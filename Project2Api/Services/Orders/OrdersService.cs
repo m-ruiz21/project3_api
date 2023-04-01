@@ -3,7 +3,6 @@ using Project2Api.DbTools;
 using ErrorOr;
 using Project2Api.ServiceErrors;
 using System.Data;
-using Project2Api.Contracts.Order;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Project2Api.Services.Orders;

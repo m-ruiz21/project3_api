@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project2Api.Contracts.Order;
 using Project2Api.Models;
@@ -47,8 +48,18 @@ namespace Project2Api.Controllers
                 orderRequest.Price
             );
 
-            // TODO: save order to database
-            
+            // save order to database
+            ErrorOr<Order> orderErrorOr = _ordersService.CreateOrder(order);
+
+            // check if order was created successfully
+            if (orderErrorOr.IsError)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new { error = orderErrorOr.Errors[0].Description }
+                );
+            }
+
             OrderResponse orderResponse = new OrderResponse(
                 order.Id,
                 order.OrderTime,
@@ -72,7 +83,33 @@ namespace Project2Api.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult GetOrder(Guid id)
         {
-            return Ok(id);
+            // make sure id is not empty
+            if (id == null)
+            {
+                return BadRequest(
+                    new { error = "Id Must Not Be Empty" }
+                );
+            }
+
+            // get order with id=id
+            ErrorOr<Order> orderErrorOr = _ordersService.GetOrder(id);
+
+            // check if order existed
+            if (orderErrorOr.IsError)
+            {
+                return NotFound(
+                    new { error = orderErrorOr.Errors[0].Description }
+                );
+            }
+
+            OrderResponse orderResponse = new OrderResponse(
+                orderErrorOr.Value.Id,
+                orderErrorOr.Value.OrderTime,
+                orderErrorOr.Value.Items,
+                orderErrorOr.Value.Price
+            );
+
+            return Ok(orderResponse);
         }
 
         /// <summary>
@@ -82,7 +119,29 @@ namespace Project2Api.Controllers
         [HttpGet()]
         public IActionResult GetAllOrders()
         {
-            return Ok();
+            // get all orders
+            ErrorOr<List<Order>> ordersErrorOr = _ordersService.GetAllOrders();
+
+            // check if orders were successfully retreieved
+            if (ordersErrorOr.IsError)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new { error = ordersErrorOr.Errors[0].Description }
+                );
+            }
+
+            // get list of orders and map to list of orderResponses
+            List<OrderResponse> orderResponses = ordersErrorOr.Value
+                .Select(order => new OrderResponse(
+                    order.Id,
+                    order.OrderTime,
+                    order.Items,
+                    order.Price
+                ))
+                .ToList();
+            
+            return Ok(orderResponses);
         }
 
         /// <summary>
@@ -94,7 +153,50 @@ namespace Project2Api.Controllers
         [HttpPut("{id:guid}")]
         public IActionResult UpdateOrder(OrderRequest orderRequest, Guid id)
         {
-            return Ok(orderRequest);
+            // make sure id is not empty
+            if (id == null)
+            {
+                return BadRequest(
+                    new { error = "Id Must Not Be Empty" }
+                );
+            }
+
+            // make sure orderRequest is not empty
+            if (orderRequest == null)
+            {
+                return BadRequest(
+                    new { error = "Order Must Not Be Empty" }
+                );
+            }
+            
+            // convert order request to order
+            Order order = new Order(
+                id,
+                DateTime.Now,
+                orderRequest.Items,
+                orderRequest.Price
+            );
+
+            // update order
+            ErrorOr<Order> orderErrorOr = _ordersService.UpdateOrder(id, order);
+
+            // check for errors 
+            if (orderErrorOr.IsError)
+            {
+                return NotFound(
+                    new { error = orderErrorOr.Errors[0].Description }
+                );
+            }
+
+            // convert to order Response
+            OrderResponse orderResponse = new OrderResponse(
+                orderErrorOr.Value.Id,
+                orderErrorOr.Value.OrderTime,
+                orderErrorOr.Value.Items,
+                orderErrorOr.Value.Price
+            );
+
+            return Ok(orderResponse);
         }
 
 
@@ -106,7 +208,18 @@ namespace Project2Api.Controllers
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteOrder(Guid id)
         {
-            return Ok(id);
+            // make sure id is not empty
+            if (id == null)
+            {
+                return BadRequest(
+                    new { error = "Id Must Not Be Empty" }
+                );
+            }
+
+            // delete order
+            ErrorOr<IActionResult> orderErrorOr = _ordersService.DeleteOrder(id);
+
+            return orderErrorOr.Value;
         }
     }
 }
