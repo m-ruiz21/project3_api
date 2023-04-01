@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "10aSiVuGDgzoMFDTFZEn4DUY+JXXtfaDT0cdDLhQVDNLyaztVBXflzDDOssrciVlpR2XbqVlwg0PPUGIkmaleA==",
+  "dgSpecHash": "ndkBn7QEoyPLeJfPXpHvfL16NGw9Wr6mqwYUZD7q83rKJrFyhGXFpiu4eCi/+ze0/pJ6e/c94CRR0DtNZIHTMw==",
   "success": true,
   "projectFilePath": "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\mateo\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\mateo\\.nuget\\packages\\npgsql\\7.0.2\\npgsql.7.0.2.nupkg.sha512",
+    "C:\\Users\\mateo\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

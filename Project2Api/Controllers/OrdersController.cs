@@ -16,6 +16,20 @@ namespace Project2Api.Controllers
         [HttpPost()]
         public IActionResult CreateOrder(OrderRequest orderRequest)
         {
+            if (orderRequest.Items.Count == 0 || orderRequest.Items == null)
+            {
+                return BadRequest(
+                    new { error = "Order Must Not Be Empty"}
+                );
+            }
+
+            if (orderRequest.Price == 0)
+            {
+                return BadRequest(
+                    new { error = "Price Must Be Greater Than 0" }
+                );
+            }
+
             return Ok(orderRequest);
         }
         
