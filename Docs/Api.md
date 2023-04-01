@@ -48,6 +48,20 @@
     -[Delete Cutlery  Request](#delete-cutlery-request)
     -[Update Cutlery  Response](#delete-cutlery-response)
 
+[/inventory](#)
+- [Create Cutlery ](#create-cutlery)
+    - [Create Cutlery  Request](#create-cutlery-request)
+    - [Create Cutlery  Response](#create-cutlery-response)
+- [Get Cutlery ](#get-cutlery)
+    -[Get Cutlery  Request](#get-cutlery-request)
+    -[Get Cutlery  Response](#get-cutlery-response)
+- [Update Cutlery ](#update-cutlery)
+    -[Update Cutlery  Request](#update-cutlery-request)
+    -[Update Cutlery  Response](#update-cutlery-response)
+- [Delete Cutlery ](#delete-cutlery)
+    -[Delete Cutlery  Request](#delete-cutlery-request)
+    -[Update Cutlery  Response](#delete-cutlery-response)
+
 # /orders
 ## Create Order
 
@@ -487,23 +501,24 @@ Example:
 }
 ```
 
-# /cutlery
-## Create Cutlery 
+# /inventory
+## Create Inventory 
 
-### Create Cutlery Request
+### Create Inventory Request
 
 ```js
-POST /cutlery
+POST /inventory
 ```
 
 ```json
 {
     "name": "vase",
+    "type": "cutlery",
     "quantity": 2000,
 }
 ```
 
-### Create Menu Item Response
+### Create Inventory Response
 
 #### Successful Creation
 ```js
@@ -515,6 +530,7 @@ Example:
 ```json
 {
     "name": "big gulp cup",
+    "type": "cutlery",
     "quantity": 2000,
 }
 ```
@@ -528,18 +544,24 @@ Example:
 ```
 ```json
 {
-    "error" : "Cutlery with name 'bowl' already exists"
+    "error" : "Cutlery must have quantity field not null"
 }
 ```
 
-## Get Cutlery By Name 
+## Get Inventory By Name 
 
-### Get Cutlery Request
+### Get Inventory Request
 ```js
-GET /menu-item/{name}
+GET /inventory/{name}
 ```
 
-### Get Cutlery Response
+```json
+{
+    "type": "cutlery"
+}
+```
+
+### Get Inventory Response
 
 #### Successful Request 
 ```js
@@ -551,6 +573,7 @@ Example:
 ```json
 {
     "name": "bowl",
+    "type": "cutlery",
     "quantity": 2000,
 }
 ```
@@ -564,24 +587,82 @@ Example:
 ```
 ```json
 {
-    "error" : "Cutlery 'Backpack' not found"
+    "error" : "Inventory Cutlery 'Backpack' not found"
 }
 ```
 
-## Update Cutlery 
+## Get All Menu Items 
 
-### Update Cutlery Request
+### Get All Menu Items Request
 ```js
-PUT /cutlery/{name}
+GET /menu-item
+```
+
+### Get All Menu Items Response
+
+#### Successful Request 
+```js
+200 Ok 
+```
+
+Returns: all inventory
+Example:
+```json
+{
+    "inventory": [
+        {
+            "name": "tortilla",
+            "type": "menu item",
+            "category": "base",
+            "price": 1.00,
+            "quantity": 2000,
+            "MenuItemCutlery": [
+                "plate"
+            ]
+        },
+        {
+            "name": "brown rice",
+            "type": "menu item",
+            "category": "base",
+            "price": 0.00,
+            "quantity": 1000,
+            "MenuItemCutlery": [
+                "plate",
+                "fork"
+            ]
+        },
+        {
+            "name": "bowl",
+            "type": "cutlery",
+            "quantity": 2000,
+        }
+    ]
+}
+```
+
+#### Error
+Will return error code.
+
+Example:
+```js
+500 Internal Server Error 
+```
+
+## Update Inventory 
+
+### Update Inventory Request
+```js
+PUT /inventory/{name}
 ```
 ```json
 {
     "name": "bowl",
+    "type": "cutlery",
     "quantity": 1999,
 }
 ```
 
-### Update Menu Item Response
+### Update Inventory Response
 
 #### Successful Update 
 ```js
@@ -592,6 +673,7 @@ Example:
 ```json
 {
     "name": "bowl",
+    "type": "cutlery", 
     "quantity": 1999,
 }
 ```
@@ -605,18 +687,23 @@ Example:
 ```
 ```json
 {
-    "error" : "Cutlery 'face' not found"
+    "error" : "Inventory Cutlery 'face' not found"
 }
 ```
 
-## Delete Cutlery 
+## Delete Inventory 
 
-### Delete Cutlery Request
+### Delete Inventory Request
 ```js
-DELETE /cutlery/{name}
+DELETE /inventory/{name}
+```
+```json
+{
+    "type": "cutlery"
+}
 ```
 
-### Delete Cutlery Response
+### Delete Inventory Response
 
 #### Successful Deletion 
 ```js
@@ -632,6 +719,6 @@ Example:
 ```
 ```json
 {
-    "error" : "Cutlery 'hand' not found"
+    "error" : "Inventory Cutlery 'hand' not found"
 }
 ```
