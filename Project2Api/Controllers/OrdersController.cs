@@ -5,6 +5,7 @@ using Project2Api.Contracts.Order;
 namespace Project2Api.Controllers
 {
     [ApiController]
+    [Route("orders")]
     public class OrdersController : ControllerBase
     {
         /// <summary>
@@ -12,7 +13,7 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <param name="orderRequest"></param>
         /// <returns>Added Object</returns>
-        [HttpPost("/orders")]
+        [HttpPost()]
         public IActionResult CreateOrder(OrderRequest orderRequest)
         {
             return Ok(orderRequest);
@@ -23,7 +24,7 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Requested object</returns>
-        [HttpGet("/orders/{id:guid}")]
+        [HttpGet("{id:guid}")]
         public IActionResult GetOrder(Guid id)
         {
             return Ok(id);
@@ -33,7 +34,7 @@ namespace Project2Api.Controllers
         /// Gets all orders
         /// </summary>
         /// <returns>List of orderResponses</returns>
-        [HttpGet("/orders")]
+        [HttpGet()]
         public IActionResult GetAllOrders()
         {
             return Ok();
@@ -45,7 +46,7 @@ namespace Project2Api.Controllers
         /// <param name="orderRequest"></param>
         /// <param name="id"></param>
         /// <returns>Updated order object</returns>
-        [HttpPut("/orders/{id:guid}")]
+        [HttpPut("{id:guid}")]
         public IActionResult UpdateOrder(OrderRequest orderRequest, Guid id)
         {
             return Ok(orderRequest);
@@ -57,7 +58,7 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Succes / Failure code</returns>
-        [HttpDelete("/orders/{id:guid}")]
+        [HttpDelete("{id:guid}")]
         public IActionResult DeleteOrder(Guid id)
         {
             return Ok(id);
