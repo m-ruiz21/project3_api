@@ -5,16 +5,11 @@ C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Project2Api.deps.json
 C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Project2Api.runtimeconfig.json
 C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Project2Api.dll
 C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Project2Api.pdb
-C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Microsoft.OpenApi.dll
-C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
-C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\Project2Api.csproj.AssemblyReference.cache
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\Project2Api.GeneratedMSBuildEditorConfig.editorconfig
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\Project2Api.AssemblyInfoInputs.cache
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\Project2Api.AssemblyInfo.cs
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\Project2Api.csproj.CoreCompileInputs.cache
-C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\Project2Api.MvcApplicationPartsAssemblyInfo.cs
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\Project2Api.MvcApplicationPartsAssemblyInfo.cache
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\staticwebassets.build.json
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\staticwebassets.development.json
@@ -25,3 +20,5 @@ C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\refint\Project2Api.dll
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\Project2Api.pdb
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\Project2Api.genruntimeconfig.cache
 C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\ref\Project2Api.dll
+C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Project2Api.Contracts.dll
+C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Project2Api.Contracts.pdb

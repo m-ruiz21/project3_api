@@ -4,14 +4,14 @@
     "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj": {}
   },
   "projects": {
-    "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj": {
+    "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
-        "projectName": "Project2Api",
-        "projectPath": "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
+        "projectUniqueName": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj",
+        "projectName": "Project2Api.Contracts",
+        "projectPath": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj",
         "packagesPath": "C:\\Users\\mateo\\.nuget\\packages\\",
-        "outputPath": "C:\\opt\\C#\\project2_api\\Project2Api\\obj\\",
+        "outputPath": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\mateo\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -39,12 +39,64 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "dependencies": {
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.2.3, )"
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
             }
           },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
+        "projectName": "Project2Api",
+        "projectPath": "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
+        "packagesPath": "C:\\Users\\mateo\\.nuget\\packages\\",
+        "outputPath": "C:\\opt\\C#\\project2_api\\Project2Api\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\mateo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {
+                "projectPath": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
           "imports": [
             "net461",
             "net462",
