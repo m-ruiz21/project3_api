@@ -1,8 +1,11 @@
-using Project2Api.IDbClient;
+using Project2Api.DbTools;
+using Project2Api.Services.Orders;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddSingleton<IDbClient>(sp => new DbClient(sp.GetService<IConfiguration>()));
+    builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+    builder.Services.AddSingleton<IDbClient, DbClient>();
+    builder.Services.AddSingleton<IOrdersService, OrdersService>(); 
     builder.Services.AddControllers();
 }
 

@@ -2,13 +2,30 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "ErrorOr/0.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/ErrorOr.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/ErrorOr.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Extensions.Logging.Abstractions/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/Microsoft.Extensions.Logging.Abstractions.dll": {}
+          "lib/net6.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net6.0/Microsoft.Extensions.Logging.Abstractions.dll": {}
+          "lib/net6.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "related": ".xml"
+          }
         },
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
@@ -21,19 +38,27 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/Npgsql.dll": {}
+          "lib/net6.0/Npgsql.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net6.0/Npgsql.dll": {}
+          "lib/net6.0/Npgsql.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+          "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+          "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
         },
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
@@ -52,6 +77,20 @@
     }
   },
   "libraries": {
+    "ErrorOr/0.1.0": {
+      "sha512": "adIVrA1Ixck5oZ79ZKB5f7k+aVlg4AB47nNHY14+qI8d+4//sTe0Dvbp8AIJEz/94OimmWjdGfei67q9UZPGig==",
+      "type": "package",
+      "path": "erroror/0.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "erroror.0.1.0.nupkg.sha512",
+        "erroror.nuspec",
+        "icon-square.png",
+        "lib/net6.0/ErrorOr.dll",
+        "lib/net6.0/ErrorOr.xml"
+      ]
+    },
     "Microsoft.Extensions.Logging.Abstractions/6.0.0": {
       "sha512": "/HggWBbTwy8TgebGSX5DBZ24ndhzi93sHUBDvP1IxbZD7FDokYzdAr6+vbWGjw2XAfR2EJ1sfKUotpjHnFWPxA==",
       "type": "package",
@@ -162,6 +201,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "ErrorOr >= 0.1.0",
       "Npgsql >= 7.0.2",
       "Project2Api.Contracts >= 1.0.0"
     ]
@@ -172,11 +212,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
+      "projectUniqueName": "c:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
       "projectName": "Project2Api",
-      "projectPath": "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
+      "projectPath": "c:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
       "packagesPath": "C:\\Users\\mateo\\.nuget\\packages\\",
-      "outputPath": "C:\\opt\\C#\\project2_api\\Project2Api\\obj\\",
+      "outputPath": "c:\\opt\\C#\\project2_api\\Project2Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\mateo\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -193,8 +233,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {
-              "projectPath": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj"
+            "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {
+              "projectPath": "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj"
             }
           }
         }
@@ -209,6 +249,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "ErrorOr": {
+            "target": "Package",
+            "version": "[0.1.0, )"
+          },
           "Npgsql": {
             "target": "Package",
             "version": "[7.0.2, )"
@@ -220,7 +264,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -232,7 +277,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

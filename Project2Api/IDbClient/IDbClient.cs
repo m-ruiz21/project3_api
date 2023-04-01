@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Project2Api.IDbClient
+namespace Project2Api.DbTools
 {
     public interface IDbClient
     {

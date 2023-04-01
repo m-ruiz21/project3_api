@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ErrorOr" Version="0.1.0" />
     <PackageReference Include="Npgsql" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Project2Api.Contracts\Project2Api.Contracts.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Tests\" />
   </ItemGroup>
 
 </Project>

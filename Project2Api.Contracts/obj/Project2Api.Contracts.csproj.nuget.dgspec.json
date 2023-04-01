@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {}
+    "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {}
   },
   "projects": {
-    "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {
+    "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj",
+        "projectUniqueName": "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj",
         "projectName": "Project2Api.Contracts",
-        "projectPath": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj",
+        "projectPath": "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj",
         "packagesPath": "C:\\Users\\mateo\\.nuget\\packages\\",
-        "outputPath": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\obj\\",
+        "outputPath": "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\mateo\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,7 +45,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -54,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

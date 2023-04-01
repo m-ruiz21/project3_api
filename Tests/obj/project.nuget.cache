@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "K5mEBoOzIb2WCtrCu+v8ZU0tWiZ2sPmZZrFbSET9o8WimAcSaGelIcRxN69jYE4Aa2GU+hKCUnZHMgyfCsJy5w==",
+  "dgSpecHash": "GW2UaSMN/xp0AT6s5+RpQufP0/gQbwq+/Q8HC0nlIvRJpY+YsMW4kWGnMyOlU/fiPMfDZlwD6IKMsCot3p12LA==",
   "success": true,
-  "projectFilePath": "C:\\opt\\C#\\project2_api\\Tests\\Tests.csproj",
+  "projectFilePath": "c:\\opt\\C#\\project2_api\\Tests\\Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mateo\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\mateo\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
+    "C:\\Users\\mateo\\.nuget\\packages\\erroror\\0.1.0\\erroror.0.1.0.nupkg.sha512",
     "C:\\Users\\mateo\\.nuget\\packages\\microsoft.codecoverage\\17.1.0\\microsoft.codecoverage.17.1.0.nupkg.sha512",
     "C:\\Users\\mateo\\.nuget\\packages\\microsoft.csharp\\4.0.1\\microsoft.csharp.4.0.1.nupkg.sha512",
     "C:\\Users\\mateo\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",

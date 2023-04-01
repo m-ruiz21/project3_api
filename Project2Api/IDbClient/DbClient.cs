@@ -1,7 +1,7 @@
 ﻿using Npgsql;
 using System.Data;
 
-namespace Project2Api.IDbClient
+namespace Project2Api.DbTools
 {
     public class DbClient : IDbClient
     {
@@ -31,7 +31,6 @@ namespace Project2Api.IDbClient
             connection.Close(); 
 
             return table;
-
         }
 
         public async Task<int> ExecuteNonQueryAsync(string query)

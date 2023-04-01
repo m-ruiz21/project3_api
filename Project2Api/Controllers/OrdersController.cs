@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project2Api.Contracts.Order;
+using Project2Api.Models;
+using Project2Api.Services.Orders;
 
 namespace Project2Api.Controllers
 {
@@ -8,6 +10,13 @@ namespace Project2Api.Controllers
     [Route("orders")]
     public class OrdersController : ControllerBase
     {
+        private readonly IOrdersService _ordersService;
+        
+        public OrdersController(IOrdersService ordersService)
+        {
+            _ordersService = ordersService;
+        } 
+
         /// <summary>
         /// Creates order
         /// </summary>
@@ -30,7 +39,29 @@ namespace Project2Api.Controllers
                 );
             }
 
-            return Ok(orderRequest);
+            // create new order item 
+            Order order = new Order(
+                new Guid(),
+                DateTime.Now,
+                orderRequest.Items,
+                orderRequest.Price
+            );
+
+            // TODO: save order to database
+            
+            OrderResponse orderResponse = new OrderResponse(
+                order.Id,
+                order.OrderTime,
+                order.Items,
+                order.Price
+            );
+
+            // return 201 response with orderResponse
+            return CreatedAtAction(
+                nameof(GetOrder),
+                new { id = orderResponse.Id },
+                orderResponse
+            );
         }
         
         /// <summary>

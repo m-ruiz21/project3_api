@@ -1,6 +1,4 @@
-using NUnit.Framework;
-using Project2Api.IDbClient;
-using System.Threading.Tasks;
+using Project2Api.DbTools;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using System.Data;
