@@ -18,10 +18,10 @@
     -[Update Order Response](#delete-order-response)
 
 [/menu-item](#menu-item)
-- [Create Menu Item](#menu-item)
+- [Create Menu Item](#create-menu-item)
     - [Create Menu Item Request](#create-menu-item-request)
     - [Create Menu Item Response](#create-menu-item-response)
-- [Get Menu Item](#get-menu-item)
+- [Get Menu Item](#get-menu-item-by-name)
     -[Get Menu Item Request](#get-menu-item-request)
     -[Get Menu Item Response](#get-menu-item-response)
 - [Get All Menu Items](#get-all-menu-items)
@@ -33,6 +33,20 @@
 - [Delete Menu Item](#delete-menu-item)
     -[Delete Menu Item Request](#delete-menu-item-request)
     -[Update Menu Item Response](#delete-menu-item-response)
+
+[/cutlery](#cutlery)
+- [Create Cutlery ](#create-cutlery)
+    - [Create Cutlery  Request](#create-cutlery-request)
+    - [Create Cutlery  Response](#create-cutlery-response)
+- [Get Cutlery ](#get-cutlery)
+    -[Get Cutlery  Request](#get-cutlery-request)
+    -[Get Cutlery  Response](#get-cutlery-response)
+- [Update Cutlery ](#update-cutlery)
+    -[Update Cutlery  Request](#update-cutlery-request)
+    -[Update Cutlery  Response](#update-cutlery-response)
+- [Delete Cutlery ](#delete-cutlery)
+    -[Delete Cutlery  Request](#delete-cutlery-request)
+    -[Update Cutlery  Response](#delete-cutlery-response)
 
 # /orders
 ## Create Order
@@ -270,7 +284,6 @@ Returns: created object
 Example:
 ```json
 {
-    "id": 1247401,
     "name": "tortilla",
     "category": "base",
     "price": 1.00,
@@ -294,11 +307,11 @@ Example:
 }
 ```
 
-## Get Menu Item By Id 
+## Get Menu Item By Name 
 
 ### Get Menu Item Request
 ```js
-GET /menu-item/{id}
+GET /menu-item/{name}
 ```
 
 ### Get Menu Item Response
@@ -312,7 +325,6 @@ Returns: requested object
 Example:
 ```json
 {
-    "id": 1247401,
     "name": "tortilla",
     "category": "base",
     "price": 1.00,
@@ -356,7 +368,6 @@ Example:
 {
     "base": [
         {
-            "id": 1247401,
             "name": "tortilla",
             "category": "base",
             "price": 1.00,
@@ -366,7 +377,6 @@ Example:
             ]
         },
         {
-            "id": 1247402,
             "name": "brown rice",
             "category": "base",
             "price": 0.00,
@@ -379,7 +389,6 @@ Example:
     ],
     "topping": [
         {
-            "id": 1247404,
             "name": "tomato",
             "category": "topping",
             "price": 0.00,
@@ -406,7 +415,6 @@ PUT /menu-item/{name}
 ```
 ```json
 {
-    "id": 1247402,
     "name": "brown rice",
     "category": "base",
     "price": 0.00,
@@ -428,7 +436,6 @@ Returns: updated object
 Example:
 ```json
 {
-    "id": 1247402,
     "name": "brown rice",
     "category": "base",
     "price": 0.00,
@@ -457,7 +464,7 @@ Example:
 
 ### Delete Menu Item Request
 ```js
-DELETE /orders/{name}
+DELETE /menu-item/{name}
 ```
 
 ### Delete Menu Item Response
@@ -477,5 +484,154 @@ Example:
 ```json
 {
     "error" : "Menu Item 'cow' not found"
+}
+```
+
+# /cutlery
+## Create Cutlery 
+
+### Create Cutlery Request
+
+```js
+POST /cutlery
+```
+
+```json
+{
+    "name": "vase",
+    "quantity": 2000,
+}
+```
+
+### Create Menu Item Response
+
+#### Successful Creation
+```js
+201 Created
+```
+
+Returns: created object
+Example:
+```json
+{
+    "name": "big gulp cup",
+    "quantity": 2000,
+}
+```
+
+#### Error
+Will return error code + message.
+
+Example:
+```js
+400 Bad Request
+```
+```json
+{
+    "error" : "Cutlery with name 'bowl' already exists"
+}
+```
+
+## Get Cutlery By Name 
+
+### Get Cutlery Request
+```js
+GET /menu-item/{name}
+```
+
+### Get Cutlery Response
+
+#### Successful Request 
+```js
+200 Ok 
+```
+
+Returns: requested object
+Example:
+```json
+{
+    "name": "bowl",
+    "quantity": 2000,
+}
+```
+
+#### Error
+Will return error code + message.
+
+Example:
+```js
+404 Not Found 
+```
+```json
+{
+    "error" : "Cutlery 'Backpack' not found"
+}
+```
+
+## Update Cutlery 
+
+### Update Cutlery Request
+```js
+PUT /cutlery/{name}
+```
+```json
+{
+    "name": "bowl",
+    "quantity": 1999,
+}
+```
+
+### Update Menu Item Response
+
+#### Successful Update 
+```js
+200 Ok 
+```
+Returns: updated object
+Example:
+```json
+{
+    "name": "bowl",
+    "quantity": 1999,
+}
+```
+
+#### Error
+Will return error code + message.
+
+Example:
+```js
+404 Not Found 
+```
+```json
+{
+    "error" : "Cutlery 'face' not found"
+}
+```
+
+## Delete Cutlery 
+
+### Delete Cutlery Request
+```js
+DELETE /cutlery/{name}
+```
+
+### Delete Cutlery Response
+
+#### Successful Deletion 
+```js
+204 No Content 
+```
+
+#### Error
+Will return error code + message.
+
+Example:
+```js
+404 Not Found 
+```
+```json
+{
+    "error" : "Cutlery 'hand' not found"
 }
 ```
