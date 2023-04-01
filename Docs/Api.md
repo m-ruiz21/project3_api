@@ -85,6 +85,7 @@ Example:
 ```json
 {
     "id": 42312478191,
+    "date_time": "2022-03-07 08:44:06.172087",
     "items": [
         "brown rice",
         "falafel",
@@ -128,6 +129,7 @@ Example:
 ```json
 {
     "id": 42312478191,
+    "date_time": "2022-03-07 08:44:06.172087",
     "items": [
         "brown rice",
         "falafel",
@@ -184,6 +186,8 @@ PUT /orders/{id}
 ```
 ```json
 {
+     "id": 42312478191,
+    "date_time": "2022-03-07 08:44:06.172087",
     "items": [
         "brown rice",
         "falafel",
@@ -205,6 +209,7 @@ Example:
 ```json
 {
     "id": 42312478191,
+    "date_time": "2022-03-07 08:44:06.172087",
     "items": [
         "brown rice",
         "falafel",
