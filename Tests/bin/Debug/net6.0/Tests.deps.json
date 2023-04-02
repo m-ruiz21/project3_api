@@ -32,6 +32,14 @@
         }
       },
       "coverlet.collector/3.1.2": {},
+      "ErrorOr/0.1.0": {
+        "runtime": {
+          "lib/net6.0/ErrorOr.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.1.0.0"
+          }
+        }
+      },
       "Microsoft.CodeCoverage/17.1.0": {
         "runtime": {
           "lib/netcoreapp1.0/Microsoft.VisualStudio.CodeCoverage.Shim.dll": {
@@ -693,6 +701,7 @@
       },
       "Project2Api/1.0.0": {
         "dependencies": {
+          "ErrorOr": "0.1.0",
           "Npgsql": "7.0.2",
           "Project2Api.Contracts": "1.0.0"
         },
@@ -726,6 +735,13 @@
       "sha512": "sha512-wuLDIDKD5XMt0A7lE31JPenT7QQwZPFkP5rRpdJeblyXZ9MGLI8rYjvm5fvAKln+2/X+4IxxQDxBtwdrqKNLZw==",
       "path": "coverlet.collector/3.1.2",
       "hashPath": "coverlet.collector.3.1.2.nupkg.sha512"
+    },
+    "ErrorOr/0.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-adIVrA1Ixck5oZ79ZKB5f7k+aVlg4AB47nNHY14+qI8d+4//sTe0Dvbp8AIJEz/94OimmWjdGfei67q9UZPGig==",
+      "path": "erroror/0.1.0",
+      "hashPath": "erroror.0.1.0.nupkg.sha512"
     },
     "Microsoft.CodeCoverage/17.1.0": {
       "type": "package",

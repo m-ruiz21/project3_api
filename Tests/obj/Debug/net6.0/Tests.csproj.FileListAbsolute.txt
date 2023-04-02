@@ -110,3 +110,4 @@ C:\opt\C#\project2_api\Tests\bin\Debug\net6.0\Project2Api.Contracts.dll
 C:\opt\C#\project2_api\Tests\bin\Debug\net6.0\Project2Api.dll
 C:\opt\C#\project2_api\Tests\bin\Debug\net6.0\Project2Api.pdb
 C:\opt\C#\project2_api\Tests\bin\Debug\net6.0\Project2Api.Contracts.pdb
+c:\opt\C#\project2_api\Tests\bin\Debug\net6.0\ErrorOr.dll

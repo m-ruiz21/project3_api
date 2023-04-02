@@ -25,10 +25,10 @@ namespace Project2Api.Tests
         [Test]
         public async Task ExecuteQueryAsync_WithValidQuery_ReturnsDataTable()
         {
-            // Set up Query
+            // Arange
             var query = "SELECT * FROM menu_item";
 
-            // Execute Query
+            // Act
             DataTable result = await _dbClient.ExecuteQueryAsync(query);
 
             // Assert Not Null
@@ -44,13 +44,13 @@ namespace Project2Api.Tests
         [Test]
         public async Task ExecuteNonQueryAsync_WithValidQuery_ReturnsRowsAffected()
         {
-            // Set up
-            var query = "INSERT INTO menu_item_test (id, name, quantity, price, category) VALUES ('12', 'hot dog', 12, 15.0, 'base')";
+            // Arrange 
+            var query = "INSERT INTO menu_item_test (name, quantity, price, category) VALUES ('hot dog', 12, 15.0, 'base')";
 
-            // Execute Query
+            // Act 
             var rowsAffected = await _dbClient.ExecuteNonQueryAsync(query);
 
-            // Make sure something happened
+            // Assert 
             Assert.AreEqual(1, rowsAffected); // Assuming the above query inserts one row
 
             // clean up
@@ -61,5 +61,3 @@ namespace Project2Api.Tests
 
     }
 }
-
-

@@ -23,3 +23,9 @@ C:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\ref\Project2Api.dll
 C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Project2Api.Contracts.dll
 C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Project2Api.Contracts.pdb
 C:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\Npgsql.dll
+c:\opt\C#\project2_api\Project2Api\bin\Debug\net6.0\ErrorOr.dll
+c:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\staticwebassets\msbuild.Project2Api.Microsoft.AspNetCore.StaticWebAssets.props
+c:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\staticwebassets\msbuild.build.Project2Api.props
+c:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Project2Api.props
+c:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Project2Api.props
+c:\opt\C#\project2_api\Project2Api\obj\Debug\net6.0\staticwebassets.pack.json
