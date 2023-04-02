@@ -18,11 +18,22 @@ public class OrdersService : IOrdersService
 
     public Order? ConvertDataTableToOrder(DataTable orderTable)
     {
-        // check if table is empty
+        // make sure table is not empty
+        if (orderTable.Rows.Count == 0)
+        {
+            return null;
+        }
+
+        // make sure table has correct columns
+        if (!orderTable.Columns.Contains("id") || !orderTable.Columns.Contains("order_time") || !orderTable.Columns.Contains("price"))
+        {
+            return null;
+        }
+
         DataRow row = orderTable.Rows[0];
 
         // check if any of the columns are null 
-        if (row["id"] == null || row["order_time"] == null || row["price"] == null || row["items"] == null)
+        if (row["id"] == null || row["order_time"] == null || row["price"] == null)
         {
             return null;
         }
@@ -33,13 +44,18 @@ public class OrdersService : IOrdersService
         String? rawPrice = row["price"].ToString() ?? "";
 
         // create order
-        Order order = new Order(Guid.Parse(RawId),
-                                DateTime.Parse(rawOrderTime),
-                                new List<string>(),
-                                float.Parse(rawPrice)
-                            );
-
-        return order;
+        try
+        {
+            Order order = new Order(Guid.Parse(RawId),
+                                    DateTime.Parse(rawOrderTime),
+                                    new List<string>(),
+                                    float.Parse(rawPrice)
+                                );
+            return order; 
+        } catch (System.FormatException e) {
+            Console.Out.WriteLine(e);
+            return null;
+        }
     }
 
     public ErrorOr<Order> CreateOrder(Order order)

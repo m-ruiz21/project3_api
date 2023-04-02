@@ -45,7 +45,7 @@ namespace Project2Api.Tests
         public async Task ExecuteNonQueryAsync_WithValidQuery_ReturnsRowsAffected()
         {
             // Arrange 
-            var query = "INSERT INTO menu_item_test (name, quantity, price, category) VALUES ('hot dog', 12, 15.0, 'base')";
+            var query = "INSERT INTO menu_item (name, quantity, price, category) VALUES ('hot dog', 12, 15.0, 'base')";
 
             // Act 
             var rowsAffected = await _dbClient.ExecuteNonQueryAsync(query);
@@ -54,7 +54,7 @@ namespace Project2Api.Tests
             Assert.AreEqual(1, rowsAffected); // Assuming the above query inserts one row
 
             // clean up
-            query = "DELETE FROM menu_item_test WHERE name='hot dog'";
+            query = "DELETE FROM menu_item WHERE name='hot dog'";
             rowsAffected = await _dbClient.ExecuteNonQueryAsync(query);
             Assert.AreEqual(1, rowsAffected);
         }

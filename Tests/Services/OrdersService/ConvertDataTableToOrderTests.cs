@@ -1,7 +1,5 @@
 using NUnit.Framework;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using Project2Api.Models;
 using Project2Api.DbTools;
@@ -41,8 +39,7 @@ namespace Project2Api.Services.Orders.Tests.OrdersServiceTests
             orderTable.Columns.Add("id");
             orderTable.Columns.Add("order_time");
             orderTable.Columns.Add("price");
-            orderTable.Columns.Add("items");
-            orderTable.Rows.Add(null, null, null, null);
+            orderTable.Rows.Add(null, null, null);
 
             // Act
             Order? order = _ordersService?.ConvertDataTableToOrder(orderTable);
@@ -59,18 +56,17 @@ namespace Project2Api.Services.Orders.Tests.OrdersServiceTests
             orderTable.Columns.Add("id");
             orderTable.Columns.Add("order_time");
             orderTable.Columns.Add("price");
-            orderTable.Columns.Add("items");
-            orderTable.Rows.Add("1", "2021-01-01 00:00:00", "10.00", "item1, item2, item3");
+            String guid = Guid.NewGuid().ToString();
+            orderTable.Rows.Add(guid, "2021-01-01 00:00:00", "10.00");
 
             // Act
             Order? order = _ordersService?.ConvertDataTableToOrder(orderTable);
 
             // Assert
             Assert.IsNotNull(order);
-            Assert.AreEqual(Guid.Parse("1"), order?.Id);
+            Assert.AreEqual(Guid.Parse(guid), order?.Id);
             Assert.AreEqual(DateTime.Parse("2021-01-01 00:00:00"), order?.OrderTime);
             Assert.AreEqual(10.00, order?.Price);
-            Assert.AreEqual(new List<string>() { "item1", "item2", "item3" }, order?.Items);
         }
 
         [Test]
@@ -81,8 +77,7 @@ namespace Project2Api.Services.Orders.Tests.OrdersServiceTests
             orderTable.Columns.Add("id");
             orderTable.Columns.Add("order_time");
             orderTable.Columns.Add("price");
-            orderTable.Columns.Add("items");
-            orderTable.Rows.Add("1", "2021-01-01 00:00:00", "10.00", "item1, item2, item3");
+            orderTable.Rows.Add("1", "2021-01-01 00:00:00", "10.00");
 
             // Act
             Order? order = _ordersService?.ConvertDataTableToOrder(orderTable);
