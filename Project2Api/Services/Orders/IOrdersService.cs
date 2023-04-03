@@ -7,14 +7,6 @@ namespace Project2Api.Services.Orders
 {
     public interface IOrdersService
     {
-
-        /// <summary>
-        /// Converts data row to order
-        /// </summary>
-        /// <param name="dataRow"></param>
-        /// <returns>Order if successful, null otherwise</returns>
-        Order? ConvertDataRowToOrder(DataRow dataRow); 
-
         /// <summary>
         /// Creates order
         /// </summary>

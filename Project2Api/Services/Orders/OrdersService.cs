@@ -15,53 +15,9 @@ public class OrdersService : IOrdersService
     {
         _dbClient = dbClient;
     }
-
-    public Order? ConvertDataRowToOrder(DataRow dataRow)
-    {
-        // check if dataRow is null 
-        if (dataRow == null)
-        {
-            // print error message
-            Console.WriteLine("[OrdersService] Failed to convert data table: data row is null");
-            return null;
-        }
-
-        // check if any of the columns are null 
-        if (dataRow["id"] == null || dataRow["date_time"] == null || dataRow["total_price"] == null)
-        {
-            // print error message
-            Console.WriteLine("[OrdersService] Failed to convert data table: some fields are null");
-            return null;
-        }
-
-        // convert rest of row to order
-        String RawId = dataRow["id"].ToString() ?? "";
-        String? rawOrderTime = dataRow["date_time"].ToString() ?? "";
-        String? rawPrice = dataRow["total_price"].ToString() ?? "";
-
-        // create order
-        try
-        {
-            Order order = new Order(Guid.Parse(RawId),
-                                    DateTime.Parse(rawOrderTime),
-                                    new List<string>(),
-                                    float.Parse(rawPrice)
-                                );
-            return order; 
-        } catch (System.FormatException e) {
-            Console.Out.WriteLine(e);
-            return null;
-        }
-    }
-
+    
     public ErrorOr<Order> CreateOrder(Order order)
     {
-        // make sure order is valid and no fields are emtpy
-        if (order.Id == Guid.Empty || order.OrderTime == DateTime.MinValue || order.Items.Count == 0 || order.Price == 0.0f)
-        {
-            return Errors.Orders.InvalidOrder;
-        }
-
         // create order
         Task<int> orderTask = _dbClient.ExecuteNonQueryAsync(
             $"INSERT INTO orders (id, date_time, total_price) VALUES ('{order.Id}', '{order.OrderTime}', '{order.Price}')"
@@ -120,12 +76,12 @@ public class OrdersService : IOrdersService
             return Errors.Orders.NotFound;
         }
 
-        Order? order = ConvertDataRowToOrder(orderTable.Rows[0]);
+        ErrorOr<Order> order= Order.From(orderTable.Rows[0]);
 
         // check that order was successfully converted 
-        if (order == null)
+        if (order.IsError)
         {
-            return Errors.Orders.UnexpectedError;
+            return order.Errors[0];
         }
 
         // populate order.items table by getting all menu items from ordered_menu_items table
@@ -150,10 +106,10 @@ public class OrdersService : IOrdersService
             }
 
             string menuItem = row["menu_item_name"].ToString() ?? "";
-            order.Items.Add(menuItem);
+            order.Value.Items.Add(menuItem);
         }
 
-        return order;   
+        return order.Value;   
     }
 
     public ErrorOr<List<Order>> GetAllOrders(int pageNumber, int pageSize)
@@ -176,14 +132,14 @@ public class OrdersService : IOrdersService
         // convert each row to order
         foreach (DataRow row in ordersTable.Rows)
         {
-            Order? order = ConvertDataRowToOrder(row);
+            ErrorOr<Order> order = Order.From(row); 
 
-            if (order == null)
+            if (order.IsError)
             {
-                return Errors.Orders.DbError;
+                return order.Errors[0];
             }
 
-            orders.Add(order);
+            orders.Add(order.Value);
         }
 
         return orders;
@@ -191,12 +147,6 @@ public class OrdersService : IOrdersService
 
     public ErrorOr<Order> UpdateOrder(Guid id, Order order)
     {
-        // check inputs
-        if (order.Id == Guid.Empty || order.OrderTime == DateTime.MinValue || order.Items.Count == 0 || order.Price == 0.0f)
-        {
-            return Errors.Orders.InvalidOrder;
-        }
-
         // update order
         Task<int> updateTask = _dbClient.ExecuteNonQueryAsync(
             $"UPDATE orders SET date_time = '{order.OrderTime}', total_price = '{order.Price}' WHERE id = '{id}'"
@@ -210,7 +160,7 @@ public class OrdersService : IOrdersService
         // make sure updateTask and deleteTask were successful
         if (updateTask.Result == 0 || deleteTask.Result == 0)
         {
-            return Errors.Orders.InvalidOrder;
+            return Errors.Orders.NotFound;
         }
         
         // add new ordered menu items for this order

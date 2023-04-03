@@ -4,6 +4,9 @@ namespace Project2Api.ServiceErrors;
 
 public static partial class Errors
 {
+    /// <summary>
+    /// Order errors
+    /// </summary>
     public static class Orders
     {
         public static Error NotFound => Error.NotFound(

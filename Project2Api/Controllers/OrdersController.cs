@@ -27,15 +27,15 @@ namespace Project2Api.Controllers
         public IActionResult CreateOrder(OrderRequest orderRequest)
         {
             // create new order item 
-            Order order = new Order(
-                Guid.NewGuid(),
-                DateTime.Now,
-                orderRequest.Items,
-                orderRequest.Price
-            );
+            ErrorOr<Order> order = Order.From(orderRequest);
+
+            if (order.IsError)
+            {
+                return Problem(order.Errors);
+            }
 
             // save order to database
-            ErrorOr<Order> orderErrorOr = _ordersService.CreateOrder(order);
+            ErrorOr<Order> orderErrorOr = _ordersService.CreateOrder(order.Value);
 
             // return Ok(orderResponse) if succcessful, otherwise return error
             return orderErrorOr.Match(
@@ -91,18 +91,18 @@ namespace Project2Api.Controllers
         /// <param name="id"></param>
         /// <returns>Updated order object</returns>
         [HttpPut("{id:guid}")]
-        public IActionResult UpdateOrder(OrderRequest orderRequest, Guid id)
+        public IActionResult UpdateOrder(UpdateOrderRequest orderRequest, Guid id)
         { 
             // convert order request to order
-            Order order = new Order(
-                id,
-                DateTime.Now,
-                orderRequest.Items,
-                orderRequest.Price
-            );
+            ErrorOr<Order> order = Order.From(orderRequest, id);
+
+            if (order.IsError)
+            {
+                return Problem(order.Errors);
+            }
 
             // update order
-            ErrorOr<Order> orderErrorOr = _ordersService.UpdateOrder(id, order);
+            ErrorOr<Order> orderErrorOr = _ordersService.UpdateOrder(id, order.Value);
 
             // return Ok(orderResponse) if succcessful, otherwise return error
             return orderErrorOr.Match(
@@ -130,6 +130,11 @@ namespace Project2Api.Controllers
             ); 
         }
 
+        /// <summary>
+        /// Maps order to order response
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns>OrderResponse</returns>
         private static OrderResponse MapOrderToOrderResponse(Order order)
         {
             return new OrderResponse(

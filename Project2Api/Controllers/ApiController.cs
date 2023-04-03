@@ -8,6 +8,11 @@ namespace Project2Api.Controllers;
 [Route("[controller]")]
 public class ApiController : ControllerBase
 {
+    /// <summary>
+    /// Returns Problem with error code and description
+    /// </summary>
+    /// <param name="errors"></param>
+    /// <returns>Problem</returns>
     protected IActionResult Problem(List<Error> errors)
     {
         var firstError = errors[0];
