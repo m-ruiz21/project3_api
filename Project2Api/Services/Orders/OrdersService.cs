@@ -154,7 +154,7 @@ public class OrdersService : IOrdersService
     {
         // get all orders from database
         Task<DataTable> ordersTask = _dbClient.ExecuteQueryAsync(
-            $"SELECT * FROM orders ORDER BY date_time DESC LIMIT {pageNumber} OFFSET {pageSize}"
+            $"SELECT * FROM orders ORDER BY date_time DESC LIMIT {pageSize} OFFSET {pageSize * (pageNumber - 1)}"
         );
 
         // check that ordersTask was successful
@@ -220,6 +220,17 @@ public class OrdersService : IOrdersService
 
     public ErrorOr<IActionResult> DeleteOrder(Guid id)
     {
+        // delete all orders in ordered_menu_item table with this order id
+        Task<int> deleteItemsTask = _dbClient.ExecuteNonQueryAsync(
+            $"DELETE FROM ordered_menu_item WHERE order_id = '{id}'"
+        );
+
+        // make sure deleteItemsTask was successful
+        if (deleteItemsTask.Result == 0)
+        {
+            return Errors.Orders.NotFound;
+        }
+
         // delete order
         Task<int> deleteTask = _dbClient.ExecuteNonQueryAsync(
             $"DELETE FROM orders WHERE id = '{id}'"
@@ -229,6 +240,11 @@ public class OrdersService : IOrdersService
         if (deleteTask.Result == 0)
         {
             return Errors.Orders.NotFound;
+        }
+
+        if (deleteTask.Result == -1)
+        {
+            return Errors.Orders.DbError;
         }
 
         return new NoContentResult();
