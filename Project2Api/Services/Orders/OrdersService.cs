@@ -102,6 +102,12 @@ public class OrdersService : IOrdersService
 
     public ErrorOr<Order> GetOrder(Guid id)
     {
+        // check input
+        if (id == Guid.Empty)
+        {
+            return Errors.Orders.InvalidOrder;
+        }
+
         // get order from database
         Task<DataTable> orderTask = _dbClient.ExecuteQueryAsync(
             $"SELECT * FROM orders WHERE id = '{id}'"
@@ -185,6 +191,12 @@ public class OrdersService : IOrdersService
 
     public ErrorOr<Order> UpdateOrder(Guid id, Order order)
     {
+        // check inputs
+        if (order.Id == Guid.Empty || order.OrderTime == DateTime.MinValue || order.Items.Count == 0 || order.Price == 0.0f)
+        {
+            return Errors.Orders.InvalidOrder;
+        }
+
         // update order
         Task<int> updateTask = _dbClient.ExecuteNonQueryAsync(
             $"UPDATE orders SET date_time = '{order.OrderTime}', total_price = '{order.Price}' WHERE id = '{id}'"
@@ -220,6 +232,11 @@ public class OrdersService : IOrdersService
 
     public ErrorOr<IActionResult> DeleteOrder(Guid id)
     {
+        if (id == Guid.Empty)
+        {
+            return Errors.Orders.InvalidOrder;
+        }
+
         // delete all orders in ordered_menu_item table with this order id
         Task<int> deleteItemsTask = _dbClient.ExecuteNonQueryAsync(
             $"DELETE FROM ordered_menu_item WHERE order_id = '{id}'"

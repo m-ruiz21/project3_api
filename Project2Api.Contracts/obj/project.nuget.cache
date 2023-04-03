@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IZw4hDG7LOAyMmmE3oJ4SVdM5+4EQOizyzsR25KwXexbL6/pU+VwyE3kqB6EWUMarmlI02Jb8BT6XYJhrn9H/w==",
+  "dgSpecHash": "N5LlwkzmYb6iDmX3P4438TLN0MO9XWTAnaPcHyHcqxGMbafEIDYAkHboPABM8roCAQjqWlbSGQQOUKdehg1DRA==",
   "success": true,
-  "projectFilePath": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj",
+  "projectFilePath": "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

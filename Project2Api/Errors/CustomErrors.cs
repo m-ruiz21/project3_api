@@ -2,8 +2,8 @@ namespace Project2Api.ServiceErrors;
 
 public enum CustomErrorType
 {
-    Database = 1,
-    Network = 2,
-    Security = 3,
-    InvalidParams = 4,
+    Database = 6,
+    Network = 7,
+    Security = 8,
+    InvalidParams = 9,
 }

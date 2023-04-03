@@ -212,11 +212,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
+      "projectUniqueName": "c:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
       "projectName": "Project2Api",
-      "projectPath": "C:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
+      "projectPath": "c:\\opt\\C#\\project2_api\\Project2Api\\Project2Api.csproj",
       "packagesPath": "C:\\Users\\mateo\\.nuget\\packages\\",
-      "outputPath": "C:\\opt\\C#\\project2_api\\Project2Api\\obj\\",
+      "outputPath": "c:\\opt\\C#\\project2_api\\Project2Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\mateo\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -233,8 +233,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {
-              "projectPath": "C:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj"
+            "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj": {
+              "projectPath": "c:\\opt\\C#\\project2_api\\Project2Api.Contracts\\Project2Api.Contracts.csproj"
             }
           }
         }

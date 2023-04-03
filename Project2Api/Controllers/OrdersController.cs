@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project2Api.Contracts.Order;
 using Project2Api.Models;
@@ -37,24 +36,7 @@ namespace Project2Api.Controllers
             // save order to database
             ErrorOr<Order> orderErrorOr = _ordersService.CreateOrder(order);
 
-            // check if order was created successfully
-            // if not, return status code based on error type
-            if (orderErrorOr.IsError)
-            {
-                if (orderErrorOr.FirstError.Code == "Order.DbError")
-                {
-                    return StatusCode(
-                        StatusCodes.Status500InternalServerError,
-                        new { error = orderErrorOr.Errors[0].Description }
-                    );
-                }
-                else
-                {
-                    return BadRequest(
-                        new { error = orderErrorOr.Errors[0].Description }
-                    );
-                }
-            }
+            // check for errors and return appropriate response code 
 
             OrderResponse orderResponse = new OrderResponse(
                 order.Id,
@@ -140,23 +122,7 @@ namespace Project2Api.Controllers
         /// <returns>Updated order object</returns>
         [HttpPut("{id:guid}")]
         public IActionResult UpdateOrder(OrderRequest orderRequest, Guid id)
-        {
-            // make sure id is not empty
-            if (id == Guid.Empty)
-            {
-                return BadRequest(
-                    new { error = "Id Must Not Be Empty" }
-                );
-            }
-
-            // make sure orderRequest is not empty
-            if (orderRequest == null)
-            {
-                return BadRequest(
-                    new { error = "Order Must Not Be Empty" }
-                );
-            }
-            
+        { 
             // convert order request to order
             Order order = new Order(
                 id,
@@ -168,12 +134,22 @@ namespace Project2Api.Controllers
             // update order
             ErrorOr<Order> orderErrorOr = _ordersService.UpdateOrder(id, order);
 
-            // check for errors 
+            // check for errors and return appropriate status code 
             if (orderErrorOr.IsError)
             {
-                return NotFound(
-                    new { error = orderErrorOr.Errors[0].Description }
-                );
+                if (orderErrorOr.FirstError.Code == "Order.DbError")
+                {
+                    return StatusCode(
+                        StatusCodes.Status500InternalServerError,
+                        new { error = orderErrorOr.Errors[0].Description }
+                    );
+                }
+                else
+                {
+                    return NotFound(
+                        new { error = orderErrorOr.Errors[0].Description }
+                    );
+                }
             }
 
             // convert to order Response
@@ -196,36 +172,13 @@ namespace Project2Api.Controllers
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteOrder(Guid id)
         {
-            // make sure id is not empty
-            if (id == Guid.Empty)
-            {
-                return BadRequest(
-                    new { error = "Id Must Not Be Empty" }
-                );
-            }
-
             // delete order
             ErrorOr<IActionResult> orderErrorOr = _ordersService.DeleteOrder(id);
-
-            // check for db or not found errors
-            if (orderErrorOr.IsError)
-            {
-                if (orderErrorOr.FirstError.Code == "Order.DbError")
-                {
-                    return StatusCode(
-                        StatusCodes.Status500InternalServerError,
-                        new { error = orderErrorOr.Errors[0].Description }
-                    );
-                }
-                else
-                {
-                    return NotFound(
-                        new { error = orderErrorOr.Errors[0].Description }
-                    );
-                }
-            }
-
-            return orderErrorOr.Value;
+            
+            return orderErrorOr.Match<IActionResult>(
+                error => Problem(),
+                value => NoContent()
+            ); 
         } 
     }
 }
