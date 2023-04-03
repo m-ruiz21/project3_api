@@ -23,14 +23,22 @@ namespace Project2Api.DbTools
             await connection.OpenAsync();
 
             using var command = new NpgsqlCommand(query, connection);
-            using var reader = await command.ExecuteReaderAsync();
 
-            var table = new DataTable();
-            table.Load(reader);
+            try 
+            {
+                using var reader = await command.ExecuteReaderAsync();
 
-            connection.Close(); 
+                var table = new DataTable();
+                table.Load(reader);
+                connection.Close(); 
 
-            return table;
+                return table;
+            } catch (Npgsql.PostgresException e) {
+                Console.Out.WriteLine(e);
+
+                connection.Close(); 
+                return new DataTable();
+            }
         }
 
         public async Task<int> ExecuteNonQueryAsync(string query)
@@ -39,11 +47,19 @@ namespace Project2Api.DbTools
             await connection.OpenAsync();
 
             using var command = new NpgsqlCommand(query, connection);
-            var rowsAffected = await command.ExecuteNonQueryAsync();
+             
+            try
+            {
+                var rowsAffected = await command.ExecuteNonQueryAsync();
+                
+                connection.Close();
+                return rowsAffected; 
+            } catch (Npgsql.PostgresException e) {
+                Console.Out.WriteLine($"Error while processing query '{query}': {e}");
 
-            connection.Close(); 
-
-            return rowsAffected;
+                connection.Close(); 
+                return -1;
+            }
         }
     }
 }

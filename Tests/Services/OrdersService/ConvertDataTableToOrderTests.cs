@@ -4,9 +4,9 @@ using System.Data;
 using Project2Api.Models;
 using Project2Api.DbTools;
 
-namespace Project2Api.Services.Orders.Tests.OrdersServiceTests
+namespace Project2Api.Services.Orders.Tests.OrdersServices.ConvertDataTableToOrder
 {
-    public class ConvertDataTableToOrderTests
+    public class ConvertDataRowToOrderTests
     {
         private OrdersService? _ordersService;
         private Mock<IDbClient>? _dbClientMock;
@@ -16,19 +16,6 @@ namespace Project2Api.Services.Orders.Tests.OrdersServiceTests
         {
             _dbClientMock = new Mock<IDbClient>();
             _ordersService = new OrdersService(_dbClientMock.Object);
-        }
-
-        [Test]
-        public void ConvertDataTableToOrder_WhenTableIsEmpty_ReturnsNull()
-        {
-            // Arrange
-            DataTable orderTable = new DataTable();
-
-            // Act
-            Order? order = _ordersService?.ConvertDataTableToOrder(orderTable);
-
-            // Assert
-            Assert.IsNull(order);
         }
 
         [Test]
@@ -42,7 +29,7 @@ namespace Project2Api.Services.Orders.Tests.OrdersServiceTests
             orderTable.Rows.Add(null, null, null);
 
             // Act
-            Order? order = _ordersService?.ConvertDataTableToOrder(orderTable);
+            Order? order = _ordersService?.ConvertDataRowToOrder(orderTable.Rows[0]);
 
             // Assert
             Assert.IsNull(order);
@@ -60,7 +47,7 @@ namespace Project2Api.Services.Orders.Tests.OrdersServiceTests
             orderTable.Rows.Add(guid, "2021-01-01 00:00:00", "10.00");
 
             // Act
-            Order? order = _ordersService?.ConvertDataTableToOrder(orderTable);
+            Order? order = _ordersService?.ConvertDataRowToOrder(orderTable.Rows[0]);
 
             // Assert
             Assert.IsNotNull(order);
@@ -80,7 +67,7 @@ namespace Project2Api.Services.Orders.Tests.OrdersServiceTests
             orderTable.Rows.Add("1", "2021-01-01 00:00:00", "10.00");
 
             // Act
-            Order? order = _ordersService?.ConvertDataTableToOrder(orderTable);
+            Order? order = _ordersService?.ConvertDataRowToOrder(orderTable.Rows[0]);
 
             // Assert
             Assert.IsNull(order);

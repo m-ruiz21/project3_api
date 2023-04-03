@@ -9,37 +9,37 @@ namespace Project2Api.Services.Orders
     {
 
         /// <summary>
-        /// Converts DataTable to Order
+        /// Converts data row to order
         /// </summary>
-        /// <param name="orderTable"></param>
-        /// <returns>Order</returns>
-        Order? ConvertDataTableToOrder(DataTable orderTable);
+        /// <param name="dataRow"></param>
+        /// <returns>Order if successful, null otherwise</returns>
+        Order? ConvertDataRowToOrder(DataRow dataRow); 
 
         /// <summary>
         /// Creates order
         /// </summary>
         /// <param name="order"></param>
-        /// <returns>Added Object</returns>
+        /// <returns>Added Object or Error</returns>
         ErrorOr<Order> CreateOrder(Order order);
     
         /// <summary>
         /// Gets order
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>Order</returns>
+        /// <returns>Order or Error</returns>
         ErrorOr<Order> GetOrder(Guid id);
 
         /// <summary>
         /// Gets all orders
         /// </summary>
-        /// <returns>List of Orders</returns>
+        /// <returns>List of Orders or Error</returns>
         ErrorOr<List<Order>> GetAllOrders();
 
         /// <summary>
         /// Updates order
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>Updated Object</returns>
+        /// <returns>Updated Object or Error</returns>
         ErrorOr<Order> UpdateOrder(Guid id, Order order);
 
         /// <summary>

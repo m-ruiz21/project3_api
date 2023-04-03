@@ -16,32 +16,28 @@ public class OrdersService : IOrdersService
         _dbClient = dbClient;
     }
 
-    public Order? ConvertDataTableToOrder(DataTable orderTable)
+    public Order? ConvertDataRowToOrder(DataRow dataRow)
     {
-        // make sure table is not empty
-        if (orderTable.Rows.Count == 0)
+        // check if dataRow is null 
+        if (dataRow == null)
         {
+            // print error message
+            Console.WriteLine("[OrdersService] Failed to convert data table: data row is null");
             return null;
         }
-
-        // make sure table has correct columns
-        if (!orderTable.Columns.Contains("id") || !orderTable.Columns.Contains("order_time") || !orderTable.Columns.Contains("price"))
-        {
-            return null;
-        }
-
-        DataRow row = orderTable.Rows[0];
 
         // check if any of the columns are null 
-        if (row["id"] == null || row["order_time"] == null || row["price"] == null)
+        if (dataRow["id"] == null || dataRow["date_time"] == null || dataRow["total_price"] == null)
         {
+            // print error message
+            Console.WriteLine("[OrdersService] Failed to convert data table: some fields are null");
             return null;
         }
 
         // convert rest of row to order
-        String RawId = row["id"].ToString() ?? "";
-        String? rawOrderTime = row["order_time"].ToString() ?? "";
-        String? rawPrice = row["price"].ToString() ?? "";
+        String RawId = dataRow["id"].ToString() ?? "";
+        String? rawOrderTime = dataRow["date_time"].ToString() ?? "";
+        String? rawPrice = dataRow["total_price"].ToString() ?? "";
 
         // create order
         try
@@ -60,6 +56,12 @@ public class OrdersService : IOrdersService
 
     public ErrorOr<Order> CreateOrder(Order order)
     {
+        // make sure order is valid and no fields are emtpy
+        if (order.Id == Guid.Empty || order.OrderTime == DateTime.MinValue || order.Items.Count == 0 || order.Price == 0.0f)
+        {
+            return Errors.Orders.InvalidOrder;
+        }
+
         // create order
         Task<int> orderTask = _dbClient.ExecuteNonQueryAsync(
             $"INSERT INTO orders (id, date_time, total_price) VALUES ('{order.Id}', '{order.OrderTime}', '{order.Price}')"
@@ -68,19 +70,19 @@ public class OrdersService : IOrdersService
         // check that orderTask was successful
         if (orderTask.Result == 0)
         {
-            return Errors.Orders.UnexpectedError;
+            return Errors.Orders.DbError;
         }
 
         // add items to ordered_menu_items table
         foreach (string item in order.Items)
         {
             Task<int> itemTask = _dbClient.ExecuteNonQueryAsync(
-                $"INSERT INTO ordered_menu_items (order_id, menu_item_name) VALUES ('{order.Id}', '{item}')"
+                $"INSERT INTO ordered_menu_item (order_id, menu_item_name) VALUES ('{order.Id}', '{item}')"
             );
 
             // reduce stock of menu item
             Task<int> reduceMenuItemTask = _dbClient.ExecuteNonQueryAsync(
-                $"UPDATE menu_items SET quantity = quantity - 1 WHERE name = '{item}'"
+                $"UPDATE menu_item SET quantity = quantity - 1 WHERE name = '{item}'"
             );
 
             // reduce stock of cutlery used by menu item 
@@ -104,7 +106,7 @@ public class OrdersService : IOrdersService
         Task<DataTable> orderTask = _dbClient.ExecuteQueryAsync(
             $"SELECT * FROM orders WHERE id = '{id}'"
         );
-        
+ 
         // check that orderTask was successful
         DataTable orderTable = orderTask.Result; 
         if (orderTable.Rows.Count == 0)
@@ -112,7 +114,7 @@ public class OrdersService : IOrdersService
             return Errors.Orders.NotFound;
         }
 
-        Order? order = ConvertDataTableToOrder(orderTable);
+        Order? order = ConvertDataRowToOrder(orderTable.Rows[0]);
 
         // check that order was successfully converted 
         if (order == null)
@@ -122,7 +124,7 @@ public class OrdersService : IOrdersService
 
         // populate order.items table by getting all menu items from ordered_menu_items table
         Task<DataTable> itemsTask = _dbClient.ExecuteQueryAsync(
-            $"SELECT menu_item FROM ordered_menu_items WHERE order_id = '{id}'"
+            $"SELECT menu_item_name FROM ordered_menu_item WHERE order_id = '{id}';"
         );
 
         // check that itemsTask was successful
@@ -152,7 +154,7 @@ public class OrdersService : IOrdersService
     {
         // get all orders from database
         Task<DataTable> ordersTask = _dbClient.ExecuteQueryAsync(
-            $"SELECT * FROM orders"
+            $"SELECT * FROM orders ORDER BY date_time DESC"
         );
 
         // check that ordersTask was successful
@@ -168,11 +170,11 @@ public class OrdersService : IOrdersService
         // convert each row to order
         foreach (DataRow row in ordersTable.Rows)
         {
-            Order? order = ConvertDataTableToOrder(ordersTable);
+            Order? order = ConvertDataRowToOrder(row);
 
             if (order == null)
             {
-                return Errors.Orders.UnexpectedError;
+                return Errors.Orders.DbError;
             }
 
             orders.Add(order);
@@ -190,20 +192,20 @@ public class OrdersService : IOrdersService
 
         // delete all ordered menu items for this order
         Task<int> deleteTask = _dbClient.ExecuteNonQueryAsync(
-            $"DELETE FROM ordered_menu_items WHERE order_id = '{id}'"
+            $"DELETE FROM ordered_menu_item WHERE order_id = '{id}'"
         );
 
         // make sure updateTask and deleteTask were successful
         if (updateTask.Result == 0 || deleteTask.Result == 0)
         {
-            return Errors.Orders.UnexpectedError;
+            return Errors.Orders.InvalidOrder;
         }
         
         // add new ordered menu items for this order
         foreach (string item in order.Items)
         {
             Task<int> itemTask = _dbClient.ExecuteNonQueryAsync(
-                $"INSERT INTO ordered_menu_items (order_id, menu_item_name) VALUES ('{order.Id}', '{item}')"
+                $"INSERT INTO ordered_menu_item (order_id, menu_item_name) VALUES ('{order.Id}', '{item}')"
             );
 
             // make sure itemTask was successful

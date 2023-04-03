@@ -26,23 +26,9 @@ namespace Project2Api.Controllers
         [HttpPost()]
         public IActionResult CreateOrder(OrderRequest orderRequest)
         {
-            if (orderRequest.Items.Count == 0 || orderRequest.Items == null)
-            {
-                return BadRequest(
-                    new { error = "Order Must Not Be Empty"}
-                );
-            }
-
-            if (orderRequest.Price == 0)
-            {
-                return BadRequest(
-                    new { error = "Price Must Be Greater Than 0" }
-                );
-            }
-
             // create new order item 
             Order order = new Order(
-                new Guid(),
+                Guid.NewGuid(),
                 DateTime.Now,
                 orderRequest.Items,
                 orderRequest.Price
@@ -52,12 +38,22 @@ namespace Project2Api.Controllers
             ErrorOr<Order> orderErrorOr = _ordersService.CreateOrder(order);
 
             // check if order was created successfully
+            // if not, return status code based on error type
             if (orderErrorOr.IsError)
             {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new { error = orderErrorOr.Errors[0].Description }
-                );
+                if (orderErrorOr.FirstError.Code == "Order.DbError")
+                {
+                    return StatusCode(
+                        StatusCodes.Status500InternalServerError,
+                        new { error = orderErrorOr.Errors[0].Description }
+                    );
+                }
+                else
+                {
+                    return BadRequest(
+                        new { error = orderErrorOr.Errors[0].Description }
+                    );
+                }
             }
 
             OrderResponse orderResponse = new OrderResponse(
@@ -70,7 +66,7 @@ namespace Project2Api.Controllers
             // return 201 response with orderResponse
             return CreatedAtAction(
                 nameof(GetOrder),
-                new { id = orderResponse.Id },
+                new { id = order.Id },
                 orderResponse
             );
         }
@@ -83,14 +79,6 @@ namespace Project2Api.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult GetOrder(Guid id)
         {
-            // make sure id is not empty
-            if (id == null)
-            {
-                return BadRequest(
-                    new { error = "Id Must Not Be Empty" }
-                );
-            }
-
             // get order with id=id
             ErrorOr<Order> orderErrorOr = _ordersService.GetOrder(id);
 
@@ -154,7 +142,7 @@ namespace Project2Api.Controllers
         public IActionResult UpdateOrder(OrderRequest orderRequest, Guid id)
         {
             // make sure id is not empty
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return BadRequest(
                     new { error = "Id Must Not Be Empty" }
@@ -209,7 +197,7 @@ namespace Project2Api.Controllers
         public IActionResult DeleteOrder(Guid id)
         {
             // make sure id is not empty
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return BadRequest(
                     new { error = "Id Must Not Be Empty" }
