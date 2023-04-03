@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Project2Api.Contracts.Order;
 using Project2Api.Models;
 using Project2Api.Services.Orders;
+using Project2Api.Controllers;
 
 namespace Project2Api.Controllers
 {
     [ApiController]
     [Route("orders")]
-    public class OrdersController : ControllerBase
+    public class OrdersController : ApiController 
     {
         private readonly IOrdersService _ordersService;
         
@@ -36,20 +37,10 @@ namespace Project2Api.Controllers
             // save order to database
             ErrorOr<Order> orderErrorOr = _ordersService.CreateOrder(order);
 
-            // check for errors and return appropriate response code 
-
-            OrderResponse orderResponse = new OrderResponse(
-                order.Id,
-                order.OrderTime,
-                order.Items,
-                order.Price
-            );
-
-            // return 201 response with orderResponse
-            return CreatedAtAction(
-                nameof(GetOrder),
-                new { id = order.Id },
-                orderResponse
+            // return Ok(orderResponse) if succcessful, otherwise return error
+            return orderErrorOr.Match(
+                value => Ok(MapOrderToOrderResponse(value)),
+                errors => Problem(errors)
             );
         }
         
@@ -64,22 +55,11 @@ namespace Project2Api.Controllers
             // get order with id=id
             ErrorOr<Order> orderErrorOr = _ordersService.GetOrder(id);
 
-            // check if order existed
-            if (orderErrorOr.IsError)
-            {
-                return NotFound(
-                    new { error = orderErrorOr.Errors[0].Description }
-                );
-            }
-
-            OrderResponse orderResponse = new OrderResponse(
-                orderErrorOr.Value.Id,
-                orderErrorOr.Value.OrderTime,
-                orderErrorOr.Value.Items,
-                orderErrorOr.Value.Price
+            // return Ok(orderResponse) if succcessful, otherwise return error
+            return orderErrorOr.Match(
+                value => Ok(MapOrderToOrderResponse(value)),
+                errors => Problem(errors)
             );
-
-            return Ok(orderResponse);
         }
 
         /// <summary>
@@ -92,26 +72,16 @@ namespace Project2Api.Controllers
             // get all orders
             ErrorOr<List<Order>> ordersErrorOr = _ordersService.GetAllOrders(pageNumber, pageSize);
 
-            // check if orders were successfully retreieved
-            if (ordersErrorOr.IsError)
-            {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new { error = ordersErrorOr.Errors[0].Description }
-                );
-            }
-
-            // get list of orders and map to list of orderResponses
-            List<OrderResponse> orderResponses = ordersErrorOr.Value
-                .Select(order => new OrderResponse(
+            // get list of orders and map list to order Responses if successful, else return error 
+            return ordersErrorOr.Match(
+                value => Ok(value.Select(order => new OrderResponse(
                     order.Id,
                     order.OrderTime,
                     order.Items,
                     order.Price
-                ))
-                .ToList();
-            
-            return Ok(orderResponses);
+                )).ToList()),
+                errors => Problem(errors)
+            );
         }
 
         /// <summary>
@@ -134,33 +104,11 @@ namespace Project2Api.Controllers
             // update order
             ErrorOr<Order> orderErrorOr = _ordersService.UpdateOrder(id, order);
 
-            // check for errors and return appropriate status code 
-            if (orderErrorOr.IsError)
-            {
-                if (orderErrorOr.FirstError.Code == "Order.DbError")
-                {
-                    return StatusCode(
-                        StatusCodes.Status500InternalServerError,
-                        new { error = orderErrorOr.Errors[0].Description }
-                    );
-                }
-                else
-                {
-                    return NotFound(
-                        new { error = orderErrorOr.Errors[0].Description }
-                    );
-                }
-            }
-
-            // convert to order Response
-            OrderResponse orderResponse = new OrderResponse(
-                orderErrorOr.Value.Id,
-                orderErrorOr.Value.OrderTime,
-                orderErrorOr.Value.Items,
-                orderErrorOr.Value.Price
+            // return Ok(orderResponse) if succcessful, otherwise return error
+            return orderErrorOr.Match(
+                value => Ok(MapOrderToOrderResponse(value)),
+                errors => Problem(errors)
             );
-
-            return Ok(orderResponse);
         }
 
 
@@ -174,11 +122,22 @@ namespace Project2Api.Controllers
         {
             // delete order
             ErrorOr<IActionResult> orderErrorOr = _ordersService.DeleteOrder(id);
-            
-            return orderErrorOr.Match<IActionResult>(
-                error => Problem(),
-                value => NoContent()
+
+            // return No Content if successful, otherwise return error 
+            return orderErrorOr.Match(
+                value => NoContent(),
+                errors => Problem(errors)
             ); 
-        } 
+        }
+
+        private static OrderResponse MapOrderToOrderResponse(Order order)
+        {
+            return new OrderResponse(
+                order.Id,
+                order.OrderTime,
+                order.Items,
+                order.Price
+            );
+        }  
     }
 }

@@ -1,9 +1,6 @@
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
-using Project2Api.Contracts.Order;
-using Project2Api.Models;
 using Project2Api.ServiceErrors;
-using Project2Api.Services.Orders;
 
 namespace Project2Api.Controllers;
 
