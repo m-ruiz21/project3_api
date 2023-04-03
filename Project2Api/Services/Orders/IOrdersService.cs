@@ -33,7 +33,7 @@ namespace Project2Api.Services.Orders
         /// Gets all orders
         /// </summary>
         /// <returns>List of Orders or Error</returns>
-        ErrorOr<List<Order>> GetAllOrders();
+        ErrorOr<List<Order>> GetAllOrders(int pageNumber, int pageSize);
 
         /// <summary>
         /// Updates order

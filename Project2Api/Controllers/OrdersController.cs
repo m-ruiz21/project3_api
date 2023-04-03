@@ -105,7 +105,7 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <returns>List of orderResponses</returns>
         [HttpGet()]
-        public IActionResult GetAllOrders()
+        public IActionResult GetAllOrders(int pageNumber = 1, int pageSize = 50)
         {
             // get all orders
             ErrorOr<List<Order>> ordersErrorOr = _ordersService.GetAllOrders();
@@ -209,5 +209,7 @@ namespace Project2Api.Controllers
 
             return orderErrorOr.Value;
         }
+
+    
     }
 }

@@ -150,11 +150,11 @@ public class OrdersService : IOrdersService
         return order;   
     }
 
-    public ErrorOr<List<Order>> GetAllOrders()
+    public ErrorOr<List<Order>> GetAllOrders(int pageNumber, int pageSize)
     {
         // get all orders from database
         Task<DataTable> ordersTask = _dbClient.ExecuteQueryAsync(
-            $"SELECT * FROM orders ORDER BY date_time DESC"
+            $"SELECT * FROM orders ORDER BY date_time DESC LIMIT {pageNumber} OFFSET {pageSize}"
         );
 
         // check that ordersTask was successful
