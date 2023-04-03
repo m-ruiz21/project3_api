@@ -84,7 +84,7 @@ Returns: created object
 Example:
 ```json
 {
-    "id": 42312478191,
+    "id": "74e359a6-d187-11ed-bf45-00155d04d6fd",
     "date_time": "2022-03-07 08:44:06.172087",
     "items": [
         "brown rice",
@@ -128,7 +128,7 @@ Returns: requested object
 Example:
 ```json
 {
-    "id": 42312478191,
+    "id": "74e359a6-d187-11ed-bf45-00155d04d6fd",
     "date_time": "2022-03-07 08:44:06.172087",
     "items": [
         "brown rice",
@@ -186,7 +186,7 @@ PUT /orders/{id}
 ```
 ```json
 {
-     "id": 42312478191,
+     "id": "74e359a6-d187-11ed-bf45-00155d04d6fd",
     "date_time": "2022-03-07 08:44:06.172087",
     "items": [
         "brown rice",
@@ -208,7 +208,7 @@ Returns: updated object
 Example:
 ```json
 {
-    "id": 42312478191,
+    "id": "74e359a6-d187-11ed-bf45-00155d04d6fd",
     "date_time": "2022-03-07 08:44:06.172087",
     "items": [
         "brown rice",
