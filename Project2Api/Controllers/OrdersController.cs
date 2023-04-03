@@ -105,10 +105,10 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <returns>List of orderResponses</returns>
         [HttpGet()]
-        public IActionResult GetAllOrders()
+        public IActionResult GetAllOrders(int pageNumber = 1, int pageSize = 50)
         {
             // get all orders
-            ErrorOr<List<Order>> ordersErrorOr = _ordersService.GetAllOrders();
+            ErrorOr<List<Order>> ordersErrorOr = _ordersService.GetAllOrders(pageNumber, pageSize);
 
             // check if orders were successfully retreieved
             if (ordersErrorOr.IsError)
@@ -207,7 +207,25 @@ namespace Project2Api.Controllers
             // delete order
             ErrorOr<IActionResult> orderErrorOr = _ordersService.DeleteOrder(id);
 
+            // check for db or not found errors
+            if (orderErrorOr.IsError)
+            {
+                if (orderErrorOr.FirstError.Code == "Order.DbError")
+                {
+                    return StatusCode(
+                        StatusCodes.Status500InternalServerError,
+                        new { error = orderErrorOr.Errors[0].Description }
+                    );
+                }
+                else
+                {
+                    return NotFound(
+                        new { error = orderErrorOr.Errors[0].Description }
+                    );
+                }
+            }
+
             return orderErrorOr.Value;
-        }
+        } 
     }
 }
