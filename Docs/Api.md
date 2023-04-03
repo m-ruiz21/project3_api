@@ -4,52 +4,52 @@
 - [Create Order](#create-order)
     - [Create Order Request](#create-order-request)
     - [Create Order Response](#create-order-response)
-- [Get Order](#get-order)
-    -[Get Order Request](#get-order-request)
-    -[Get Order Response](#get-order-response)
-- [Get All Orders](#get-all-orders)
-    -[Get All Orders Request](#get-all-orders-request)
-    -[Get All Orders Response](#get-all-orders-response)
+- [Get Order](#get-order)  
+    - [Get Order Request](#get-order-request)  
+    - [Get Order Response](#get-order-response)
+- [Get All Orders](#get-all-orders)  
+    - [Get All Orders Request](#get-all-orders-request)
+    - [Get All Orders Response](#get-all-orders-response)
 - [Update Order](#update-order)
-    -[Update Order Request](#update-order-request)
-    -[Update Order Response](#update-order-response)
+    - [Update Order Request](#update-order-request)
+    - [Update Order Response](#update-order-response)
 - [Delete Order](#delete-order)
-    -[Delete Order Request](#delete-order-request)
-    -[Update Order Response](#delete-order-response)
+    - [Delete Order Request](#delete-order-request)
+    - [Update Order Response](#delete-order-response)
 
 [/menu-item](#menu-item)
 - [Create Menu Item](#create-menu-item)
     - [Create Menu Item Request](#create-menu-item-request)
     - [Create Menu Item Response](#create-menu-item-response)
 - [Get Menu Item](#get-menu-item-by-name)
-    -[Get Menu Item Request](#get-menu-item-request)
-    -[Get Menu Item Response](#get-menu-item-response)
+    - [Get Menu Item Request](#get-menu-item-request)
+    - [Get Menu Item Response](#get-menu-item-response)
 - [Get All Menu Items](#get-all-menu-items)
-    -[Get All Menu Items Request](#get-all-menu-items-request)
-    -[Get All Menu Items Response](#get-all-menu-items-response)
+    - [Get All Menu Items Request](#get-all-menu-items-request)
+    - [Get All Menu Items Response](#get-all-menu-items-response)
 - [Update Menu Item](#update-menu-item)
-    -[Update Menu Item Request](#update-menu-item-request)
-    -[Update Menu Item Response](#update-menu-item-response)
+    - [Update Menu Item Request](#update-menu-item-request)
+    - [Update Menu Item Response](#update-menu-item-response)
 - [Delete Menu Item](#delete-menu-item)
-    -[Delete Menu Item Request](#delete-menu-item-request)
-    -[Update Menu Item Response](#delete-menu-item-response)
+    - [Delete Menu Item Request](#delete-menu-item-request)
+    - [Update Menu Item Response](#delete-menu-item-response)
 
 [/inventory ](#inventory)
 - [Create Inventory](#create-inventory)
     - [Create Inventory Request](#create-inventory-request)
     - [Create Inventory Response](#create-inventory-response)
 - [Get Inventory](#get-inventory-by-name)
-    -[Get Inventory Request](#get-inventory-request)
-    -[Get Inventory Response](#get-inventory-response)
-- [Get All Inventorys](#get-all-inventorys)
-    -[Get All Inventorys Request](#get-all-inventorys-request)
-    -[Get All Inventorys Response](#get-all-inventorys-response)
+    - [Get Inventory Request](#get-inventory-request)
+    - [Get Inventory Response](#get-inventory-response)
+- [Get All Inventory](#get-all-inventory)
+    - [Get All Inventory Request](#get-all-inventory-request)
+    - [Get All Inventory Response](#get-all-inventory-response)
 - [Update Inventory](#update-inventory)
-    -[Update Inventory Request](#update-inventory-request)
-    -[Update Inventory Response](#update-inventory-response)
+    - [Update Inventory Request](#update-inventory-request)
+    - [Update Inventory Response](#update-inventory-response)
 - [Delete Inventory](#delete-inventory)
-    -[Delete Inventory Request](#delete-inventory-request)
-    -[Update Inventory Response](#delete-inventory-response)
+    - [Delete Inventory Request](#delete-inventory-request)
+    - [Update Inventory Response](#delete-inventory-response)
 
 # /orders
 ## Create Order
@@ -160,6 +160,8 @@ Example:
 ```js
 GET /orders
 ```
+
+**Parameters**: pageNumber=1, pageSize=100 
 
 ### Get All Orders Response
 
@@ -585,14 +587,14 @@ Example:
 }
 ```
 
-## Get All Menu Items 
+## Get All Inventory
 
-### Get All Menu Items Request
+### Get All Inventory Request
 ```js
-GET /menu-item
+GET /inventory
 ```
 
-### Get All Menu Items Response
+### Get All Inventory Response
 
 #### Successful Request 
 ```js
@@ -603,7 +605,7 @@ Returns: all inventory
 Example:
 ```json
 {
-    "inventory": [
+    [
         {
             "name": "tortilla",
             "type": "menu item",
