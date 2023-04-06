@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - PomAndHoneyAPI
+name: Build, Test and Deploy ASP.Net Core app to Azure Web App - PomAndHoneyAPI
 
 on:
   push:
@@ -10,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: windows-latest
 
     steps:
@@ -22,8 +19,14 @@ jobs:
           dotnet-version: '7.x'
           include-prerelease: true
 
+      - name: Restore packages
+        run: dotnet restore
+
       - name: Build with dotnet
         run: dotnet build --configuration Release
+
+      - name: Run NUnit tests
+        run: dotnet test ./Tests/**/*.csproj
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -36,7 +39,7 @@ jobs:
 
   deploy:
     runs-on: windows-latest
-    needs: build
+    needs: build-and-test
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
