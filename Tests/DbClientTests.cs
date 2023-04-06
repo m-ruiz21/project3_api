@@ -7,10 +7,10 @@ using System.Data;
 namespace Project2Api.Tests
 {
     [TestFixture]
-    public class DbClientTests
+    internal class DbClientTests
     {
         private IConfiguration? _configuration;
-        private DbClient? _dbClient;
+        private DbClient _dbClient = null!;
 
         [SetUp]
         public void Setup()
@@ -29,7 +29,7 @@ namespace Project2Api.Tests
             var query = "SELECT * FROM menu_item";
 
             // Act
-            DataTable? result = await _dbClient?.ExecuteQueryAsync(query);
+            DataTable result = await _dbClient.ExecuteQueryAsync(query);
 
             // Assert Not Null
             Assert.IsNotNull(result);
@@ -48,7 +48,7 @@ namespace Project2Api.Tests
             var query = "SELECT * FROM best_devs_table WHERE name='mateo'";
 
             // Act
-            DataTable? result = await _dbClient?.ExecuteQueryAsync(query);
+            DataTable result = await _dbClient.ExecuteQueryAsync(query);
 
             // Assert Not Null
             Assert.IsNotNull(result);
@@ -67,7 +67,7 @@ namespace Project2Api.Tests
             var query = "INSERT INTO menu_item (name, quantity, price, category) VALUES ('hot dog', 12, 15.0, 'base')";
 
             // Act 
-            int? rowsAffected = await _dbClient?.ExecuteNonQueryAsync(query);
+            int rowsAffected = await _dbClient.ExecuteNonQueryAsync(query);
 
             // Assert 
             Assert.AreEqual(1, rowsAffected); // Assuming the above query inserts one row
@@ -85,14 +85,14 @@ namespace Project2Api.Tests
             var query = "INSERT INTO menu_item (name, quantity, price, category) VALUES ('hot dog', 12, 15.0, 'base')";
 
             // Act 
-            var rowsAffected = await _dbClient?.ExecuteNonQueryAsync(query);
+            int rowsAffected = await _dbClient.ExecuteNonQueryAsync(query);
 
             // Assert 
             Assert.AreEqual(1, rowsAffected); // Assuming the above query inserts one row
 
             // clean up
             query = "DELETE FROM menu_item WHERE name='hot dog'";
-            rowsAffected = await _dbClient?.ExecuteNonQueryAsync(query);
+            rowsAffected = await _dbClient.ExecuteNonQueryAsync(query);
             Assert.AreEqual(1, rowsAffected);
         }
     }

@@ -39,7 +39,7 @@ public class Order
         Guid? id = null
     )
     {
-        if (price == 0.0f)
+        if (price == 0.0f || orderTime == DateTime.MinValue)
         {
             return Errors.Orders.InvalidOrder;
         }
