@@ -25,10 +25,10 @@ public static partial class Errors
             description: "Error occurred when getting order from database"
         );
 
-        public static Error InvalidOrder => Error.Custom(
+        public static Error InvalidOrder(string error) => Error.Custom(
             type: (int)CustomErrorType.InvalidParams,
             code: "Order.InvalidOrder", 
-            description: "Given order is invalid"
+            description: $"Given order is invalid: {error}"
         );
     }
 }
