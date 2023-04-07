@@ -22,14 +22,13 @@ jobs:
       - name: Restore packages
         run: dotnet restore
 
-      - name: Set Environment Variables
-        run: |
-          echo "FOO=bar" >> $GITHUB_ENV
-          echo "PSQL_DB_PASSWORD=${{ secrets.PSQL_DB_PASSWORD }}" >> $GITHUB_ENV
-          cat $GITHUB_ENV
+      - name: Run NUnit Tests
+      - run: |
+          export JWT_SECRET=MIIBO...
+          dotnet test ./Tests/Tests.csproj
   
-      - name: Run NUnit tests
-        run: dotnet test ./Tests/Tests.csproj
+#       - name: Run NUnit tests
+#         run: dotnet test ./Tests/Tests.csproj
 
   build:
     runs-on: windows-latest
