@@ -6,9 +6,6 @@ on:
       - master
   workflow_dispatch:
 
-env:
-  DATABASE_PASSWORD: ${{ secrets.PSQL_DB_PASSWORD }}
-
 jobs:
   test:
     runs-on: windows-latest
@@ -16,6 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: Set Environment Variables
+        run: |
+          echo "PSQL_DB_PASSWORD=${{ secrets.PSQL_DB_PASSWORD }}" >> $GITHUB_ENV
+          
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -24,7 +25,6 @@ jobs:
 
       - name: Restore packages
         run: dotnet restore
-
 
       - name: Run NUnit tests
         run: dotnet test ./Tests/Tests.csproj
