@@ -16,6 +16,7 @@ namespace Project2Api.DbTools
             
             if (_host == null || _database == null || _username == null || _password == null)
             {
+                Console.WriteLine($"password: {_password}");
                 throw new ArgumentNullException("Missing configuration values for PostgreSQL");
             }
 
