@@ -41,7 +41,7 @@ public class Order
     {
         if (price == 0.0f || orderTime == DateTime.MinValue)
         {
-            return Errors.Orders.InvalidOrder("Price or order time is invalid");
+            return Errors.Orders.InvalidOrder;
         }
 
         return new Order(
@@ -102,7 +102,7 @@ public class Order
         {
             // print error message
             Console.WriteLine("[OrdersService] Failed to convert data table: some fields are null");
-            return Errors.Orders.InvalidOrder("Some fields are null");
+            return Errors.Orders.NotFound;
         }
 
         // convert rest of row to order

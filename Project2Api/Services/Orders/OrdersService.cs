@@ -61,7 +61,7 @@ public class OrdersService : IOrdersService
         // check input
         if (id == Guid.Empty)
         {
-            return Errors.Orders.InvalidOrder("guid is empty");
+            return Errors.Orders.InvalidOrder;
         }
 
         // get order from database
@@ -184,7 +184,7 @@ public class OrdersService : IOrdersService
     {
         if (id == Guid.Empty)
         {
-            return Errors.Orders.InvalidOrder("guid is empty");
+            return Errors.Orders.InvalidOrder;
         }
 
         // delete all orders in ordered_menu_item table with this order id
