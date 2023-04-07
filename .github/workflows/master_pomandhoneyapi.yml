@@ -26,7 +26,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Run NUnit tests
-        run: dotnet test ./Tests/**/*.csproj
+        run: dotnet test ./Tests/Tests.csproj
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
