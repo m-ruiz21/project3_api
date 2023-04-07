@@ -24,7 +24,7 @@ jobs:
 
       - name: Run NUnit Tests
       - run: |
-          export JWT_SECRET=MIIBO...
+          export PSQL_DB_PASSWORD={{ secrets.PSQL_DB_PASSWORD }}...
           dotnet test ./Tests/Tests.csproj
   
 #       - name: Run NUnit tests
