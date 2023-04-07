@@ -24,7 +24,9 @@ jobs:
 
       - name: Set Environment Variables
         run: |
+          echo "FOO=bar" >> $GITHUB_ENV
           echo "PSQL_DB_PASSWORD=${{ secrets.PSQL_DB_PASSWORD }}" >> $GITHUB_ENV
+          cat $GITHUB_ENV
   
       - name: Run NUnit tests
         run: dotnet test ./Tests/Tests.csproj
