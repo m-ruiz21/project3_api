@@ -6,6 +6,9 @@ on:
       - master
   workflow_dispatch:
 
+env:
+  DATABASE_PASSWORD: ${{ secrets.PSQL_DB_PASSWORD }}
+
 jobs:
   test:
     runs-on: windows-latest
@@ -21,10 +24,6 @@ jobs:
 
       - name: Restore packages
         run: dotnet restore
-        
-        
-      - name: Set up environment variable
-        run: echo "PSQL_DB_PASSWORD=${{ secrets.PSQL_DB_PASSWORD }}" >> $GITHUB_ENV
 
 
       - name: Run NUnit tests
