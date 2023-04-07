@@ -53,8 +53,8 @@ namespace Tests.Models.OrdersTests
             );
 
             // Assert
-            Assert.IsTrue(errorOrOrder.IsError);
-            Assert.AreEqual(Errors.Orders.InvalidOrder, errorOrOrder.FirstError);
+            Assert.That(errorOrOrder.IsError, Is.True);
+            Assert.That(errorOrOrder.FirstError, Is.EqualTo(Errors.Orders.InvalidOrder)); 
         }
 
         // test for invalid order price
