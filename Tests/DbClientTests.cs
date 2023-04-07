@@ -1,6 +1,5 @@
 using Project2Api.DbTools;
 using Microsoft.Extensions.Configuration;
-using Moq;
 using System.Data;
 
 
@@ -31,14 +30,10 @@ namespace Project2Api.Tests
             // Act
             DataTable result = await _dbClient.ExecuteQueryAsync(query);
 
-            // Assert Not Null
-            Assert.IsNotNull(result);
-
-            // Make sure it's a datatable
-            Assert.IsInstanceOf<DataTable>(result);
-
-            // Make sure it actually returned something
-            Assert.IsTrue(result.Rows.Count > 0);
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.InstanceOf<DataTable>());
+            Assert.That(result.Rows.Count, Is.GreaterThan(0));
         }
 
         [Test]
@@ -50,14 +45,10 @@ namespace Project2Api.Tests
             // Act
             DataTable result = await _dbClient.ExecuteQueryAsync(query);
 
-            // Assert Not Null
-            Assert.IsNotNull(result);
-
-            // Make sure it's a datatable
-            Assert.IsInstanceOf<DataTable>(result);
-
-            // Make sure it returned empty table
-            Assert.IsTrue(result.Rows.Count == 0);
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.InstanceOf<DataTable>());
+            Assert.That(result.Rows.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -70,7 +61,7 @@ namespace Project2Api.Tests
             int rowsAffected = await _dbClient.ExecuteNonQueryAsync(query);
 
             // Assert 
-            Assert.AreEqual(1, rowsAffected); // Assuming the above query inserts one row
+            Assert.That(rowsAffected, Is.EqualTo(1));
 
             // clean up
             query = "DELETE FROM menu_item WHERE name='hot dog'";
@@ -88,12 +79,12 @@ namespace Project2Api.Tests
             int rowsAffected = await _dbClient.ExecuteNonQueryAsync(query);
 
             // Assert 
-            Assert.AreEqual(1, rowsAffected); // Assuming the above query inserts one row
+            Assert.That(rowsAffected, Is.EqualTo(1));
 
             // clean up
             query = "DELETE FROM menu_item WHERE name='hot dog'";
             rowsAffected = await _dbClient.ExecuteNonQueryAsync(query);
-            Assert.AreEqual(1, rowsAffected);
+            Assert.That(rowsAffected, Is.EqualTo(1));
         }
     }
 }

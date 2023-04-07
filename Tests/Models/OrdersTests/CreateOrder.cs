@@ -26,11 +26,12 @@ namespace Tests.Models.OrdersTests
             );
 
             // Assert
-            Assert.IsFalse(errorOrOrder.IsError);
-            Assert.AreEqual(orderTime, errorOrOrder.Value.OrderTime);
-            Assert.AreEqual(orderItems, errorOrOrder.Value.Items);
-            Assert.AreEqual(1.0f, errorOrOrder.Value.Price);
-            Assert.AreEqual(guid, errorOrOrder.Value.Id);
+            Assert.That(errorOrOrder.IsError, Is.False);
+            Assert.That(errorOrOrder.Value.OrderTime, Is.EqualTo(orderTime));
+            Assert.That(errorOrOrder.Value.Items, Is.EqualTo(orderItems));
+            Assert.That(errorOrOrder.Value.Price, Is.EqualTo(1.0f));
+            Assert.That(errorOrOrder.Value.Id, Is.EqualTo(guid));
+
         }
 
         // test for invalid order time
@@ -75,8 +76,8 @@ namespace Tests.Models.OrdersTests
             );
 
             // Assert
-            Assert.IsTrue(errorOrOrder.IsError);
-            Assert.AreEqual(Errors.Orders.InvalidOrder, errorOrOrder.FirstError);
+            Assert.That(errorOrOrder.IsError, Is.True);
+            Assert.That(errorOrOrder.FirstError, Is.EqualTo(Errors.Orders.InvalidOrder));
         }
     }
 }
