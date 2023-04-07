@@ -86,7 +86,7 @@ public class OrdersService : IOrdersService
 
         // populate order.items table by getting all menu items from ordered_menu_items table
         Task<DataTable> itemsTask = _dbClient.ExecuteQueryAsync(
-            $"SELECT menu_item_name FROM ordered_menu_item WHERE order_id = '{id}';"
+            $"SELECT menu_item_name FROM ordered_menu_item WHERE order_id = '{id}'"
         );
 
         // check that itemsTask was successful
