@@ -9,10 +9,15 @@ namespace Project2Api.DbTools
         
         public DbClient(IConfiguration config)
         {
-            string _host = config.GetValue<string>("PostgreSQL:Host");
-            string _database = config.GetValue<string>("PostgreSQL:Database");
-            string _username = config.GetValue<string>("PostgreSQL:Username");
-            string _password = config.GetValue<string>("PostgreSQL:Password");
+            string? _host = config.GetValue<string>("PostgreSQL:Host");
+            string? _database = config.GetValue<string>("PostgreSQL:Database");
+            string? _username = config.GetValue<string>("PostgreSQL:Username");
+            string? _password = Environment.GetEnvironmentVariable("PSQL_DB_PASSWORD");
+            
+            if (_host == null || _database == null || _username == null || _password == null)
+            {
+                throw new ArgumentNullException("Missing configuration values for PostgreSQL");
+            }
 
             _connectionString = $"Host={_host};Database={_database};Username={_username};Password={_password};";
         }

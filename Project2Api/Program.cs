@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
     builder.Services.AddSingleton<IDbClient, DbClient>();
-    builder.Services.AddSingleton<IOrdersService, OrdersService>(); 
+    builder.Services.AddSingleton<IOrdersService, OrdersService>();     
     builder.Services.AddControllers();
 }
 
