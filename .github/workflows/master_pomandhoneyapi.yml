@@ -23,7 +23,7 @@ jobs:
         run: dotnet restore
 
       - name: Run NUnit Tests
-      - run: |
+        run: |
           export PSQL_DB_PASSWORD={{ secrets.PSQL_DB_PASSWORD }}...
           dotnet test ./Tests/Tests.csproj
   
