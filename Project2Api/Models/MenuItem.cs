@@ -2,11 +2,11 @@ namespace Project2Api.Models;
 
 public class MenuItem
 {
-    string name { get; }
-    float price { get; }
-    string category { get; }
-    int quantity { get; }
-    List<string> MenuItemCutlery { get; }
+    public string Name { get; }
+    public float Price { get; }
+    public string Category { get; }
+    public int Quantity { get; }
+    public List<string> Cutlery { get; }
 
     private MenuItem(
         string name,
@@ -15,10 +15,10 @@ public class MenuItem
         int quantity,
         List<string> MenuItemCutlery)
     {
-        this.name = name;
-        this.price = price;
-        this.category = category;
-        this.quantity = quantity;
-        this.MenuItemCutlery = MenuItemCutlery;
+        this.Name = name;
+        this.Price = price;
+        this.Category = category;
+        this.Quantity = quantity;
+        this.Cutlery = MenuItemCutlery;
     }
 }
