@@ -18,7 +18,7 @@ public class MenuItemService : IMenuItemService
 
         // create menu_item
         Task<int> menuItemTask = _dbClient.ExecuteNonQueryAsync(
-            $"INSERT INTO menu_Item (name, price, quantity) VALUES ('{menuItem.Name}', '{menuItem.Price}', '{menuItem.Quantity}')"
+            $"INSERT INTO menu_item (name, price, quantity) VALUES ('{menuItem.Name}', '{menuItem.Price}', '{menuItem.Quantity}')"
         );
 
         if(menuItemTask.Result == 0)
@@ -27,17 +27,16 @@ public class MenuItemService : IMenuItemService
         }
 
         // add items to ordered_menu_items table
-        foreach (string item in menuItem.Cutlery)
+        foreach (string cutlery in menuItem.Cutlery)
         {
-            Task<int> itemTask = _dbClient.ExecuteNonQueryAsync(
-                $"INSERT INTO menu_item (menu_item_name, cutlery_name) VALUES ('{menuItem.Name}', '{item}')"
+            Task<int> cutleryTask = _dbClient.ExecuteNonQueryAsync(
+                $"INSERT INTO menu_item_cutlery (menu_item_name, cutlery_name) VALUES ('{menuItem.Name}', '{cutlery}')"
             );
 
-
             // check that itemTask was successful
-            if (menuItemTask.Result == 0)
+            if (cutleryTask.Result == 0)
             {
-                return ServiceErrors.Errors.Orders.UnexpectedError;
+                return ServiceErrors.Errors.Orders.DbError;
             }
         }
 
