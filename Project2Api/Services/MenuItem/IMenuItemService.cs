@@ -2,7 +2,7 @@ using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Project2Api.Models;
 
-namespace Project2Api.Services.Orders
+namespace Project2Api.Services.MenuItems
 {
     public interface IMenuItemService
     {

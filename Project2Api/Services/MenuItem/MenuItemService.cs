@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Project2Api.DbTools;
 using Project2Api.Models;
 
-namespace Project2Api.Services.Orders;
+namespace Project2Api.Services.MenuItems;
 public class MenuItemService : IMenuItemService
 {
     private readonly IDbClient _dbClient;
@@ -43,7 +43,7 @@ public class MenuItemService : IMenuItemService
         return menuItem;
     }
 
-    public ErrorOr<IActionResult> DeleteMenuItem(Guid id)
+    public ErrorOr<MenuItem> GetMenuItem(Guid id)
     {
         throw new NotImplementedException();
     }
@@ -53,12 +53,13 @@ public class MenuItemService : IMenuItemService
         throw new NotImplementedException();
     }
 
-    public ErrorOr<MenuItem> GetMenuItem(Guid id)
+
+    public ErrorOr<MenuItem> UpdateMenuItem(Guid id, Order order)
     {
         throw new NotImplementedException();
     }
-
-    public ErrorOr<MenuItem> UpdateMenuItem(Guid id, Order order)
+    
+    public ErrorOr<IActionResult> DeleteMenuItem(Guid id)
     {
         throw new NotImplementedException();
     }
