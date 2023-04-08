@@ -8,12 +8,12 @@ namespace Project2Api.Services.MenuItems
     {
         ErrorOr<MenuItem> CreateMenuItem(MenuItem menuItem);
     
-        ErrorOr<MenuItem> GetMenuItem(Guid id);
+        ErrorOr<MenuItem> GetMenuItem(string name);
 
         ErrorOr<List<MenuItem>> GetAllMenuItems(int pageNumber, int pageSize);
 
-        ErrorOr<MenuItem> UpdateMenuItem(Guid id, Order order);
+        ErrorOr<MenuItem> UpdateMenuItem(string name, MenuItem menuItem);
 
-        ErrorOr<IActionResult> DeleteMenuItem(Guid id);
+        ErrorOr<IActionResult> DeleteMenuItem(string name);
     }
 }
