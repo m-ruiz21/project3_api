@@ -5,11 +5,11 @@ using System.Data;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Project2Api.Tests.Services.OrdersServiceTests
+namespace Project2Api.Tests.Services.MenuItemServiceTests
 {
     
     [TestFixture]
-    internal class DeleteOrderTests 
+    internal class DeleteMenuItemTests 
     {
 
         private Mock<IDbClient> _dbClientMock = null!;
@@ -21,7 +21,7 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
             _dbClientMock = new Mock<IDbClient>();
             _dbClientMock.Setup(x => x.ExecuteQueryAsync(It.IsAny<string>())).ReturnsAsync(new DataTable());
             _ordersService = new OrdersService(_dbClientMock.Object);
-        } 
+        }
 
         [Test]
         public void DeleteOrder_WithValidOrderId_Returns204Status()
