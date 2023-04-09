@@ -1,11 +1,9 @@
 using Moq;
-using Project2Api.Contracts.Order;
 using Project2Api.DbTools;
 using Project2Api.Services.MenuItems;
 using System.Data;
 using Project2Api.Models;
 using ErrorOr;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Project2Api.Tests.Services.MenuItemServiceTests
 {
