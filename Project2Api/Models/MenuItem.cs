@@ -1,5 +1,6 @@
 using System.Data;
 using ErrorOr;
+using Project2Api.Contracts.MenuItem;
 using Project2Api.ServiceErrors;
 
 namespace Project2Api.Models;
@@ -41,6 +42,22 @@ public class MenuItem
         return new MenuItem(name, price, category, quantity, MenuItemCutlery);
     }
 
+    public static ErrorOr<MenuItem> From(MenuItemRequest menuItemRequest)
+    {
+        if (menuItemRequest == null || menuItemRequest.Name == null || menuItemRequest.Price < 0 || menuItemRequest.Category == null || menuItemRequest.Quantity < 0 || menuItemRequest.Cutlery == null)
+        {
+            return ServiceErrors.Errors.MenuItem.InvalidMenuItem;
+        }
+
+        return Create(
+            menuItemRequest.Name,
+            menuItemRequest.Price,
+            menuItemRequest.Category,
+            menuItemRequest.Quantity,
+            menuItemRequest.Cutlery
+        );
+    }
+    
     public static ErrorOr<MenuItem> From(DataRow dataRow)
     {
         // check if dataRow is null 
