@@ -10,7 +10,7 @@ namespace Project2Api.Services.MenuItems
     
         ErrorOr<MenuItem> GetMenuItem(string name);
 
-        ErrorOr<List<MenuItem>> GetAllMenuItems(int pageNumber, int pageSize);
+        ErrorOr<Dictionary<string, MenuItem>> GetAllMenuItems();
 
         ErrorOr<MenuItem> UpdateMenuItem(string name, MenuItem menuItem);
 

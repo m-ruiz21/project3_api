@@ -101,16 +101,40 @@ public class MenuItemService : IMenuItemService
         return menuItem.Value;   
     }
 
-    public ErrorOr<List<MenuItem>> GetAllMenuItems(int pageNumber, int pageSize)
-    {
-        throw new NotImplementedException();
-    }
+    public ErrorOr<Dictionary<string, MenuItem>> GetAllMenuItems()
+    {        
+        Dictionary<string, MenuItem> menuItems = new Dictionary<string, MenuItem>();
+        foreach (string category in new string[] { "base", "protein", "topping", "dressing", "drink", "extra", "side" })
+        {
+            // get menu items from database
+            Task<DataTable> menuItemTask = _dbClient.ExecuteQueryAsync(
+                $"SELECT * FROM menu_item WHERE category = '{category}'"
+            );
 
+            DataTable menuItemTable = menuItemTask.Result; 
+
+            // insert items into menuItems
+            foreach (DataRow row in menuItemTable.Rows)
+            {
+                // make sure menu_item exists
+                if (row["name"] == null)
+                {
+                    return Errors.Orders.DbError;
+                }
+
+                string name = row["name"].ToString() ?? "";
+                menuItems.Add(name, MenuItem.From(row).Value);
+            }
+        } 
+
+        return menuItems; 
+    }
 
     public ErrorOr<MenuItem> UpdateMenuItem(string name, MenuItem menuItem)
     {
         throw new NotImplementedException();
-    } 
+    }
+
     public ErrorOr<IActionResult> DeleteMenuItem(string name)
     {
         throw new NotImplementedException();

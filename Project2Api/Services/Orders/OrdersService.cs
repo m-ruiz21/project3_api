@@ -123,7 +123,7 @@ public class OrdersService : IOrdersService
         DataTable ordersTable = ordersTask.Result;
         if (ordersTable.Rows.Count == 0)
         {
-            return Errors.Orders.UnexpectedError;
+            return Errors.Orders.NotFound;
         }
 
         // convert ordersTable to list of orders
