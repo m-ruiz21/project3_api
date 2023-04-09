@@ -17,10 +17,9 @@ public class MenuItemService : IMenuItemService
 
     public ErrorOr<MenuItem> CreateMenuItem(MenuItem menuItem)
     {
-
         // create menu_item
         Task<int> menuItemTask = _dbClient.ExecuteNonQueryAsync(
-            $"INSERT INTO menu_item (name, price, quantity) VALUES ('{menuItem.Name}', '{menuItem.Price}', '{menuItem.Quantity}')"
+            $"INSERT INTO menu_item (name, price, quantity, category) VALUES ('{menuItem.Name}', '{menuItem.Price}', '{menuItem.Quantity}', '{menuItem.Category}')"
         );
 
         if(menuItemTask.Result <= 0)
@@ -101,9 +100,9 @@ public class MenuItemService : IMenuItemService
         return menuItem.Value;   
     }
 
-    public ErrorOr<Dictionary<string, MenuItem>> GetAllMenuItems()
+    public ErrorOr<Dictionary<string, List<MenuItem>>> GetAllMenuItems()
     {        
-        Dictionary<string, MenuItem> menuItems = new Dictionary<string, MenuItem>();
+        Dictionary<string, List<MenuItem>> menuItems = new Dictionary<string, List<MenuItem>>();
         foreach (string category in new string[] { "base", "protein", "topping", "dressing", "drink", "extra", "side" })
         {
             // get menu items from database
@@ -113,18 +112,21 @@ public class MenuItemService : IMenuItemService
 
             DataTable menuItemTable = menuItemTask.Result; 
 
+            List<MenuItem> menuItemList = new List<MenuItem>();
             // insert items into menuItems
             foreach (DataRow row in menuItemTable.Rows)
             {
-                // make sure menu_item exists
-                if (row["name"] == null)
+                ErrorOr<MenuItem> menuItem = MenuItem.From(row);
+
+                if (menuItem.IsError)
                 {
-                    return Errors.MenuItem.DbError;
+                    return menuItem.FirstError;
                 }
 
-                string name = row["name"].ToString() ?? "";
-                menuItems.Add(name, MenuItem.From(row).Value);
+                menuItemList.Add(menuItem.Value);
             }
+
+            menuItems.Add(category, menuItemList);
         } 
 
         return menuItems; 

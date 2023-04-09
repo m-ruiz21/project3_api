@@ -82,6 +82,11 @@ public class MenuItem
         {
             // print error message
             Console.WriteLine("[MenuItem] Failed to convert data table: missing values");
+            // print out values
+            Console.WriteLine($"name: {name}");
+            Console.WriteLine($"price: {RawPrice}");
+            Console.WriteLine($"category: {RawCategory}");
+            Console.WriteLine($"quantity: {RawQuantity}");
             return Errors.MenuItem.NotFound;
         }
 
