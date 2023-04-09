@@ -68,8 +68,16 @@ public class MenuItem
             return Errors.Orders.DbError;
         }
 
+        // check to see if our necessary columns exist
+        if (!dataRow.Table.Columns.Contains("name") || !dataRow.Table.Columns.Contains("price") || !dataRow.Table.Columns.Contains("category") || !dataRow.Table.Columns.Contains("quantity"))
+        {
+            // print error message
+            Console.WriteLine("[OrdersService] Failed to convert data table: missing columns");
+            return Errors.Orders.DbError;
+        }
+
         // check if any of the columns are null 
-        if (dataRow["id"] == null || dataRow["date_time"] == null || dataRow["total_price"] == null)
+        if (dataRow["name"] == null || dataRow["price"] == null || dataRow["category"] == null || dataRow["quantity"] == null)
         {
             // print error message
             Console.WriteLine("[OrdersService] Failed to convert data table: some fields are null");
