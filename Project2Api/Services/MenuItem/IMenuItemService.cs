@@ -34,6 +34,11 @@ namespace Project2Api.Services.MenuItems
         /// <returns>Updated menu item</returns>
         ErrorOr<MenuItem> UpdateMenuItem(string name, MenuItem menuItem);
 
+        /// <summary>
+        /// Deletes menu item
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Deleted menu item</returns>
         ErrorOr<IActionResult> DeleteMenuItem(string name);
     }
 }
