@@ -64,7 +64,7 @@ public class MenuItem
         if (dataRow == null)
         {
             // print error message
-            Console.WriteLine("[OrdersService] Failed to convert data table: data row is null");
+            Console.WriteLine("[MenuItem] Failed to convert data table: data row is null");
             return Errors.Orders.DbError;
         }
 
@@ -72,7 +72,7 @@ public class MenuItem
         if (!dataRow.Table.Columns.Contains("name") || !dataRow.Table.Columns.Contains("price") || !dataRow.Table.Columns.Contains("category") || !dataRow.Table.Columns.Contains("quantity"))
         {
             // print error message
-            Console.WriteLine("[OrdersService] Failed to convert data table: missing columns");
+            Console.WriteLine("[MenuItem] Failed to convert data table: missing columns");
             return Errors.Orders.DbError;
         }
 
@@ -86,8 +86,8 @@ public class MenuItem
         if (String.IsNullOrEmpty(name) || String.IsNullOrEmpty(RawPrice) || String.IsNullOrEmpty(RawCategory) || String.IsNullOrEmpty(RawQuantity))
         {
             // print error message
-            Console.WriteLine("[OrdersService] Failed to convert data table: missing values");
-            return Errors.Orders.NotFound;
+            Console.WriteLine("[MenuItem] Failed to convert data table: missing values");
+            return Errors.MenuItem.NotFound;
         }
 
         // create order
