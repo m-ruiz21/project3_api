@@ -173,7 +173,7 @@ public class OrdersService : IOrdersService
             // make sure itemTask was successful
             if (itemTask.Result == 0)
             {
-                return Errors.Orders.UnexpectedError;
+                return Errors.Orders.DbError;
             }
         }
 

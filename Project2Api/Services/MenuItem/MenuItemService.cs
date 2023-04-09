@@ -132,7 +132,43 @@ public class MenuItemService : IMenuItemService
 
     public ErrorOr<MenuItem> UpdateMenuItem(string name, MenuItem menuItem)
     {
-        throw new NotImplementedException();
+        // update menu item
+        Task<int> menuItemTask = _dbClient.ExecuteNonQueryAsync(
+            $"UPDATE menu_item SET price = '{menuItem.Price}', quantity = '{menuItem.Quantity}' WHERE name = '{name}'"
+        );
+
+        // check that menuItemTask was successful
+        if (menuItemTask.Result == 0)
+        {
+            return ServiceErrors.Errors.Orders.DbError;
+        }
+
+        // delete all cutlery from menu_item_cutlery table
+        Task<int> cutleryTask = _dbClient.ExecuteNonQueryAsync(
+            $"DELETE FROM menu_item_cutlery WHERE menu_item_name = '{name}'"
+        );
+
+        // check that cutleryTask was successful
+        if (cutleryTask.Result == 0)
+        {
+            return ServiceErrors.Errors.Orders.DbError;
+        }
+
+        // add items to ordered_menu_items table
+        foreach (string cutlery in menuItem.Cutlery)
+        {
+            Task<int> cutleryTask2 = _dbClient.ExecuteNonQueryAsync(
+                $"INSERT INTO menu_item_cutlery (menu_item_name, cutlery_name) VALUES ('{name}', '{cutlery}')"
+            );
+
+            // check that itemTask was successful
+            if (cutleryTask2.Result == 0)
+            {
+                return ServiceErrors.Errors.Orders.DbError;
+            }
+        }
+
+        return menuItem;
     }
 
     public ErrorOr<IActionResult> DeleteMenuItem(string name)
