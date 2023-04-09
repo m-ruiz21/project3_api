@@ -24,7 +24,7 @@ public class OrdersService : IOrdersService
         );
 
         // check that orderTask was successful
-        if (orderTask.Result == 0)
+        if (orderTask.Result == -1)
         {
             return Errors.Orders.DbError;
         }
@@ -47,7 +47,7 @@ public class OrdersService : IOrdersService
             );
 
             // check that itemTask and reduceStockTask was successful
-            if (itemTask.Result == 0 || reduceMenuItemTask.Result == 0)
+            if (itemTask.Result == -1 || reduceMenuItemTask.Result == -1)
             {
                 return Errors.Orders.UnexpectedError;
             }
@@ -158,7 +158,7 @@ public class OrdersService : IOrdersService
         );
 
         // make sure updateTask and deleteTask were successful
-        if (updateTask.Result == 0 || deleteTask.Result == 0)
+        if (updateTask.Result == -1 || deleteTask.Result == -1)
         {
             return Errors.Orders.NotFound;
         }
@@ -171,7 +171,7 @@ public class OrdersService : IOrdersService
             );
 
             // make sure itemTask was successful
-            if (itemTask.Result == 0)
+            if (itemTask.Result == -1)
             {
                 return Errors.Orders.DbError;
             }
@@ -193,7 +193,7 @@ public class OrdersService : IOrdersService
         );
 
         // make sure deleteItemsTask was successful
-        if (deleteItemsTask.Result == 0)
+        if (deleteItemsTask.Result == -1)
         {
             return Errors.Orders.NotFound;
         }
@@ -204,7 +204,7 @@ public class OrdersService : IOrdersService
         );
 
         // check that orderTask was successful
-        if (deleteTask.Result == 0)
+        if (deleteTask.Result == -1)
         {
             return Errors.Orders.NotFound;
         }
