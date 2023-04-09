@@ -158,9 +158,13 @@ public class OrdersService : IOrdersService
         );
 
         // make sure updateTask and deleteTask were successful
-        if (updateTask.Result == -1 || deleteTask.Result == -1)
+        if (updateTask.Result == 0 || deleteTask.Result == 0)
         {
             return Errors.Orders.NotFound;
+        }
+        else if (updateTask.Result == -1 || deleteTask.Result == -1)
+        {
+            return Errors.Orders.DbError;
         }
         
         // add new ordered menu items for this order
@@ -171,7 +175,7 @@ public class OrdersService : IOrdersService
             );
 
             // make sure itemTask was successful
-            if (itemTask.Result == -1)
+            if (itemTask.Result <= 0)
             {
                 return Errors.Orders.DbError;
             }
@@ -195,6 +199,10 @@ public class OrdersService : IOrdersService
         // make sure deleteItemsTask was successful
         if (deleteItemsTask.Result == -1)
         {
+            return Errors.Orders.DbError;
+        } 
+        else if (deleteItemsTask.Result == 0)
+        {
             return Errors.Orders.NotFound;
         }
 
@@ -204,7 +212,7 @@ public class OrdersService : IOrdersService
         );
 
         // check that orderTask was successful
-        if (deleteTask.Result == -1)
+        if (deleteTask.Result == 0)
         {
             return Errors.Orders.NotFound;
         }

@@ -55,7 +55,7 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
 
             ErrorOr<Order> order = Order.From(updateOrderRequest, guid);
 
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(0);
+            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(-1);
 
             // Act
             ErrorOr<Order> result = _ordersService.UpdateOrder(guid, order.Value);
