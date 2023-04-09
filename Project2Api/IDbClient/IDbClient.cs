@@ -10,7 +10,7 @@ namespace Project2Api.DbTools
         Task<DataTable> ExecuteQueryAsync(string query);
 
         /// <summary>
-        /// Executes query and returns number of affected rows
+        /// Executes query and returns number of affected rows if successful, else -1
         /// </summary>
         Task<int> ExecuteNonQueryAsync(string query);
     }
