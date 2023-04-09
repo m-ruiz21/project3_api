@@ -277,7 +277,7 @@ POST /menu-item
     "category": "base",
     "price": 1.00,
     "quantity": 2000,
-    "MenuItemCutlery": [
+    "Cutlery": [
         "plate"
     ]
 }
@@ -298,7 +298,7 @@ Example:
     "category": "base",
     "price": 1.00,
     "quantity": 2000,
-    "MenuItemCutlery": [
+    "Cutlery": [
         "plate"
     ]
 }
@@ -339,7 +339,7 @@ Example:
     "category": "base",
     "price": 1.00,
     "quantity": 2000,
-    "MenuItemCutlery": [
+    "Cutlery": [
         "plate"
     ]
 }
@@ -382,7 +382,7 @@ Example:
             "category": "base",
             "price": 1.00,
             "quantity": 2000,
-            "MenuItemCutlery": [
+            "Cutlery": [
                 "plate"
             ]
         },
@@ -391,7 +391,7 @@ Example:
             "category": "base",
             "price": 0.00,
             "quantity": 1000,
-            "MenuItemCutlery": [
+            "Cutlery": [
                 "plate",
                 "fork"
             ]
@@ -403,7 +403,7 @@ Example:
             "category": "topping",
             "price": 0.00,
             "quantity": 1000,
-            "MenuItemCutlery": []
+            "Cutlery": []
         }
     ]
 }
@@ -429,7 +429,7 @@ PUT /menu-item/{name}
     "category": "base",
     "price": 0.00,
     "quantity": 1001,
-    "MenuItemCutlery": [
+    "Cutlery": [
         "plate",
         "fork"
     ]
@@ -450,7 +450,7 @@ Example:
     "category": "base",
     "price": 0.00,
     "quantity": 1001,
-    "MenuItemCutlery": [
+    "Cutlery": [
         "plate",
         "fork"
     ]
