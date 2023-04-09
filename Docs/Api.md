@@ -35,18 +35,9 @@
     - [Update Menu Item Response](#delete-menu-item-response)
 
 [/inventory ](#inventory)
-- [Create Inventory](#create-inventory)
-    - [Create Inventory Request](#create-inventory-request)
-    - [Create Inventory Response](#create-inventory-response)
-- [Get Inventory](#get-inventory-by-name)
-    - [Get Inventory Request](#get-inventory-request)
-    - [Get Inventory Response](#get-inventory-response)
 - [Get All Inventory](#get-all-inventory)
     - [Get All Inventory Request](#get-all-inventory-request)
     - [Get All Inventory Response](#get-all-inventory-response)
-- [Update Inventory](#update-inventory)
-    - [Update Inventory Request](#update-inventory-request)
-    - [Update Inventory Response](#update-inventory-response)
 - [Delete Inventory](#delete-inventory)
     - [Delete Inventory Request](#delete-inventory-request)
     - [Update Inventory Response](#delete-inventory-response)
@@ -498,94 +489,6 @@ Example:
 ```
 
 # /inventory
-## Create Inventory 
-
-### Create Inventory Request
-
-```js
-POST /inventory
-```
-
-```json
-{
-    "name": "vase",
-    "type": "cutlery",
-    "quantity": 2000,
-}
-```
-
-### Create Inventory Response
-
-#### Successful Creation
-```js
-201 Created
-```
-
-Returns: created object
-Example:
-```json
-{
-    "name": "big gulp cup",
-    "type": "cutlery",
-    "quantity": 2000,
-}
-```
-
-#### Error
-Will return error code + message.
-
-Example:
-```js
-400 Bad Request
-```
-```json
-{
-    "error" : "Cutlery must have quantity field not null"
-}
-```
-
-## Get Inventory By Name 
-
-### Get Inventory Request
-```js
-GET /inventory/{name}
-```
-
-```json
-{
-    "type": "cutlery"
-}
-```
-
-### Get Inventory Response
-
-#### Successful Request 
-```js
-200 Ok 
-```
-
-Returns: requested object
-Example:
-```json
-{
-    "name": "bowl",
-    "type": "cutlery",
-    "quantity": 2000,
-}
-```
-
-#### Error
-Will return error code + message.
-
-Example:
-```js
-404 Not Found 
-```
-```json
-{
-    "error" : "Inventory Cutlery 'Backpack' not found"
-}
-```
 
 ## Get All Inventory
 
@@ -642,49 +545,6 @@ Will return error code.
 Example:
 ```js
 500 Internal Server Error 
-```
-
-## Update Inventory 
-
-### Update Inventory Request
-```js
-PUT /inventory/{name}
-```
-```json
-{
-    "name": "bowl",
-    "type": "cutlery",
-    "quantity": 1999,
-}
-```
-
-### Update Inventory Response
-
-#### Successful Update 
-```js
-200 Ok 
-```
-Returns: updated object
-Example:
-```json
-{
-    "name": "bowl",
-    "type": "cutlery", 
-    "quantity": 1999,
-}
-```
-
-#### Error
-Will return error code + message.
-
-Example:
-```js
-404 Not Found 
-```
-```json
-{
-    "error" : "Inventory Cutlery 'face' not found"
-}
 ```
 
 ## Delete Inventory 
