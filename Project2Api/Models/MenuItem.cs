@@ -27,6 +27,15 @@ public class MenuItem
         this.Cutlery = MenuItemCutlery;
     }
 
+    /// <summary>
+    /// Creates menu item
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="price"></param>
+    /// <param name="category"></param>
+    /// <param name="quantity"></param>
+    /// <param name="MenuItemCutlery"></param>
+    /// <returns>Created menu item</returns>
     public static ErrorOr<MenuItem> Create(
         string name,
         float price,
@@ -42,6 +51,11 @@ public class MenuItem
         return new MenuItem(name, price, category, quantity, MenuItemCutlery);
     }
 
+    /// <summary>
+    /// Creates menu item from request
+    /// </summary>
+    /// <param name="menuItemRequest"></param>
+    /// <returns>Created menu item</returns>
     public static ErrorOr<MenuItem> From(MenuItemRequest menuItemRequest)
     {
         return Create(
@@ -52,7 +66,12 @@ public class MenuItem
             menuItemRequest.Cutlery
         );
     }
-    
+
+    /// <summary>
+    /// Creates menu item from data row
+    /// </summary>
+    /// <param name="dataRow"></param>
+    /// <returns>Created menu item</returns>    
     public static ErrorOr<MenuItem> From(DataRow dataRow)
     {
         // check if dataRow is null 
