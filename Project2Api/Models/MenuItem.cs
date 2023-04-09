@@ -76,19 +76,19 @@ public class MenuItem
             return Errors.Orders.DbError;
         }
 
-        // check if any of the columns are null 
-        if (dataRow["name"] == null || dataRow["price"] == null || dataRow["category"] == null || dataRow["quantity"] == null)
-        {
-            // print error message
-            Console.WriteLine("[OrdersService] Failed to convert data table: some fields are null");
-            return Errors.Orders.NotFound;
-        }
-
         // convert rest of row to order
         String name = dataRow["name"].ToString() ?? "";
         String RawPrice = dataRow["price"].ToString() ?? "";
         String RawCategory = dataRow["category"].ToString() ?? "";
         String RawQuantity = dataRow["quantity"].ToString() ?? "";
+
+        // check if any values are null or empty using string.IsNullOrEmpty
+        if (String.IsNullOrEmpty(name) || String.IsNullOrEmpty(RawPrice) || String.IsNullOrEmpty(RawCategory) || String.IsNullOrEmpty(RawQuantity))
+        {
+            // print error message
+            Console.WriteLine("[OrdersService] Failed to convert data table: missing values");
+            return Errors.Orders.NotFound;
+        }
 
         // create order
         try
