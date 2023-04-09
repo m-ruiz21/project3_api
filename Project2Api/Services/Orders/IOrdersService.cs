@@ -1,7 +1,6 @@
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Project2Api.Models;
-using System.Data;
 
 namespace Project2Api.Services.Orders
 {

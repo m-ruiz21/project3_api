@@ -51,7 +51,7 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
             ErrorOr<Order> order = Order.From(orderRequest);
 
             _dbClientMock.Setup(x => x.ExecuteQueryAsync(It.IsAny<string>())).ReturnsAsync(new DataTable());
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(0);
+            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(-1);
 
             // Act
             ErrorOr<Order> result = _ordersService.CreateOrder(order.Value);

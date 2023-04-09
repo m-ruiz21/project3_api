@@ -102,7 +102,7 @@ public class Order
         {
             // print error message
             Console.WriteLine("[OrdersService] Failed to convert data table: some fields are null");
-            return Errors.Orders.InvalidOrder;
+            return Errors.Orders.NotFound;
         }
 
         // convert rest of row to order

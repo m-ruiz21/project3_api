@@ -24,7 +24,7 @@ public class OrdersService : IOrdersService
         );
 
         // check that orderTask was successful
-        if (orderTask.Result == 0)
+        if (orderTask.Result == -1)
         {
             return Errors.Orders.DbError;
         }
@@ -47,7 +47,7 @@ public class OrdersService : IOrdersService
             );
 
             // check that itemTask and reduceStockTask was successful
-            if (itemTask.Result == 0 || reduceMenuItemTask.Result == 0)
+            if (itemTask.Result == -1 || reduceMenuItemTask.Result == -1)
             {
                 return Errors.Orders.UnexpectedError;
             }
@@ -123,7 +123,7 @@ public class OrdersService : IOrdersService
         DataTable ordersTable = ordersTask.Result;
         if (ordersTable.Rows.Count == 0)
         {
-            return Errors.Orders.UnexpectedError;
+            return Errors.Orders.NotFound;
         }
 
         // convert ordersTable to list of orders
@@ -162,6 +162,10 @@ public class OrdersService : IOrdersService
         {
             return Errors.Orders.NotFound;
         }
+        else if (updateTask.Result == -1 || deleteTask.Result == -1)
+        {
+            return Errors.Orders.DbError;
+        }
         
         // add new ordered menu items for this order
         foreach (string item in order.Items)
@@ -171,9 +175,9 @@ public class OrdersService : IOrdersService
             );
 
             // make sure itemTask was successful
-            if (itemTask.Result == 0)
+            if (itemTask.Result <= 0)
             {
-                return Errors.Orders.UnexpectedError;
+                return Errors.Orders.DbError;
             }
         }
 
@@ -193,7 +197,11 @@ public class OrdersService : IOrdersService
         );
 
         // make sure deleteItemsTask was successful
-        if (deleteItemsTask.Result == 0)
+        if (deleteItemsTask.Result == -1)
+        {
+            return Errors.Orders.DbError;
+        } 
+        else if (deleteItemsTask.Result == 0)
         {
             return Errors.Orders.NotFound;
         }

@@ -1,37 +1,37 @@
 using Moq;
 using Project2Api.DbTools;
-using Project2Api.Services.Orders;
+using Project2Api.Services.MenuItems;
 using System.Data;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Project2Api.Tests.Services.OrdersServiceTests
+namespace Project2Api.Tests.Services.MenuItemServiceTests
 {
     
     [TestFixture]
-    internal class DeleteOrderTests 
+    internal class DeleteMenuItemTests 
     {
 
         private Mock<IDbClient> _dbClientMock = null!;
-        private OrdersService _ordersService = null!;
+        private MenuItemService _menuItemService = null!;
 
         [SetUp]
         public void SetUp()
         {
             _dbClientMock = new Mock<IDbClient>();
             _dbClientMock.Setup(x => x.ExecuteQueryAsync(It.IsAny<string>())).ReturnsAsync(new DataTable());
-            _ordersService = new OrdersService(_dbClientMock.Object);
+            _menuItemService = new MenuItemService(_dbClientMock.Object);
         } 
 
         [Test]
-        public void DeleteOrder_WithValidOrderId_Returns204Status()
+        public void DeleteMenuItem_WithValidMenuItemId_Returns204Status()
         {
             // Arrange
-            Guid orderId = Guid.NewGuid();
+            string name = "Test Name"; 
             _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(1);
 
             // Act
-            ErrorOr<IActionResult> result = _ordersService.DeleteOrder(orderId);
+            ErrorOr<IActionResult> result = _menuItemService.DeleteMenuItem(name);
 
             // Assert
             Assert.That(result.IsError, Is.False);
@@ -39,18 +39,18 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
         }
 
         [Test]
-        public void DeleteOrder_WithInvalidOrderId_Returns404Status()
+        public void DeleteMenuItem_WithInvalidMenuItemId_Returns404Status()
         {
             // Arrange
-            Guid orderId = Guid.NewGuid();
+            string name = "Test Name"; 
             _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(0);
 
             // Act
-            ErrorOr<IActionResult> result = _ordersService.DeleteOrder(orderId);
+            ErrorOr<IActionResult> result = _menuItemService.DeleteMenuItem(name);
 
             // Assert
             Assert.That(result.IsError);
-            Assert.That(result.FirstError, Is.EqualTo(ServiceErrors.Errors.Orders.NotFound));
+            Assert.That(result.FirstError, Is.EqualTo(ServiceErrors.Errors.MenuItem.NotFound));
         }
     }
 }
