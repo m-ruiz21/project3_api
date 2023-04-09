@@ -23,9 +23,9 @@ public class MenuItemService : IMenuItemService
             $"INSERT INTO menu_item (name, price, quantity) VALUES ('{menuItem.Name}', '{menuItem.Price}', '{menuItem.Quantity}')"
         );
 
-        if(menuItemTask.Result == -1)
+        if(menuItemTask.Result <= 0)
         {
-            return ServiceErrors.Errors.Orders.DbError;
+            return ServiceErrors.Errors.MenuItem.DbError;
         }
 
         // add items to ordered_menu_items table
@@ -36,9 +36,9 @@ public class MenuItemService : IMenuItemService
             );
 
             // check that itemTask was successful
-            if (cutleryTask.Result == -1)
+            if (cutleryTask.Result <= 0)
             {
-                return ServiceErrors.Errors.Orders.DbError;
+                return ServiceErrors.Errors.MenuItem.DbError;
             }
         }
 
@@ -82,7 +82,7 @@ public class MenuItemService : IMenuItemService
         DataTable cutleryTable = cutleryTask.Result;
         if (cutleryTable.Rows.Count == 0)
         {
-            return Errors.Orders.UnexpectedError;
+            return Errors.MenuItem.UnexpectedError;
         }
 
         // insert items into order.items
@@ -91,7 +91,7 @@ public class MenuItemService : IMenuItemService
             // make sure menu_item exists
             if (row["cutlery_name"] == null)
             {
-                return Errors.Orders.UnexpectedError;
+                return Errors.MenuItem.UnexpectedError;
             }
 
             string cutlery = row["cutlery_name"].ToString() ?? "";
@@ -119,7 +119,7 @@ public class MenuItemService : IMenuItemService
                 // make sure menu_item exists
                 if (row["name"] == null)
                 {
-                    return Errors.Orders.DbError;
+                    return Errors.MenuItem.DbError;
                 }
 
                 string name = row["name"].ToString() ?? "";
@@ -140,7 +140,11 @@ public class MenuItemService : IMenuItemService
         // check that menuItemTask was successful
         if (menuItemTask.Result == -1)
         {
-            return ServiceErrors.Errors.Orders.DbError;
+            return ServiceErrors.Errors.MenuItem.DbError;
+        }
+        else if (menuItemTask.Result == 0)
+        {
+            return ServiceErrors.Errors.MenuItem.NotFound;
         }
 
         // delete all cutlery from menu_item_cutlery table
@@ -151,7 +155,7 @@ public class MenuItemService : IMenuItemService
         // check that cutleryTask was successful
         if (cutleryTask.Result == -1)
         {
-            return ServiceErrors.Errors.Orders.DbError;
+            return ServiceErrors.Errors.MenuItem.DbError;
         }
 
         // add items to ordered_menu_items table
@@ -164,7 +168,11 @@ public class MenuItemService : IMenuItemService
             // check that itemTask was successful
             if (cutleryTask2.Result == -1)
             {
-                return ServiceErrors.Errors.Orders.DbError;
+                return ServiceErrors.Errors.MenuItem.DbError;
+            }
+            else if (cutleryTask2.Result == 0)
+            {
+                return ServiceErrors.Errors.MenuItem.NotFound;
             }
         }
 
@@ -181,7 +189,11 @@ public class MenuItemService : IMenuItemService
         // check that cutleryTask was successful
         if (cutleryTask.Result == -1)
         {
-            return ServiceErrors.Errors.Orders.DbError;
+            return ServiceErrors.Errors.MenuItem.DbError;
+        }
+        else if (cutleryTask.Result == 0)
+        {
+            return ServiceErrors.Errors.MenuItem.NotFound;
         }
 
         // delete menu item from menu_item table
@@ -192,7 +204,11 @@ public class MenuItemService : IMenuItemService
         // check that menuItemTask was successful
         if (menuItemTask.Result == -1)
         {
-            return ServiceErrors.Errors.Orders.DbError;
+            return ServiceErrors.Errors.MenuItem.DbError;
+        }
+        else if (menuItemTask.Result == 0)
+        {
+            return ServiceErrors.Errors.MenuItem.NotFound;
         }
 
         return new NoContentResult();

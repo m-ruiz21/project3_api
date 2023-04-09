@@ -34,7 +34,7 @@ public class MenuItem
         int quantity,
         List<string> MenuItemCutlery)
     {
-        if (name == null || price < 0 || category == null || quantity < 0 || MenuItemCutlery == null)
+        if (string.IsNullOrEmpty(name) || price < 0 || string.IsNullOrEmpty(name) || quantity < 0 || MenuItemCutlery == null)
         {
             return ServiceErrors.Errors.MenuItem.InvalidMenuItem;
         }
@@ -44,11 +44,6 @@ public class MenuItem
 
     public static ErrorOr<MenuItem> From(MenuItemRequest menuItemRequest)
     {
-        if (menuItemRequest == null || menuItemRequest.Name == null || menuItemRequest.Price < 0 || menuItemRequest.Category == null || menuItemRequest.Quantity < 0 || menuItemRequest.Cutlery == null)
-        {
-            return ServiceErrors.Errors.MenuItem.InvalidMenuItem;
-        }
-
         return Create(
             menuItemRequest.Name,
             menuItemRequest.Price,
