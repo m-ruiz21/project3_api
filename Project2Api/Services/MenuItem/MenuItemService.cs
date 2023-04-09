@@ -23,7 +23,7 @@ public class MenuItemService : IMenuItemService
             $"INSERT INTO menu_item (name, price, quantity) VALUES ('{menuItem.Name}', '{menuItem.Price}', '{menuItem.Quantity}')"
         );
 
-        if(menuItemTask.Result == 0)
+        if(menuItemTask.Result == -1)
         {
             return ServiceErrors.Errors.Orders.DbError;
         }
@@ -36,7 +36,7 @@ public class MenuItemService : IMenuItemService
             );
 
             // check that itemTask was successful
-            if (cutleryTask.Result == 0)
+            if (cutleryTask.Result == -1)
             {
                 return ServiceErrors.Errors.Orders.DbError;
             }
@@ -138,7 +138,7 @@ public class MenuItemService : IMenuItemService
         );
 
         // check that menuItemTask was successful
-        if (menuItemTask.Result == 0)
+        if (menuItemTask.Result == -1)
         {
             return ServiceErrors.Errors.Orders.DbError;
         }
@@ -149,7 +149,7 @@ public class MenuItemService : IMenuItemService
         );
 
         // check that cutleryTask was successful
-        if (cutleryTask.Result == 0)
+        if (cutleryTask.Result == -1)
         {
             return ServiceErrors.Errors.Orders.DbError;
         }
@@ -162,7 +162,7 @@ public class MenuItemService : IMenuItemService
             );
 
             // check that itemTask was successful
-            if (cutleryTask2.Result == 0)
+            if (cutleryTask2.Result == -1)
             {
                 return ServiceErrors.Errors.Orders.DbError;
             }
@@ -173,6 +173,28 @@ public class MenuItemService : IMenuItemService
 
     public ErrorOr<IActionResult> DeleteMenuItem(string name)
     {
-        throw new NotImplementedException();
+        // delete cutlery from menu_item_cutlery table
+        Task<int> cutleryTask = _dbClient.ExecuteNonQueryAsync(
+            $"DELETE FROM menu_item_cutlery WHERE menu_item_name = '{name}'"
+        );
+
+        // check that cutleryTask was successful
+        if (cutleryTask.Result == -1)
+        {
+            return ServiceErrors.Errors.Orders.DbError;
+        }
+
+        // delete menu item from menu_item table
+        Task<int> menuItemTask = _dbClient.ExecuteNonQueryAsync(
+            $"DELETE FROM menu_item WHERE name = '{name}'"
+        );
+
+        // check that menuItemTask was successful
+        if (menuItemTask.Result == -1)
+        {
+            return ServiceErrors.Errors.Orders.DbError;
+        }
+
+        return new NoContentResult();
     }
 }
