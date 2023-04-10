@@ -24,7 +24,7 @@ public class OrdersService : IOrdersService
         );
 
         // check that orderTask was successful
-        if (orderTask.Result == -1)
+        if (orderTask.Result <= 0)
         {
             return Errors.Orders.DbError;
         }
@@ -47,9 +47,9 @@ public class OrdersService : IOrdersService
             );
 
             // check that itemTask and reduceStockTask was successful
-            if (itemTask.Result == -1 || reduceMenuItemTask.Result == -1)
+            if (itemTask.Result <= 0 || reduceMenuItemTask.Result <= 0)
             {
-                return Errors.Orders.UnexpectedError;
+                return Errors.Orders.DbError;
             }
         }
 
@@ -120,11 +120,12 @@ public class OrdersService : IOrdersService
         );
 
         // check that ordersTask was successful
-        DataTable ordersTable = ordersTask.Result;
-        if (ordersTable.Rows.Count == 0)
+        if (ordersTask.IsFaulted)
         {
-            return Errors.Orders.NotFound;
+            return Errors.Orders.DbError;
         }
+
+        DataTable ordersTable = ordersTask.Result;
 
         // convert ordersTable to list of orders
         List<Order> orders = new List<Order>();
