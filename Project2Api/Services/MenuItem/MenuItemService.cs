@@ -56,8 +56,14 @@ public class MenuItemService : IMenuItemService
         Task<DataTable> menuItemTask = _dbClient.ExecuteQueryAsync(
             $"SELECT * FROM menu_item WHERE name = '{name}'"
         );
- 
+
         // check that menuItemTask was successful
+        if (menuItemTask.IsFaulted)
+        {
+            return ServiceErrors.Errors.MenuItem.DbError;
+        }
+
+        // check if menu item was found
         DataTable menuItemTable = menuItemTask.Result; 
         if (menuItemTable.Rows.Count == 0)
         {
@@ -79,9 +85,9 @@ public class MenuItemService : IMenuItemService
 
         // check that itemsTask was successful
         DataTable cutleryTable = cutleryTask.Result;
-        if (cutleryTable.Rows.Count == 0)
+        if (cutleryTable.Rows.Count <= 0)
         {
-            return Errors.MenuItem.UnexpectedError;
+            return Errors.MenuItem.DbError;
         }
 
         // insert items into order.items
@@ -109,6 +115,12 @@ public class MenuItemService : IMenuItemService
             Task<DataTable> menuItemTask = _dbClient.ExecuteQueryAsync(
                 $"SELECT * FROM menu_item WHERE category = '{category}'"
             );
+
+            // make sure query was successful
+            if (menuItemTask.IsFaulted)
+            {
+                return ServiceErrors.Errors.MenuItem.DbError;
+            }
 
             DataTable menuItemTable = menuItemTask.Result; 
 
