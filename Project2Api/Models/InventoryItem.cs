@@ -1,5 +1,6 @@
 using System.Data;
 using ErrorOr;
+using Project2Api.Contracts.Inventory;
 
 namespace Project2Api.Models;
 
@@ -9,6 +10,12 @@ public class InventoryItem
     public int Quantity { get; }
     public string Type { get; }
 
+    /// <summary>
+    /// Private constructor for InventoryItem
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
+    /// <param name="quantity"></param>
     private InventoryItem(string name, string type, int quantity)
     {
         this.Name = name;
@@ -16,6 +23,13 @@ public class InventoryItem
         this.Quantity = quantity;
     }
 
+    /// <summary>
+    /// Creates a new InventoryItem
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
+    /// <param name="quantity"></param>
+    /// <returns>Error or new inventory item</returns>
     public static ErrorOr<InventoryItem> Create(
         string name,
         string type,
@@ -30,6 +44,30 @@ public class InventoryItem
         return new InventoryItem(name, type, quantity);
     }
 
+    /// <summary>
+    /// Creates a new InventoryItem from an InventoryRequest
+    /// </summary>
+    /// <param name="inventoryRequest"></param>
+    /// <returns>Error or new inventory item</returns>
+    public static ErrorOr<InventoryItem> From(InventoryRequest inventoryRequest)
+    {
+        if (string.IsNullOrEmpty(inventoryRequest.Name) || string.IsNullOrEmpty(inventoryRequest.Type))
+        {
+            return ServiceErrors.Errors.Inventory.InvalidInventoryItem;
+        }
+
+        return Create(
+            inventoryRequest.Name,
+            inventoryRequest.Type,
+            0 
+        );
+    }
+
+    /// <summary>
+    /// Creates a new InventoryItem from a DataRow
+    /// </summary>
+    /// <param name="row"></param>
+    /// <returns>Error or new inventory item</returns>
     public static ErrorOr<InventoryItem> From(DataRow row)
     {
         if (!row.Table.Columns.Contains("name") || !row.Table.Columns.Contains("type") || !row.Table.Columns.Contains("quantity"))

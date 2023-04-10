@@ -540,10 +540,11 @@ Example:
 
 ### Delete Inventory Request
 ```js
-DELETE /inventory/{name}
+DELETE /inventory
 ```
 ```json
 {
+    "name": "plate",
     "type": "cutlery"
 }
 ```
