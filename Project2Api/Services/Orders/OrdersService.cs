@@ -65,12 +65,17 @@ public class OrdersService : IOrdersService
         }
 
         // get order from database
-        Task<DataTable> orderTask = _dbClient.ExecuteQueryAsync(
+        Task<DataTable?> orderTask = _dbClient.ExecuteQueryAsync(
             $"SELECT * FROM orders WHERE id = '{id}'"
         );
  
         // check that orderTask was successful
-        DataTable orderTable = orderTask.Result; 
+        if (orderTask.Result == null)
+        {
+            return Errors.Orders.DbError;
+        }
+
+        DataTable orderTable = orderTask.Result ?? new DataTable(); 
         if (orderTable.Rows.Count == 0)
         {
             return Errors.Orders.NotFound;
@@ -81,17 +86,17 @@ public class OrdersService : IOrdersService
         // check that order was successfully converted 
         if (order.IsError)
         {
-            return order.Errors[0];
+            return order.FirstError;
         }
 
         // populate order.items table by getting all menu items from ordered_menu_items table
-        Task<DataTable> itemsTask = _dbClient.ExecuteQueryAsync(
+        Task<DataTable?> itemsTask = _dbClient.ExecuteQueryAsync(
             $"SELECT menu_item_name FROM ordered_menu_item WHERE order_id = '{id}'"
         );
 
         // check that itemsTask was successful
-        DataTable itemsTable = itemsTask.Result;
-        if (itemsTable.Rows.Count == 0)
+        DataTable itemsTable = itemsTask.Result ?? new DataTable();
+        if (itemsTable.Rows.Count <= 0)
         {
             return Errors.Orders.UnexpectedError;
         }
@@ -115,17 +120,17 @@ public class OrdersService : IOrdersService
     public ErrorOr<List<Order>> GetAllOrders(int pageNumber, int pageSize)
     {
         // get all orders from database
-        Task<DataTable> ordersTask = _dbClient.ExecuteQueryAsync(
+        Task<DataTable?> ordersTask = _dbClient.ExecuteQueryAsync(
             $"SELECT * FROM orders ORDER BY date_time DESC LIMIT {pageSize} OFFSET {pageSize * (pageNumber - 1)}"
         );
 
         // check that ordersTask was successful
-        if (ordersTask.IsFaulted)
+        if (ordersTask.Result == null)
         {
             return Errors.Orders.DbError;
         }
 
-        DataTable ordersTable = ordersTask.Result;
+        DataTable ordersTable = ordersTask.Result ?? new DataTable();
 
         // convert ordersTable to list of orders
         List<Order> orders = new List<Order>();
@@ -137,7 +142,7 @@ public class OrdersService : IOrdersService
 
             if (order.IsError)
             {
-                return order.Errors[0];
+                return order.FirstError;
             }
 
             orders.Add(order.Value);

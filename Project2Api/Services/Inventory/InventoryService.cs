@@ -40,7 +40,7 @@ public class MenuItemService : IInventoryService
 
     public ErrorOr<List<InventoryItem>> GetAllInventoryItems()
     {
-        Task<DataTable> table = _dbClient.ExecuteQueryAsync(
+        Task<DataTable?> table = _dbClient.ExecuteQueryAsync(
             "SELECT id, name, quantity, 'cutlery' as type " +
             "FROM cutlery " +
             "UNION " +
@@ -48,7 +48,7 @@ public class MenuItemService : IInventoryService
             "FROM menu_item;"
         );
 
-        if (table.IsFaulted)
+        if (table.Result == null)
         {
             return ServiceErrors.Errors.Inventory.DbError;
         }
