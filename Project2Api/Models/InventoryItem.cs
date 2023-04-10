@@ -6,43 +6,43 @@ namespace Project2Api.Models;
 public class InventoryItem
 {
     public string Name { get; }
-    public string Category { get; }
     public int Quantity { get; }
+    public string Type { get; }
 
-    private InventoryItem(string name, string category, int quantity)
+    private InventoryItem(string name, string type, int quantity)
     {
         this.Name = name;
-        this.Category = category;
+        this.Type = type;
         this.Quantity = quantity;
     }
 
     public ErrorOr<InventoryItem> Create(
         string name,
-        string category,
+        string type,
         int quantity
     )
     {
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(category) || quantity < 0)
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(type) || quantity < 0)
         {
             return ServiceErrors.Errors.Inventory.InvalidInventoryItem;
         }
 
-        return new InventoryItem(name, category, quantity);
+        return new InventoryItem(name, type, quantity);
     }
 
     public ErrorOr<InventoryItem> From(DataRow row)
     {
-        if (!row.Table.Columns.Contains("name") || !row.Table.Columns.Contains("category") || !row.Table.Columns.Contains("quantity"))
+        if (!row.Table.Columns.Contains("name") || !row.Table.Columns.Contains("type") || !row.Table.Columns.Contains("quantity"))
         {
             return ServiceErrors.Errors.Inventory.InvalidInventoryItem;
         }
 
         string name = row["name"].ToString() ?? "";
-        string category = row["category"].ToString() ?? "";
+        string type = row["type"].ToString() ?? "";
         string rawQuantity = row["quantity"].ToString() ?? "";
 
         // make sure none of them are emtpy or null
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(rawQuantity))
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(rawQuantity))
         {
             Console.WriteLine("[Inventory] Failed to Convert to Inventory Item: missing values");
             return ServiceErrors.Errors.Inventory.InvalidInventoryItem;
@@ -52,7 +52,7 @@ public class InventoryItem
         {
             return Create(
                 name,  
-                category, 
+                type, 
                 int.Parse(rawQuantity)
                 );
         } catch (Exception e) { 
