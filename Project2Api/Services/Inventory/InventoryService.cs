@@ -39,9 +39,15 @@ public class MenuItemService : IInventoryService
         List<InventoryItem> inventoryItems = new List<InventoryItem>();
         foreach (DataRow row in table.Result.Rows)
         {
+            ErrorOr<InventoryItem> inventoryItem = InventoryItem.From(row);
+            if (inventoryItem.IsError)
+            {
+                return inventoryItem.FirstError;
+            }
 
+            inventoryItems.Add(inventoryItem.Value);
         } 
 
-        throw new NotImplementedException();
+        return inventoryItems;
     }
 }

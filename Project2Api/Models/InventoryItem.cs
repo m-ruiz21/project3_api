@@ -16,7 +16,7 @@ public class InventoryItem
         this.Quantity = quantity;
     }
 
-    public ErrorOr<InventoryItem> Create(
+    public static ErrorOr<InventoryItem> Create(
         string name,
         string type,
         int quantity
@@ -30,7 +30,7 @@ public class InventoryItem
         return new InventoryItem(name, type, quantity);
     }
 
-    public ErrorOr<InventoryItem> From(DataRow row)
+    public static ErrorOr<InventoryItem> From(DataRow row)
     {
         if (!row.Table.Columns.Contains("name") || !row.Table.Columns.Contains("type") || !row.Table.Columns.Contains("quantity"))
         {
