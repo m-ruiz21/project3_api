@@ -41,7 +41,7 @@ namespace Project2Api.DbTools
             } catch (Npgsql.PostgresException e) {
                 Console.Out.WriteLine(e);
                 connection.Close(); 
-                return new DataTable();
+                return Task.FromException<DataTable>(e).Result;
             }
         }
 

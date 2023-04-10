@@ -22,13 +22,25 @@ public class MenuItemService : IInventoryService
 
     public ErrorOr<List<InventoryItem>> GetAllInventoryItems()
     {
-        _dbClient.ExecuteQueryAsync(
+        Task<DataTable> table = _dbClient.ExecuteQueryAsync(
             "SELECT id, name, quantity, 'cutlery' as type " +
             "FROM cutlery " +
             "UNION " +
-            "SELECT id, name, quantity, 'menu_item' as type " +
+            "SELECT id, name, quantity, 'menu item' as type " +
             "FROM menu_item;"
         );
+
+        if (table.IsFaulted)
+        {
+            return ServiceErrors.Errors.Inventory.DbError;
+        }
+
+        // convert table to list of inventory Items
+        List<InventoryItem> inventoryItems = new List<InventoryItem>();
+        foreach (DataRow row in table.Result.Rows)
+        {
+
+        } 
 
         throw new NotImplementedException();
     }
