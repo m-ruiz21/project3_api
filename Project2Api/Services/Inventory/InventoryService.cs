@@ -20,7 +20,7 @@ public class MenuItemService : IInventoryService
         string type = inventoryItem.Type;
         string table = type == "menu item" ? "menu_item" : "cutlery";
 
-        // delete cutlery from menu_item_cutlery table
+        // delete items from menu_item table
         Task<int> inventoryTask = _dbClient.ExecuteNonQueryAsync(
             $"DELETE FROM {table} WHERE name = '{inventoryItem.Name}'"
         );
