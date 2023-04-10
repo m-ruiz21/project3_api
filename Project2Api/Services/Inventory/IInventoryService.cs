@@ -17,6 +17,6 @@ namespace Project2Api.Services.Inventory
         /// </summary>
         /// <param name="name"></param>
         /// <returns>No Content Result or Error</returns>
-        ErrorOr<IActionResult> DeleteInventoryItem(string name);
+        ErrorOr<IActionResult> DeleteInventoryItem(InventoryItem inventoryItem);
     }
 }

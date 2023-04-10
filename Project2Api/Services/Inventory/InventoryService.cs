@@ -15,13 +15,13 @@ public class MenuItemService : IInventoryService
         _dbClient = dbClient;
     }
 
-    public ErrorOr<IActionResult> DeleteInventoryItem(string name)
+    public ErrorOr<IActionResult> DeleteInventoryItem(InventoryItem inventoryItem)
     {
         throw new NotImplementedException();
     }
 
     public ErrorOr<List<InventoryItem>> GetAllInventoryItems()
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); 
     }
 }
