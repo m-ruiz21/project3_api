@@ -17,6 +17,22 @@ public class MenuItemService : IInventoryService
 
     public ErrorOr<IActionResult> DeleteInventoryItem(InventoryItem inventoryItem)
     {
+        // delete cutlery from menu_item_cutlery table
+        Task<int> inventoryTask = _dbClient.ExecuteNonQueryAsync(
+            $"DELETE FROM menu_item WHERE name = '{inventoryItem.Name}'"
+        );
+
+        // check that inventoryTask was successful
+        if (inventoryTask.Result == -1)
+        {
+            return ServiceErrors.Errors.MenuItem.DbError;
+        }
+        else if (inventoryTask.Result == 0)
+        {
+            return ServiceErrors.Errors.MenuItem.NotFound;
+        }
+    
+
         throw new NotImplementedException();
     }
 
