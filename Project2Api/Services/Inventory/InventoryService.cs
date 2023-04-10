@@ -22,6 +22,14 @@ public class MenuItemService : IInventoryService
 
     public ErrorOr<List<InventoryItem>> GetAllInventoryItems()
     {
-        throw new NotImplementedException(); 
+        _dbClient.ExecuteQueryAsync(
+            "SELECT id, name, quantity, 'cutlery' as type " +
+            "FROM cutlery " +
+            "UNION " +
+            "SELECT id, name, quantity, 'menu_item' as type " +
+            "FROM menu_item;"
+        );
+
+        throw new NotImplementedException();
     }
 }

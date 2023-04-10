@@ -5,15 +5,15 @@ namespace Project2Api.Models;
 
 public class InventoryItem
 {
-    public string name { get; }
-    public string category { get; }
-    public int quantity { get; }
+    public string Name { get; }
+    public string Category { get; }
+    public int Quantity { get; }
 
     private InventoryItem(string name, string category, int quantity)
     {
-        this.name = name;
-        this.category = category;
-        this.quantity = quantity;
+        this.Name = name;
+        this.Category = category;
+        this.Quantity = quantity;
     }
 
     public ErrorOr<InventoryItem> Create(
