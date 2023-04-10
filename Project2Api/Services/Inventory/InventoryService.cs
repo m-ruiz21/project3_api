@@ -34,9 +34,8 @@ public class MenuItemService : IInventoryService
         {
             return ServiceErrors.Errors.Inventory.NotFound;
         }
-    
 
-        throw new NotImplementedException();
+        return new NoContentResult();
     }
 
     public ErrorOr<List<InventoryItem>> GetAllInventoryItems()
