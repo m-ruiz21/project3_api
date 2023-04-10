@@ -18,7 +18,7 @@ public class MenuItemService : IInventoryService
     public ErrorOr<IActionResult> DeleteInventoryItem(InventoryItem inventoryItem)
     {
         string type = inventoryItem.Type;
-        string table = type == "menu item" ? "menu_item" : "cutlery";
+        string table = (type == "menu item") ? "menu_item" : "cutlery";
 
         // delete items from menu_item table
         Task<int> inventoryTask = _dbClient.ExecuteNonQueryAsync(
