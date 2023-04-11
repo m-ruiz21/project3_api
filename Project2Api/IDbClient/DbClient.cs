@@ -22,7 +22,12 @@ namespace Project2Api.DbTools
             _connectionString = $"Host={_host};Database={_database};Username={_username};Password={_password};";
         }
 
-        public async Task<DataTable> ExecuteQueryAsync(string query)
+        /// <summary>
+        /// Executes a query and returns the result as a DataTable
+        /// </summary>
+        /// <param name="query">The query to execute</param>
+        /// <returns>DataTable with the result of the query or null object if error</returns>
+        public async Task<DataTable?> ExecuteQueryAsync(string query)
         {
             using var connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
@@ -41,10 +46,15 @@ namespace Project2Api.DbTools
             } catch (Npgsql.PostgresException e) {
                 Console.Out.WriteLine(e);
                 connection.Close(); 
-                return new DataTable();
+                return null;            
             }
         }
 
+        /// <summary>
+        /// Executes a query that does not return a result
+        /// </summary>
+        /// <param name="query">The query to execute</param>
+        /// <returns>The number of rows affected by the query, -1 if error</returns>
         public async Task<int> ExecuteNonQueryAsync(string query)
         {
             using var connection = new NpgsqlConnection(_connectionString);

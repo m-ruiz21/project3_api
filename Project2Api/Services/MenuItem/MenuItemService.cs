@@ -53,12 +53,18 @@ public class MenuItemService : IMenuItemService
         }
 
         // get menu item from database
-        Task<DataTable> menuItemTask = _dbClient.ExecuteQueryAsync(
+        Task<DataTable?> menuItemTask = _dbClient.ExecuteQueryAsync(
             $"SELECT * FROM menu_item WHERE name = '{name}'"
         );
- 
+
         // check that menuItemTask was successful
-        DataTable menuItemTable = menuItemTask.Result; 
+        if (menuItemTask.Result == null)
+        {
+            return ServiceErrors.Errors.MenuItem.DbError;
+        }
+
+        // check if menu item was found
+        DataTable menuItemTable = menuItemTask.Result ?? new DataTable(); 
         if (menuItemTable.Rows.Count == 0)
         {
             return Errors.MenuItem.NotFound;
@@ -73,15 +79,20 @@ public class MenuItemService : IMenuItemService
         }
 
         // populate order.items table by getting all menu items from ordered_menu_items table
-        Task<DataTable> cutleryTask = _dbClient.ExecuteQueryAsync(
+        Task<DataTable?> cutleryTask = _dbClient.ExecuteQueryAsync(
             $"SELECT cutlery_name FROM menu_item_cutlery WHERE menu_item_name = '{name}'"
         );
 
         // check that itemsTask was successful
-        DataTable cutleryTable = cutleryTask.Result;
-        if (cutleryTable.Rows.Count == 0)
+        if (cutleryTask.Result == null)
         {
-            return Errors.MenuItem.UnexpectedError;
+            return Errors.MenuItem.DbError;
+        }
+
+        DataTable cutleryTable = cutleryTask.Result ?? new DataTable();
+        if (cutleryTable.Rows.Count < 0)
+        {
+            return Errors.MenuItem.DbError;
         }
 
         // insert items into order.items
@@ -106,11 +117,17 @@ public class MenuItemService : IMenuItemService
         foreach (string category in new string[] { "base", "protein", "topping", "dressing", "drink", "extra", "side" })
         {
             // get menu items from database
-            Task<DataTable> menuItemTask = _dbClient.ExecuteQueryAsync(
+            Task<DataTable?> menuItemTask = _dbClient.ExecuteQueryAsync(
                 $"SELECT * FROM menu_item WHERE category = '{category}'"
             );
 
-            DataTable menuItemTable = menuItemTask.Result; 
+            // make sure query was successful
+            if (menuItemTask?.Result == null)
+            {
+                return ServiceErrors.Errors.MenuItem.DbError;
+            }
+
+            DataTable menuItemTable = menuItemTask?.Result ?? new DataTable(); 
 
             List<MenuItem> menuItemList = new List<MenuItem>();
             // insert items into menuItems
@@ -192,10 +209,6 @@ public class MenuItemService : IMenuItemService
         if (cutleryTask.Result == -1)
         {
             return ServiceErrors.Errors.MenuItem.DbError;
-        }
-        else if (cutleryTask.Result == 0)
-        {
-            return ServiceErrors.Errors.MenuItem.NotFound;
         }
 
         // delete menu item from menu_item table

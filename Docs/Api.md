@@ -512,23 +512,12 @@ Example:
         {
             "name": "tortilla",
             "type": "menu item",
-            "category": "base",
-            "price": 1.00,
             "quantity": 2000,
-            "MenuItemCutlery": [
-                "plate"
-            ]
         },
         {
             "name": "brown rice",
             "type": "menu item",
-            "category": "base",
-            "price": 0.00,
             "quantity": 1000,
-            "MenuItemCutlery": [
-                "plate",
-                "fork"
-            ]
         },
         {
             "name": "bowl",
@@ -551,10 +540,11 @@ Example:
 
 ### Delete Inventory Request
 ```js
-DELETE /inventory/{name}
+DELETE /inventory
 ```
 ```json
 {
+    "name": "plate",
     "type": "cutlery"
 }
 ```

@@ -28,14 +28,15 @@ namespace Project2Api.Tests
             var query = "SELECT * FROM menu_item";
 
             // Act
-            DataTable result = await _dbClient.ExecuteQueryAsync(query);
+            DataTable? result = await _dbClient.ExecuteQueryAsync(query);
 
             // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.InstanceOf<DataTable>());
-            Assert.That(result.Rows.Count, Is.GreaterThan(0));
+            Assert.That(result?.Rows.Count, Is.GreaterThan(0));
         }
 
+        // execute query with invalid query returns unhandled exception (task.IsFaulted == true)
         [Test]
         public async Task ExecuteQueryAsync_WithInvalidQuery_ReturnsEmptyDataTable()
         {
@@ -43,13 +44,11 @@ namespace Project2Api.Tests
             var query = "SELECT * FROM best_devs_table WHERE name='mateo'";
 
             // Act
-            DataTable result = await _dbClient.ExecuteQueryAsync(query);
+            DataTable? result = await _dbClient.ExecuteQueryAsync(query);
 
             // Assert
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result, Is.InstanceOf<DataTable>());
-            Assert.That(result.Rows.Count, Is.EqualTo(0));
-        }
+            Assert.That(result, Is.Null);
+        }         
 
         [Test]
         public async Task ExecuteNonQueryAsync_WithValidQuery_ReturnsRowsAffected()
