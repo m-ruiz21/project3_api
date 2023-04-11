@@ -6,11 +6,11 @@ using Project2Api.Models;
 using System.Data;
 
 namespace Project2Api.Services.Inventory;
-public class MenuItemService : IInventoryService
+public class InventoryService: IInventoryService
 {
     private readonly IDbClient _dbClient;
 
-    public MenuItemService(IDbClient dbClient)
+    public InventoryService(IDbClient dbClient)
     {
         _dbClient = dbClient;
     }
