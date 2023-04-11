@@ -41,10 +41,10 @@ public class InventoryService: IInventoryService
     public ErrorOr<List<InventoryItem>> GetAllInventoryItems()
     {
         Task<DataTable?> table = _dbClient.ExecuteQueryAsync(
-            "SELECT id, name, quantity, 'cutlery' as type " +
+            "SELECT name, quantity, 'cutlery' as type " +
             "FROM cutlery " +
             "UNION " +
-            "SELECT id, name, quantity, 'menu item' as type " +
+            "SELECT name, quantity, 'menu item' as type " +
             "FROM menu_item;"
         );
 
