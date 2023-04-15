@@ -24,11 +24,17 @@ public class UnitOfWork : IDisposable
         get { return _transaction; }
     }
 
+    /// <summary>
+    /// Commits to DB transaction.
+    /// </summary>
     public void Commit()
     {
         _transaction.Commit();
     }
 
+    /// <summary>
+    /// Rolls back DB transaction.
+    /// </summary>
     public void Rollback()
     {
         _transaction.Rollback();
