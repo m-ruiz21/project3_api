@@ -5,29 +5,30 @@ using Project2Api.Services.MenuItems;
 using System.Data;
 using Project2Api.Models;
 using ErrorOr;
+using Project2Api.Repositories;
 
 namespace Project2Api.Tests.Services.MenuItemServiceTests
 {
     [TestFixture]
     internal class UpdateMenuItemTests 
     {
-        private Mock<IDbClient> _dbClientMock = null!;
+        private Mock<IMenuItemRepository> _repositoryMock = null!;
         private MenuItemService _menuItemService = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _dbClientMock = new Mock<IDbClient>();
-            _menuItemService = new MenuItemService(_dbClientMock.Object);
+            _repositoryMock = new Mock<IMenuItemRepository>();
+            _menuItemService = new MenuItemService(_repositoryMock.Object);
         }
 
         [Test]
-        public void UpdateMenuItem_WithValidMenuItemId_Returns200Status()
+        public async Task UpdateMenuItem_WithValidMenuItemId_Returns200Status()
         {
             // Arrange
             // create mock menu item
             string name = "Test Name";
-            float price = 10.00f;
+            decimal price = 10.00M;
             string category = "Test Category";
             int quantity = 10;
             List<string> cutlery = new List<string>() {"Test Cutlery"};
@@ -35,35 +36,10 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
 
             MenuItem menuItem = errorOrMenuItem.Value;
 
-            // set up return for get menu item
-            DataTable dataTable = new DataTable();
-            dataTable.Columns.Add("Name");
-            dataTable.Columns.Add("Price");
-            dataTable.Columns.Add("Category");
-            dataTable.Columns.Add("Quantity");
-            DataRow dataRow = dataTable.NewRow();
-            dataRow["Name"] = menuItem.Name;
-            dataRow["Price"] = menuItem.Price;
-            dataRow["Category"] = menuItem.Category;
-            dataRow["Quantity"] = menuItem.Quantity;
-            dataTable.Rows.Add(dataRow);
-
-            _dbClientMock.Setup(x => x.ExecuteQueryAsync($"SELECT * FROM menu_item WHERE name = '{name}'")).ReturnsAsync(dataTable);
-
-            // set up return for cutlery
-            DataTable cutleryDataTable = new DataTable();
-            cutleryDataTable.Columns.Add("cutlery_name");
-            DataRow cutleryDataRow = cutleryDataTable.NewRow();
-            cutleryDataRow["cutlery_name"] = cutlery[0];
-            cutleryDataTable.Rows.Add(cutleryDataRow);
-
-            _dbClientMock.Setup(x => x.ExecuteQueryAsync($"SELECT * FROM cutlery WHERE menu_item_name = '{name}'")).ReturnsAsync(cutleryDataTable);
-
-            // set up return for update menu item
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(1);
-
+            _repositoryMock.Setup(x => x.UpdateMenuItemAsync(It.IsAny<MenuItem>())).ReturnsAsync(1);
+            
             // Act
-            ErrorOr<MenuItem> result = _menuItemService.UpdateMenuItem(name, menuItem);
+            ErrorOr<MenuItem> result = await _menuItemService.UpdateMenuItem(name, menuItem);
 
             // Assert
             Assert.That(result.IsError, Is.False);
@@ -75,11 +51,11 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
         }
 
         [Test]
-        public void UpdateMenuItem_WithInvalidMenuItemId_Returns404Status()
+        public async Task UpdateMenuItem_WithInvalidMenuItem_Returns404Status()
         {
             // Arrange
             string name = "Test Name";
-            float price = 10.00f;
+            decimal price = 10.00M;
             string category = "Test Category";
             int quantity = 10;
             List<string> cutlery = new List<string>() {"Test Cutlery"};
@@ -87,14 +63,14 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
 
             MenuItem menuItem = errorOrMenuItem.Value;
 
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(-1);
+            _repositoryMock.Setup(x => x.UpdateMenuItemAsync(It.IsAny<MenuItem>())).ReturnsAsync(0);
 
             // Act
-            ErrorOr<MenuItem> result = _menuItemService.UpdateMenuItem(name, menuItem);
+            ErrorOr<MenuItem> result = await _menuItemService.UpdateMenuItem(name, menuItem);
 
             // Assert
             Assert.That(result.IsError, Is.True);
-            Assert.That(result.FirstError, Is.EqualTo(Errors.MenuItem.DbError));
+            Assert.That(result.FirstError, Is.EqualTo(Errors.MenuItem.NotFound));
         }
     }
 }

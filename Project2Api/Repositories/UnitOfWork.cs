@@ -2,7 +2,7 @@ using System.Data;
 
 namespace Project2Api.Repositories;
 
-public class UnitOfWork
+public class UnitOfWork : IDisposable
 {
     private IDbConnection _connection;
     private IDbTransaction _transaction;
@@ -10,6 +10,7 @@ public class UnitOfWork
     public UnitOfWork(IDbConnection connection)
     {
         _connection = connection;
+        _connection.Open();
         _transaction = _connection.BeginTransaction();
     }
 
@@ -31,5 +32,13 @@ public class UnitOfWork
     public void Rollback()
     {
         _transaction.Rollback();
+    }
+
+    public void Dispose()
+    {
+        _transaction?.Dispose(); 
+        if (_connection.State == ConnectionState.Open) {
+                _connection.Close();
+        }
     }
 }
