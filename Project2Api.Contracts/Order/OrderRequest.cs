@@ -2,6 +2,6 @@
 {
     public record OrderRequest(
         List<string> Items, 
-        float Price
+        decimal Price
     );
 }

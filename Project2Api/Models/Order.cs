@@ -7,16 +7,27 @@ namespace Project2Api.Models;
 
 public class Order
 {
-    public Guid Id { get; }
-    public DateTime OrderTime { get; }
-    public List<string> Items { get; }
-    public float Price { get; }
+    public Guid Id { get; set; }
+    public DateTime OrderTime { get; set; }
+    public List<string> Items { get; set; }
+    public decimal Price { get; set; }
+
+    private Order(
+        Guid id, 
+        DateTime orderTime, 
+        decimal price)
+    {
+        Id = id;
+        OrderTime = orderTime;
+        Items = new List<string>();
+        Price = price;
+    }
 
     private Order(
         Guid id, 
         DateTime orderTime, 
         List<string> items, 
-        float price)
+        decimal price)
     {
         Id = id;
         OrderTime = orderTime;
@@ -35,11 +46,11 @@ public class Order
     public static ErrorOr<Order> Create(
         DateTime orderTime,
         List<string> items,
-        float price,
+        decimal price,
         Guid? id = null
     )
     {
-        if (price == 0.0f || orderTime == DateTime.MinValue)
+        if (price == 0.0M || orderTime == DateTime.MinValue)
         {
             return Errors.Orders.InvalidOrder;
         }
@@ -116,7 +127,7 @@ public class Order
             return Create(
                 DateTime.Parse(rawOrderTime),
                 new List<string>(),
-                float.Parse(rawPrice),
+                decimal.Parse(rawPrice),
                 Guid.Parse(RawId)
             ); 
         } catch (System.FormatException e) {

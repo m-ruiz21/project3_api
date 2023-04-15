@@ -21,7 +21,7 @@ namespace Tests.Models.OrdersTests
             ErrorOr<Order> errorOrOrder = Order.Create(
                 orderTime,
                 orderItems,
-                1.0f,
+                1.0M,
                 guid
             );
 
@@ -29,7 +29,7 @@ namespace Tests.Models.OrdersTests
             Assert.That(errorOrOrder.IsError, Is.False);
             Assert.That(errorOrOrder.Value.OrderTime, Is.EqualTo(orderTime));
             Assert.That(errorOrOrder.Value.Items, Is.EqualTo(orderItems));
-            Assert.That(errorOrOrder.Value.Price, Is.EqualTo(1.0f));
+            Assert.That(errorOrOrder.Value.Price, Is.EqualTo(1.0M));
             Assert.That(errorOrOrder.Value.Id, Is.EqualTo(guid));
 
         }
@@ -48,7 +48,7 @@ namespace Tests.Models.OrdersTests
             ErrorOr<Order> errorOrOrder = Order.Create(
                 orderTime,
                 orderItems,
-                0.0f,
+                0.0M,
                 guid
             );
 
@@ -71,7 +71,7 @@ namespace Tests.Models.OrdersTests
             ErrorOr<Order> errorOrOrder = Order.Create(
                 orderTime,
                 orderItems,
-                0.0f,
+                0.0M,
                 guid
             );
 
