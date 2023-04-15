@@ -24,7 +24,7 @@ namespace Project2Api.DbTools
 
         public async Task<DataTable> ExecuteQueryAsync(string query)
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            using NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
 
             using var command = new NpgsqlCommand(query, connection);

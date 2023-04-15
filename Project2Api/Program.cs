@@ -1,6 +1,8 @@
 using Project2Api.DbTools;
 using Project2Api.Services.Orders;
 using Project2Api.Services.MenuItems;
+using System.Data;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -9,6 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddSingleton<IOrdersService, OrdersService>();
     builder.Services.AddSingleton<IMenuItemService, MenuItemService>();     
     builder.Services.AddControllers();
+    builder.Services.AddTransient<IDbConnection>(
+        (sp) => 
+            new NpgsqlConnection(builder.Configuration.GetValue<string>("PostgreSQL:ConnectionString"))
+        );
 }
 
 var app = builder.Build();
