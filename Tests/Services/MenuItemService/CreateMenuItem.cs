@@ -1,37 +1,37 @@
 using Moq;
 using Project2Api.Contracts.MenuItem;
-using Project2Api.DbTools;
 using Project2Api.Services.MenuItems;
 using Project2Api.Models;
 using ErrorOr;
+using Project2Api.Repositories;
 
 namespace Project2Api.Tests.Services.MenuItemServiceTests
 {
     [TestFixture]
     internal class CreateMenuItemTests
     {
-        private Mock<IDbClient> _dbClientMock = null!;
+        private Mock<IMenuItemRepository> _repositoryMock = null!;
         private MenuItemService _menuItemService = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _dbClientMock = new Mock<IDbClient>();
-            _menuItemService = new MenuItemService(_dbClientMock.Object);
+            _repositoryMock = new Mock<IMenuItemRepository>();
+            _menuItemService = new MenuItemService(_repositoryMock.Object);
         }
 
         [Test]
-        public void CreateMenuItem_WithValidMenuItemRequest_ReturnsMenuItem()
+        public async Task CreateMenuItem_WithValidMenuItemRequest_ReturnsMenuItem()
         {
             // Arrange
-            MenuItemRequest menuItemRequest = new MenuItemRequest("pita", 1.0f, "base", 2000, new List<string> { "utensils", "plate" });
+            MenuItemRequest menuItemRequest = new MenuItemRequest("pita", 1.0M, "base", 2000, new List<string> { "utensils", "plate" });
 
             ErrorOr<MenuItem> menuItem = MenuItem.From(menuItemRequest);
-
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(1);
+            
+            _repositoryMock.Setup(x => x.CreateMenuItemAsync(It.IsAny<MenuItem>())).ReturnsAsync(1);
 
             // Act
-            ErrorOr<MenuItem> result = _menuItemService.CreateMenuItem(menuItem.Value);
+            ErrorOr<MenuItem> result = await _menuItemService.CreateMenuItemAsync(menuItem.Value);
 
             // Assert
             Assert.That(result.IsError, Is.False);
@@ -42,16 +42,16 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
         }
 
         [Test]
-        public void CreateMenuItem_WithInvalidMenuItem_ReturnsError()
+        public async Task CreateMenuItem_WithInvalidMenuItem_ReturnsError()
         {
             // Arrange
-            MenuItemRequest menuItemRequest = new MenuItemRequest("burger", 0.1f, "meal", 1, new List<string> { "utensils", "plate" });
+            MenuItemRequest menuItemRequest = new MenuItemRequest("burger", 0.1M, "meal", 1, new List<string> { "utensils", "plate" });
             MenuItem newMenuItem = MenuItem.From(menuItemRequest).Value;
 
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(-1);
+            _repositoryMock.Setup(x => x.CreateMenuItemAsync(It.IsAny<MenuItem>())).ReturnsAsync(0);
 
             // Act
-            ErrorOr<MenuItem> result = _menuItemService.CreateMenuItem(newMenuItem);
+            ErrorOr<MenuItem> result = await _menuItemService.CreateMenuItemAsync(newMenuItem);
 
             // Assert
             Assert.That(result.IsError, Is.True);

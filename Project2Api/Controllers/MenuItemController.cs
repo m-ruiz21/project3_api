@@ -23,9 +23,8 @@ namespace Project2Api.Controllers
         /// <param name="menuItemRequest"></param>
         /// <returns>Added Object</returns>
         [HttpPost()]
-        public IActionResult CreateMenuItem(MenuItemRequest menuItemRequest)
+        public async Task<IActionResult> CreateMenuItem(MenuItemRequest menuItemRequest)
         {
-            // convert request to menu item 
             ErrorOr<MenuItem> menuItem = MenuItem.From(menuItemRequest);
 
             if (menuItem.IsError)
@@ -33,10 +32,8 @@ namespace Project2Api.Controllers
                 return Problem(menuItem.Errors);
             }
 
-            // save menu item to database
-            ErrorOr<MenuItem> menuItemErrorOr = _menuItemService.CreateMenuItem(menuItem.Value);
+            ErrorOr<MenuItem> menuItemErrorOr = await _menuItemService.CreateMenuItemAsync(menuItem.Value);
 
-            // return Ok(menuItemResponse) if succcessful, otherwise return error
             return menuItemErrorOr.Match(
                 value => Ok(MapMenuItemToMenuItemResponse(value)),
                 errors => Problem(errors)
@@ -49,12 +46,10 @@ namespace Project2Api.Controllers
         /// <param name="name"></param>
         /// <returns>Requested object</returns>
         [HttpGet("{name}")]
-        public IActionResult GetMenuItem(string name)
+        public async Task<IActionResult> GetMenuItem(string name)
         {
-            // get menu item with name=name
-            ErrorOr<MenuItem> menuItemErrorOr = _menuItemService.GetMenuItem(name);
+            ErrorOr<MenuItem> menuItemErrorOr = await _menuItemService.GetMenuItemAsync(name);
 
-            // return Ok(menuItemResponse) if succcessful, otherwise return error
             return menuItemErrorOr.Match(
                 value => Ok(MapMenuItemToMenuItemResponse(value)),
                 errors => Problem(errors)
@@ -66,12 +61,10 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <returns>Requested object</returns>
         [HttpGet()]
-        public IActionResult GetAllMenuItems()
+        public async Task<IActionResult> GetAllMenuItems()
         {
-            // get all menu items
-            ErrorOr<Dictionary<string, List<MenuItem>>> menuItemsErrorOr = _menuItemService.GetAllMenuItems();
+            ErrorOr<Dictionary<string, List<MenuItem>>> menuItemsErrorOr = await _menuItemService.GetAllMenuItemsAsync();
 
-            // return Ok(menuItemResponse) if succcessful, otherwise return error
             return menuItemsErrorOr.Match(
                 value => Ok(value),
                 errors => Problem(errors)
@@ -85,9 +78,8 @@ namespace Project2Api.Controllers
         /// <param name="menuItemRequest"></param>
         /// <returns>Updated object</returns>
         [HttpPut("{name}")]
-        public IActionResult UpdateMenuItem(string name, MenuItemRequest menuItemRequest)
+        public async Task<IActionResult> UpdateMenuItem(string name, MenuItemRequest menuItemRequest)
         {
-            // convert request to menu item
             ErrorOr<MenuItem> menuItem = MenuItem.From(menuItemRequest);
 
             if (menuItem.IsError)
@@ -95,10 +87,8 @@ namespace Project2Api.Controllers
                 return Problem(menuItem.Errors);
             }
 
-            // update menu item
-            ErrorOr<MenuItem> menuItemErrorOr = _menuItemService.UpdateMenuItem(name, menuItem.Value);
+            ErrorOr<MenuItem> menuItemErrorOr = await _menuItemService.UpdateMenuItemAsync(name, menuItem.Value);
 
-            // return Ok(menuItemResponse) if succcessful, otherwise return error
             return menuItemErrorOr.Match(
                 value => Ok(MapMenuItemToMenuItemResponse(value)),
                 errors => Problem(errors)
@@ -111,12 +101,10 @@ namespace Project2Api.Controllers
         /// <param name="name"></param>
         /// <returns>Deleted object</returns>
         [HttpDelete("{name}")]
-        public IActionResult DeleteMenuItem(string name)
+        public async Task<IActionResult> DeleteMenuItem(string name)
         {
-            // delete menu item
-            ErrorOr<IActionResult> menuItemErrorOr = _menuItemService.DeleteMenuItem(name);
+            ErrorOr<IActionResult> menuItemErrorOr = await _menuItemService.DeleteMenuItemAsync(name);
 
-            // return NoContent() if succcessful, otherwise return error
             return menuItemErrorOr.Match(
                 value => NoContent(), 
                 errors => Problem(errors)

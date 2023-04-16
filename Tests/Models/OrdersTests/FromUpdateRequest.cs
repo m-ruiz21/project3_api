@@ -18,7 +18,7 @@ namespace Tests.Models.OrdersTests
             orderItems.Add("pita");
             DateTime orderTime = DateTime.Now;
             Guid guid = Guid.NewGuid();
-            float price = 0.1f;
+            decimal price = 0.1M;
             UpdateOrderRequest orderUpdateRequest = new UpdateOrderRequest(orderTime, orderItems, price);
 
             // Act
@@ -27,7 +27,7 @@ namespace Tests.Models.OrdersTests
             // Assert
             Assert.That(! errorOrOrder.IsError);
             Assert.That(orderItems, Is.EqualTo(errorOrOrder.Value.Items));
-            Assert.That(price, Is.EqualTo(errorOrOrder.Value.Price).Within(0.01f));
+            Assert.That(price, Is.EqualTo(errorOrOrder.Value.Price).Within(0.01M));
             Assert.That(orderTime, Is.EqualTo(errorOrOrder.Value.OrderTime));
             Assert.That(guid, Is.EqualTo(errorOrOrder.Value.Id));
         }
@@ -41,7 +41,7 @@ namespace Tests.Models.OrdersTests
             orderItems.Add("pita");
             DateTime orderTime = DateTime.Now;
             Guid guid = Guid.NewGuid();
-            float price = 0.0f;
+            decimal price = 0.0M;
             UpdateOrderRequest orderUpdateRequest = new UpdateOrderRequest(orderTime, orderItems, price);
 
             // Act

@@ -10,13 +10,13 @@ namespace Project2Api.Services.Inventory
         // Gets all inventory items
         /// </summary>
         /// <returns>List of inventory items</returns>
-        ErrorOr<List<InventoryItem>> GetAllInventoryItems();
+        Task<ErrorOr<List<InventoryItem>>> GetAllInventoryItems();
 
         /// <summary>
         /// Gets inventory item by name
         /// </summary>
         /// <param name="name"></param>
         /// <returns>No Content Result or Error</returns>
-        ErrorOr<IActionResult> DeleteInventoryItem(InventoryItem inventoryItem);
+        Task<ErrorOr<IActionResult>> DeleteInventoryItem(InventoryItem inventoryItem);
     }
 }

@@ -22,10 +22,10 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <returns>List of inventory items</returns>
         [HttpGet()]
-        public IActionResult GetAllInventoryItems()
+        public async Task<IActionResult> GetAllInventoryItems()
         {
             // get all inventory items
-            ErrorOr<List<InventoryItem>> inventoryItemsErrorOr = _inventoryService.GetAllInventoryItems();
+            ErrorOr<List<InventoryItem>> inventoryItemsErrorOr = await _inventoryService.GetAllInventoryItems();
 
             // return Ok(inventoryItems) if succcessful, otherwise return error
             return inventoryItemsErrorOr.Match(
@@ -40,7 +40,7 @@ namespace Project2Api.Controllers
         /// <param name="inventoryRequest"></param>
         /// <returns>No Content Result or Error</returns>
         [HttpDelete()]
-        public IActionResult DeleteInventoryItem(InventoryRequest inventoryRequest)
+        public async Task<IActionResult> DeleteInventoryItem(InventoryRequest inventoryRequest)
         {
             // convert request to inventory item 
             ErrorOr<InventoryItem> inventoryItem = InventoryItem.From(inventoryRequest);
@@ -51,7 +51,7 @@ namespace Project2Api.Controllers
             }
 
             // delete inventory item from database
-            ErrorOr<IActionResult> inventoryItemErrorOr = _inventoryService.DeleteInventoryItem(inventoryItem.Value);
+            ErrorOr<IActionResult> inventoryItemErrorOr = await _inventoryService.DeleteInventoryItem(inventoryItem.Value);
 
             // return NoContent() if succcessful, otherwise return error
             return inventoryItemErrorOr.Match(

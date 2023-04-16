@@ -11,20 +11,20 @@ namespace Project2Api.Services.MenuItems
         /// </summary>
         /// <param name="menuItem"></param>
         /// <returns>Created menu item</returns>
-        ErrorOr<MenuItem> CreateMenuItem(MenuItem menuItem);
+        Task<ErrorOr<MenuItem>> CreateMenuItemAsync(MenuItem menuItem);
 
         /// <summary>
         /// Gets menu item by name
         /// </summary>
         /// <param name="name"></param>
         /// <returns>Menu item</returns>
-        ErrorOr<MenuItem> GetMenuItem(string name);
+        Task<ErrorOr<MenuItem>> GetMenuItemAsync(string name);
 
         /// <summary>
         /// Gets all menu items
         /// </summary>
         /// <returns>Dictionary of menu items</returns>
-        ErrorOr<Dictionary<string, List<MenuItem>>> GetAllMenuItems();
+        Task<ErrorOr<Dictionary<string, List<MenuItem>>>> GetAllMenuItemsAsync();
 
         /// <summary>
         /// Updates menu item
@@ -32,13 +32,13 @@ namespace Project2Api.Services.MenuItems
         /// <param name="name"></param>
         /// <param name="menuItem"></param>
         /// <returns>Updated menu item</returns>
-        ErrorOr<MenuItem> UpdateMenuItem(string name, MenuItem menuItem);
+        Task<ErrorOr<MenuItem>> UpdateMenuItemAsync(string name, MenuItem menuItem);
 
         /// <summary>
         /// Deletes menu item
         /// </summary>
         /// <param name="name"></param>
         /// <returns>Deleted menu item</returns>
-        ErrorOr<IActionResult> DeleteMenuItem(string name);
+        Task<ErrorOr<IActionResult>> DeleteMenuItemAsync(string name);
     }
 }

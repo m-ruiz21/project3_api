@@ -1,9 +1,8 @@
 using Moq;
-using Project2Api.DbTools;
 using Project2Api.Services.MenuItems;
-using System.Data;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
+using Project2Api.Repositories;
 
 namespace Project2Api.Tests.Services.MenuItemServiceTests
 {
@@ -12,26 +11,25 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
     internal class DeleteMenuItemTests 
     {
 
-        private Mock<IDbClient> _dbClientMock = null!;
+        private Mock<IMenuItemRepository> _repositoryMock = null!;
         private MenuItemService _menuItemService = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _dbClientMock = new Mock<IDbClient>();
-            _dbClientMock.Setup(x => x.ExecuteQueryAsync(It.IsAny<string>())).ReturnsAsync(new DataTable());
-            _menuItemService = new MenuItemService(_dbClientMock.Object);
-        } 
+            _repositoryMock = new Mock<IMenuItemRepository>();
+            _menuItemService = new MenuItemService(_repositoryMock.Object);
+        }
 
         [Test]
-        public void DeleteMenuItem_WithValidMenuItemId_Returns204Status()
+        public async Task DeleteMenuItem_WithValidMenuItemId_Returns204Status()
         {
             // Arrange
             string name = "Test Name"; 
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(1);
+            _repositoryMock.Setup(x => x.DeleteMenuItemAsync(It.IsAny<string>())).ReturnsAsync(true);
 
             // Act
-            ErrorOr<IActionResult> result = _menuItemService.DeleteMenuItem(name);
+            ErrorOr<IActionResult> result = await _menuItemService.DeleteMenuItemAsync(name);
 
             // Assert
             Assert.That(result.IsError, Is.False);
@@ -39,14 +37,14 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
         }
 
         [Test]
-        public void DeleteMenuItem_WithInvalidMenuItemId_Returns404Status()
+        public async Task DeleteMenuItem_WithInvalidMenuItemId_Returns404Status()
         {
             // Arrange
             string name = "Test Name"; 
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(0);
+            _repositoryMock.Setup(x => x.DeleteMenuItemAsync(It.IsAny<string>())).ReturnsAsync(false);
 
             // Act
-            ErrorOr<IActionResult> result = _menuItemService.DeleteMenuItem(name);
+            ErrorOr<IActionResult> result = await _menuItemService.DeleteMenuItemAsync(name);
 
             // Assert
             Assert.That(result.IsError);

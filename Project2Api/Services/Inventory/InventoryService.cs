@@ -1,70 +1,75 @@
 using ErrorOr;
 using Project2Api.ServiceErrors;
 using Microsoft.AspNetCore.Mvc;
-using Project2Api.DbTools;
 using Project2Api.Models;
-using System.Data;
+using Project2Api.Repositories;
 
 namespace Project2Api.Services.Inventory;
 public class InventoryService: IInventoryService
 {
-    private readonly IDbClient _dbClient;
+    private readonly ICutleryRepository _cutleryRepository;
+    private readonly IMenuItemRepository _menuItemRepository;
 
-    public InventoryService(IDbClient dbClient)
+    public InventoryService(ICutleryRepository  cutleryRepository, IMenuItemRepository menuItemRepository)
     {
-        _dbClient = dbClient;
+        _cutleryRepository = cutleryRepository;
+        _menuItemRepository = menuItemRepository;
     }
 
-    public ErrorOr<IActionResult> DeleteInventoryItem(InventoryItem inventoryItem)
+    public async Task<ErrorOr<IActionResult>> DeleteInventoryItem(InventoryItem inventoryItem)
     {
-        string type = inventoryItem.Type;
-        string table = (type == "menu item") ? "menu_item" : "cutlery";
+        bool deleted;
+        if (inventoryItem.Type == "cutlery")
+        {
+            deleted = await _cutleryRepository.DeleteCutleryAsync(inventoryItem.Name);
+        }
+        else if (inventoryItem.Type == "menu item")
+        {
+            deleted = await _menuItemRepository.DeleteMenuItemAsync(inventoryItem.Name);
+        }
+        else
+        {
+            return ServiceErrors.Errors.Inventory.InvalidType;
+        }
 
-        // delete items from menu_item table
-        Task<int> inventoryTask = _dbClient.ExecuteNonQueryAsync(
-            $"DELETE FROM {table} WHERE name = '{inventoryItem.Name}'"
-        );
-
-        // check that inventoryTask was successful
-        if (inventoryTask.Result == -1)
+        if (!deleted)
         {
             return ServiceErrors.Errors.Inventory.DbError;
-        }
-        else if (inventoryTask.Result == 0)
-        {
-            return ServiceErrors.Errors.Inventory.NotFound;
         }
 
         return new NoContentResult();
     }
 
-    public ErrorOr<List<InventoryItem>> GetAllInventoryItems()
+    public async Task<ErrorOr<List<InventoryItem>>> GetAllInventoryItems()
     {
-        Task<DataTable?> table = _dbClient.ExecuteQueryAsync(
-            "SELECT name, quantity, 'cutlery' as type " +
-            "FROM cutlery " +
-            "UNION " +
-            "SELECT name, quantity, 'menu item' as type " +
-            "FROM menu_item;"
-        );
-
-        if (table.Result == null)
+        IEnumerable<Cutlery>? allCutlery = await _cutleryRepository.GetCutleryAsync();
+        IEnumerable<MenuItem>? allMenuItems = await _menuItemRepository.GetMenuItemsAsync();
+        if (allCutlery == null || allMenuItems == null)
         {
             return ServiceErrors.Errors.Inventory.DbError;
         }
-
-        // convert table to list of inventory Items
+ 
         List<InventoryItem> inventoryItems = new List<InventoryItem>();
-        foreach (DataRow row in table.Result.Rows)
+        
+        foreach (Cutlery cutlery in allCutlery)
         {
-            ErrorOr<InventoryItem> inventoryItem = InventoryItem.From(row);
-            if (inventoryItem.IsError)
+            ErrorOr<InventoryItem> result = InventoryItem.Create(cutlery.Name, "cutlery", cutlery.Quantity);
+            if (result.IsError)
             {
-                return inventoryItem.FirstError;
+                return Errors.Inventory.DbError;
             }
+            inventoryItems.Add(result.Value);
+        }
 
-            inventoryItems.Add(inventoryItem.Value);
-        } 
+        foreach (MenuItem menuItem in allMenuItems)
+        {
+            var result = InventoryItem.Create(menuItem.Name, "menu item", menuItem.Quantity);
+            if (result.IsError)
+            {
+                return Errors.Inventory.DbError;
+            }
+            inventoryItems.Add(result.Value);
+        }
 
         return inventoryItems;
     }

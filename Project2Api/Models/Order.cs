@@ -7,16 +7,25 @@ namespace Project2Api.Models;
 
 public class Order
 {
-    public Guid Id { get; }
-    public DateTime OrderTime { get; }
-    public List<string> Items { get; }
-    public float Price { get; }
+    public Guid Id { get; set; }
+    public DateTime OrderTime { get; set; }
+    public List<string> Items { get; set; }
+    public decimal Price { get; set; }    
 
-    private Order(
+    public Order(Guid id, DateTime date_time, decimal total_price)
+    {
+        Id = id;
+        OrderTime = date_time;
+        Price = total_price;
+        Items = new List<string>();
+    }
+
+
+    public Order(
         Guid id, 
         DateTime orderTime, 
         List<string> items, 
-        float price)
+        decimal price)
     {
         Id = id;
         OrderTime = orderTime;
@@ -35,11 +44,11 @@ public class Order
     public static ErrorOr<Order> Create(
         DateTime orderTime,
         List<string> items,
-        float price,
+        decimal price,
         Guid? id = null
     )
     {
-        if (price == 0.0f || orderTime == DateTime.MinValue)
+        if (price == 0.0M || orderTime == DateTime.MinValue)
         {
             return Errors.Orders.InvalidOrder;
         }
@@ -80,48 +89,5 @@ public class Order
             order.Price,
             id
         );
-    }
-
-    /// <summary>
-    /// Creates order from data row
-    /// </summary>
-    /// <param name="dataRow"></param>
-    /// <returns>Created order</returns>
-    public static ErrorOr<Order> From(DataRow dataRow)
-    {
-        // check if dataRow is null 
-        if (dataRow == null)
-        {
-            // print error message
-            Console.WriteLine("[OrdersService] Failed to convert data table: data row is null");
-            return Errors.Orders.DbError;
-        }
-
-        // check if any of the columns are null 
-        if (dataRow["id"] == null || dataRow["date_time"] == null || dataRow["total_price"] == null)
-        {
-            // print error message
-            Console.WriteLine("[OrdersService] Failed to convert data table: some fields are null");
-            return Errors.Orders.NotFound;
-        }
-
-        // convert rest of row to order
-        String RawId = dataRow["id"].ToString() ?? "";
-        String? rawOrderTime = dataRow["date_time"].ToString() ?? "";
-        String? rawPrice = dataRow["total_price"].ToString() ?? "";
-
-        // create order
-        try
-        {
-            return Create(
-                DateTime.Parse(rawOrderTime),
-                new List<string>(),
-                float.Parse(rawPrice),
-                Guid.Parse(RawId)
-            ); 
-        } catch (System.FormatException e) {
-            Console.Out.WriteLine(e);
-            return Errors.Orders.UnexpectedError;
-        }
     }
 }

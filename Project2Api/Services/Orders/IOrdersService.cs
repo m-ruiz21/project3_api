@@ -11,33 +11,33 @@ namespace Project2Api.Services.Orders
         /// </summary>
         /// <param name="order"></param>
         /// <returns>Added Object or Error</returns>
-        ErrorOr<Order> CreateOrder(Order order);
+        Task<ErrorOr<Order>> CreateOrderAsync(Order order);
     
         /// <summary>
         /// Gets order
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Order or Error</returns>
-        ErrorOr<Order> GetOrder(Guid id);
+        Task<ErrorOr<Order>> GetOrderAsync(Guid id);
 
         /// <summary>
         /// Gets all orders
         /// </summary>
         /// <returns>List of Orders or Error</returns>
-        ErrorOr<List<Order>> GetAllOrders(int pageNumber, int pageSize);
+        Task<ErrorOr<List<Order>>> GetAllOrdersAsync(int pageNumber, int pageSize);
 
         /// <summary>
         /// Updates order
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Updated Object or Error</returns>
-        ErrorOr<Order> UpdateOrder(Guid id, Order order);
+        Task<ErrorOr<Order>> UpdateOrderAsync(Guid id, Order order);
 
         /// <summary>
         /// Deletes order
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Success Action Result or Error</returns>
-        ErrorOr<IActionResult> DeleteOrder(Guid id);
+        Task<ErrorOr<IActionResult>> DeleteOrderAsync(Guid id);
     }
 }

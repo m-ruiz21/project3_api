@@ -1,5 +1,5 @@
 using Moq;
-using Project2Api.DbTools;
+using Project2Api.Repositories;
 using Project2Api.Services.Inventory;
 using System.Data;
 using ErrorOr;
@@ -13,27 +13,34 @@ namespace Project2Api.Tests.Services.InventoryServiceTests
     internal class DeleteInventoryTests 
     {
 
-        private Mock<IDbClient> _dbClientMock = null!;
+        private Mock<IMenuItemRepository> _menuItemRepositoryMock = null!;
+        private Mock<ICutleryRepository> _cutleryRepositoryMock = null!;
+
         private InventoryService _inventoryService = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _dbClientMock = new Mock<IDbClient>();
-            _dbClientMock.Setup(x => x.ExecuteQueryAsync(It.IsAny<string>())).ReturnsAsync(new DataTable());
-            _inventoryService = new InventoryService(_dbClientMock.Object);
+            _cutleryRepositoryMock = new Mock<ICutleryRepository>();
+            _menuItemRepositoryMock = new Mock<IMenuItemRepository>(); 
+            _inventoryService = new InventoryService(_cutleryRepositoryMock.Object, _menuItemRepositoryMock.Object);
         } 
 
         [Test]
-        public void DeleteInventory_WithValidInventoryItem_Returns204Status()
+        public async Task DeleteCutleryInventory_WithValidInventoryItem_Returns204Status()
         {
             // Arrange
-            ErrorOr<InventoryItem> item = InventoryItem.Create("Tests", "Cutlery", 0);
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(1);
-
+            ErrorOr<InventoryItem> item = InventoryItem.Create("tests", "cutlery", 0);
+            _cutleryRepositoryMock.Setup(x => x.DeleteCutleryAsync(It.IsAny<string>())).ReturnsAsync(true);
+            
+            if (item.IsError)
+            {
+                Console.WriteLine(item.FirstError);
+                Assert.Fail();
+            }
 
             // Act
-            ErrorOr<IActionResult> result = _inventoryService.DeleteInventoryItem(item.Value);
+            ErrorOr<IActionResult> result = await _inventoryService.DeleteInventoryItem(item.Value);
 
             // Assert
             Assert.That(result.IsError, Is.False);
@@ -41,15 +48,42 @@ namespace Project2Api.Tests.Services.InventoryServiceTests
         }
 
         [Test]
-        public void DeleteInventory_WithInvalidInventoryType_Returns404Status()
+        public async Task DeleteMenuItemInventory_WithValidInventoryItem_Returns204Status()
         {
             // Arrange
-            ErrorOr<InventoryItem> item = InventoryItem.Create("test", "test", 0);
-
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(-1);
+            ErrorOr<InventoryItem> item = InventoryItem.Create("tests", "menu item", 1);
+            _menuItemRepositoryMock.Setup(x => x.DeleteMenuItemAsync(It.IsAny<string>())).ReturnsAsync(true);
+            
+            if (item.IsError)
+            {
+                Console.WriteLine(item.FirstError);
+                Assert.Fail();
+            }
 
             // Act
-            ErrorOr<IActionResult> result = _inventoryService.DeleteInventoryItem(item.Value);
+            ErrorOr<IActionResult> result = await _inventoryService.DeleteInventoryItem(item.Value);
+
+            // Assert
+            Assert.That(result.IsError, Is.False);
+            Assert.That(result.Value, Is.TypeOf<NoContentResult>());
+        }
+
+        [Test]
+        public async Task DeleteInventory_WithInvalidInventoryType_Returns404Status()
+        {
+            // Arrange
+            ErrorOr<InventoryItem> item = InventoryItem.Create("test", "cutlery", 0);
+
+            if (item.IsError)
+            {
+                Console.WriteLine(item.FirstError);
+                Assert.Fail();
+            }
+
+            _cutleryRepositoryMock.Setup(x => x.DeleteCutleryAsync(It.IsAny<string>())).ReturnsAsync(false);
+
+            // Act
+            ErrorOr<IActionResult> result = await _inventoryService.DeleteInventoryItem(item.Value);
 
             // Assert
             Assert.That(result.IsError);
