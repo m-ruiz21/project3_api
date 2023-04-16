@@ -1,8 +1,6 @@
 using Moq;
 using Project2Api.ServiceErrors;
-using Project2Api.DbTools;
 using Project2Api.Services.MenuItems;
-using System.Data;
 using Project2Api.Models;
 using ErrorOr;
 using Project2Api.Repositories;

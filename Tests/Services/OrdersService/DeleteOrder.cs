@@ -1,7 +1,5 @@
 using Moq;
-using Project2Api.DbTools;
 using Project2Api.Services.Orders;
-using System.Data;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Project2Api.Repositories;

@@ -1,8 +1,6 @@
 using Project2Api.Models;
-using Project2Api.DbTools;
 using ErrorOr;
 using Project2Api.ServiceErrors;
-using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Project2Api.Repositories;
 

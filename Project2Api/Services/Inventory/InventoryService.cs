@@ -1,9 +1,7 @@
 using ErrorOr;
 using Project2Api.ServiceErrors;
 using Microsoft.AspNetCore.Mvc;
-using Project2Api.DbTools;
 using Project2Api.Models;
-using System.Data;
 using Project2Api.Repositories;
 
 namespace Project2Api.Services.Inventory;

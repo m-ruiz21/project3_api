@@ -1,11 +1,7 @@
 using Moq;
-using Project2Api.Contracts.Order;
-using Project2Api.DbTools;
 using Project2Api.Services.Orders;
-using System.Data;
 using Project2Api.Models;
 using ErrorOr;
-using Microsoft.AspNetCore.Mvc;
 using Project2Api.Repositories;
 
 namespace Project2Api.Tests.Services.OrdersServiceTests

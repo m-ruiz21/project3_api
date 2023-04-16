@@ -1,4 +1,3 @@
-using Project2Api.DbTools;
 using Project2Api.Services.Orders;
 using Project2Api.Services.MenuItems;
 using System.Data;
@@ -16,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
         );
     
     // repositories
-    builder.Services.AddSingleton<IDbClient, DbClient>();
     builder.Services.AddSingleton<IMenuItemRepository, MenuItemRepository>(); 
     builder.Services.AddSingleton<IOrdersRepository, OrdersRepository>();
 
