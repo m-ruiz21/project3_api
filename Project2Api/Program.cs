@@ -3,6 +3,7 @@ using Project2Api.Services.MenuItems;
 using System.Data;
 using Npgsql;
 using Project2Api.Repositories;
+using Project2Api.Services.Inventory;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -17,10 +18,12 @@ var builder = WebApplication.CreateBuilder(args);
     // repositories
     builder.Services.AddSingleton<IMenuItemRepository, MenuItemRepository>(); 
     builder.Services.AddSingleton<IOrdersRepository, OrdersRepository>();
+    builder.Services.AddSingleton<ICutleryRepository, CutleryRepository>();
 
     // services
     builder.Services.AddSingleton<IOrdersService, OrdersService>();
-    builder.Services.AddSingleton<IMenuItemService, MenuItemService>();     
+    builder.Services.AddSingleton<IMenuItemService, MenuItemService>();   
+    builder.Services.AddSingleton<IInventoryService, InventoryService>();  
     
     // controllers 
     builder.Services.AddControllers();
