@@ -21,5 +21,10 @@ public static partial class Errors
             code: "Inventory.DbError", 
             description: "Error occurred when getting inventory from database"
         );
+        public static Error InvalidInventoryItem => Error.Custom(
+            type: (int)CustomErrorType.InvalidParams,
+            code: "Inventory.InvalidInventoryItem", 
+            description: "Given inventory item is invalid"
+        );
     }
 }
