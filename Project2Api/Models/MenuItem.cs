@@ -12,6 +12,15 @@ public class MenuItem
     public int Quantity { get; set; }
     public List<string> Cutlery { get; set; }
 
+    /// <summary>
+    /// Creates menu item (Created for use by Dapper)
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="price"></param>
+    /// <param name="category"></param>
+    /// <param name="quantity"></param>
+    /// <param name="MenuItemCutlery"></param>
+    /// <returns>Created menu item</returns>
     public MenuItem(
         string name,
         int quantity,
@@ -25,6 +34,14 @@ public class MenuItem
         this.Cutlery = new List<string>();
     }
 
+    /// <summary>
+    /// Private constructor for menu item
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="price"></param>
+    /// <param name="category"></param>
+    /// <param name="quantity"></param>
+    /// <param name="MenuItemCutlery"></param>
     private MenuItem(
         string name,
         decimal price,
