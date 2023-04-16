@@ -16,7 +16,7 @@ namespace Tests.Models.OrdersTests
             // Arrange
             List<string> orderItems = new List<string>();
             orderItems.Add("pita");
-            OrderRequest orderRequest = new OrderRequest(orderItems, 0.1f);
+            OrderRequest orderRequest = new OrderRequest(orderItems, 0.1M);
 
             // Act
             ErrorOr<Order> errorOrOrder = Order.From(orderRequest);
@@ -36,7 +36,7 @@ namespace Tests.Models.OrdersTests
             // Arrange
             List<string> orderItems = new List<string>();
             orderItems.Add("pita");
-            OrderRequest orderRequest = new OrderRequest(orderItems, 0.0f);
+            OrderRequest orderRequest = new OrderRequest(orderItems, 0.0M);
 
             // Act
             ErrorOr<Order> errorOrOrder = Order.From(orderRequest);

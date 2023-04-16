@@ -17,7 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
     
     // repositories
     builder.Services.AddSingleton<IDbClient, DbClient>();
-    builder.Services.AddSingleton<IMenuItemRepository, MenuItemRepository>();
+    builder.Services.AddSingleton<IMenuItemRepository, MenuItemRepository>(); 
+    builder.Services.AddSingleton<IOrdersRepository, OrdersRepository>();
 
     // services
     builder.Services.AddSingleton<IOrdersService, OrdersService>();

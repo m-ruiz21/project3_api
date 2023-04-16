@@ -23,9 +23,8 @@ namespace Project2Api.Controllers
         /// <param name="orderRequest"></param>
         /// <returns>Added Object</returns>
         [HttpPost()]
-        public IActionResult CreateOrder(OrderRequest orderRequest)
+        public async Task<IActionResult> CreateOrder(OrderRequest orderRequest)
         {
-            // create new order item 
             ErrorOr<Order> order = Order.From(orderRequest);
 
             if (order.IsError)
@@ -33,10 +32,8 @@ namespace Project2Api.Controllers
                 return Problem(order.Errors);
             }
 
-            // save order to database
-            ErrorOr<Order> orderErrorOr = _ordersService.CreateOrder(order.Value);
+            ErrorOr<Order> orderErrorOr = await _ordersService.CreateOrderAsync(order.Value);
 
-            // return Ok(orderResponse) if succcessful, otherwise return error
             return orderErrorOr.Match(
                 value => Ok(MapOrderToOrderResponse(value)),
                 errors => Problem(errors)
@@ -49,12 +46,10 @@ namespace Project2Api.Controllers
         /// <param name="id"></param>
         /// <returns>Requested object</returns>
         [HttpGet("{id:guid}")]
-        public IActionResult GetOrder(Guid id)
+        public async Task<IActionResult> GetOrder(Guid id)
         {
-            // get order with id=id
-            ErrorOr<Order> orderErrorOr = _ordersService.GetOrder(id);
+            ErrorOr<Order> orderErrorOr = await _ordersService.GetOrderAsync(id);
 
-            // return Ok(orderResponse) if succcessful, otherwise return error
             return orderErrorOr.Match(
                 value => Ok(MapOrderToOrderResponse(value)),
                 errors => Problem(errors)
@@ -66,19 +61,16 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <returns>List of orderResponses</returns>
         [HttpGet()]
-        public IActionResult GetAllOrders(int pageNumber = 1, int pageSize = 50)
+        public async Task<IActionResult> GetAllOrders(int pageNumber = 1, int pageSize = 50)
         {
             // get all orders
-            ErrorOr<List<Order>> ordersErrorOr = _ordersService.GetAllOrders(pageNumber, pageSize);
+            ErrorOr<List<Order>> ordersErrorOr = await _ordersService.GetAllOrdersAsync(pageNumber, pageSize);
 
             // get list of orders and map list to order Responses if successful, else return error 
             return ordersErrorOr.Match(
-                value => Ok(value.Select(order => new OrderResponse(
-                    order.Id,
-                    order.OrderTime,
-                    order.Items,
-                    order.Price
-                )).ToList()),
+                value => Ok(value
+                    .Select(order => MapOrderToOrderResponse(order))
+                    .ToList()),
                 errors => Problem(errors)
             );
         }
@@ -90,7 +82,7 @@ namespace Project2Api.Controllers
         /// <param name="id"></param>
         /// <returns>Updated order object</returns>
         [HttpPut("{id:guid}")]
-        public IActionResult UpdateOrder(UpdateOrderRequest orderRequest, Guid id)
+        public async Task<IActionResult> UpdateOrder(UpdateOrderRequest orderRequest, Guid id)
         { 
             // convert order request to order
             ErrorOr<Order> order = Order.From(orderRequest, id);
@@ -101,7 +93,7 @@ namespace Project2Api.Controllers
             }
 
             // update order
-            ErrorOr<Order> orderErrorOr = _ordersService.UpdateOrder(id, order.Value);
+            ErrorOr<Order> orderErrorOr = await _ordersService.UpdateOrderAsync(id, order.Value);
 
             // return Ok(orderResponse) if succcessful, otherwise return error
             return orderErrorOr.Match(
@@ -117,10 +109,10 @@ namespace Project2Api.Controllers
         /// <param name="id"></param>
         /// <returns>Succes / Failure code</returns>
         [HttpDelete("{id:guid}")]
-        public IActionResult DeleteOrder(Guid id)
+        public async Task<IActionResult> DeleteOrder(Guid id)
         {
             // delete order
-            ErrorOr<IActionResult> orderErrorOr = _ordersService.DeleteOrder(id);
+            ErrorOr<IActionResult> orderErrorOr = await _ordersService.DeleteOrderAsync(id);
 
             // return No Content if successful, otherwise return error 
             return orderErrorOr.Match(

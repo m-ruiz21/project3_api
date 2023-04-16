@@ -48,7 +48,7 @@ namespace Project2Api.Controllers
         [HttpGet("{name}")]
         public async Task<IActionResult> GetMenuItem(string name)
         {
-            ErrorOr<MenuItem> menuItemErrorOr = await _menuItemService.GetMenuItem(name);
+            ErrorOr<MenuItem> menuItemErrorOr = await _menuItemService.GetMenuItemAsync(name);
 
             return menuItemErrorOr.Match(
                 value => Ok(MapMenuItemToMenuItemResponse(value)),
@@ -87,7 +87,7 @@ namespace Project2Api.Controllers
                 return Problem(menuItem.Errors);
             }
 
-            ErrorOr<MenuItem> menuItemErrorOr = await _menuItemService.UpdateMenuItem(name, menuItem.Value);
+            ErrorOr<MenuItem> menuItemErrorOr = await _menuItemService.UpdateMenuItemAsync(name, menuItem.Value);
 
             return menuItemErrorOr.Match(
                 value => Ok(MapMenuItemToMenuItemResponse(value)),
@@ -103,7 +103,7 @@ namespace Project2Api.Controllers
         [HttpDelete("{name}")]
         public async Task<IActionResult> DeleteMenuItem(string name)
         {
-            ErrorOr<IActionResult> menuItemErrorOr = await _menuItemService.DeleteMenuItem(name);
+            ErrorOr<IActionResult> menuItemErrorOr = await _menuItemService.DeleteMenuItemAsync(name);
 
             return menuItemErrorOr.Match(
                 value => NoContent(), 

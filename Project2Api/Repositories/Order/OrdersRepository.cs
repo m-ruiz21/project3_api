@@ -30,8 +30,24 @@ public class OrdersRepository : IOrdersRepository
                     var orderItemsParameters = new { order_id = order.Id, menu_item_name = item};
 
                     uow.Connection.Execute(sql, orderItemsParameters, uow.Transaction);
-                }
 
+                    sql = "UPDATE menu_item SET quantity = quantity - 1 WHERE name = @menu_item_name";
+                    var updateMenuItemParameters = new { menu_item_name = item };
+
+                    uow.Connection.Execute(sql, updateMenuItemParameters, uow.Transaction);
+
+                    sql = @"
+                    UPDATE cutlery 
+                    SET quantity = cutlery.quantity - mc.quantity 
+                    FROM menu_item mi 
+                    JOIN menu_item_cutlery mc 
+                    ON mi.name = mc.menu_item_name 
+                    WHERE cutlery.name = mc.cutlery_name AND mi.name = @menu_item_name";
+
+                    uow.Connection.Execute(sql, updateMenuItemParameters, uow.Transaction);
+                }
+                
+                uow.Commit();
                 return Task.FromResult<int?>(rowsAffected);
             } catch (Exception e)
             {
@@ -42,7 +58,7 @@ public class OrdersRepository : IOrdersRepository
         }
     }
 
-    public Task<Order?> GetOrderIdAsync(Guid id)
+    public Task<Order?> GetOrderByIdAsync(Guid id)
     {
         using (UnitOfWork uow = new UnitOfWork(_connection))
         {
@@ -58,6 +74,7 @@ public class OrdersRepository : IOrdersRepository
 
                 order.Items = uow.Connection.Query<string>(sql, orderItemsParameters, uow.Transaction).ToList();
 
+                uow.Commit();
                 return Task.FromResult<Order?>(order);
             } catch (Exception e)
             {
@@ -74,10 +91,11 @@ public class OrdersRepository : IOrdersRepository
         {
             try
             {
-                string sql = "SELECT * FROM orders";
+                string sql = "SELECT * FROM orders ORDER BY date_time DESC;";
 
                 IEnumerable<Order> orders = uow.Connection.Query<Order>(sql, uow.Transaction);
 
+                uow.Commit();
                 return Task.FromResult<IEnumerable<Order>?>(orders);
             } catch (Exception e)
             {
@@ -110,6 +128,7 @@ public class OrdersRepository : IOrdersRepository
                     uow.Connection.Execute(sql, addOrderItemsParameters, uow.Transaction);
                 }
 
+                uow.Commit();
                 return Task.FromResult<int?>(rowsAffected);
             } catch (Exception e)
             {
@@ -126,13 +145,14 @@ public class OrdersRepository : IOrdersRepository
         {
             try
             {
-                string sql = "DELETE FROM ordered_menu_item WHERE id = @id";
+                string sql = "DELETE FROM ordered_menu_item WHERE order_id = @id";
                 var parameters = new { id = id };
                 int rowsAffected = uow.Connection.Execute(sql, parameters, uow.Transaction);
 
                 sql = "DELETE FROM orders WHERE id = @id";
                 rowsAffected += uow.Connection.Execute(sql, parameters, uow.Transaction);
 
+                uow.Commit();
                 return Task.FromResult<bool>(rowsAffected > 0);
             } catch (Exception e)
             {

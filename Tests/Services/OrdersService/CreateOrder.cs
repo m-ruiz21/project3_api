@@ -5,35 +5,35 @@ using Project2Api.Services.Orders;
 using System.Data;
 using Project2Api.Models;
 using ErrorOr;
+using Project2Api.Repositories;
 
 namespace Project2Api.Tests.Services.OrdersServiceTests
 {
     [TestFixture]
     internal class CreateOrderTests 
     {
-        private Mock<IDbClient> _dbClientMock = null!;
+        private Mock<IOrdersRepository> _ordersRepositoryMock = null!;
         private OrdersService _ordersService = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _dbClientMock = new Mock<IDbClient>();
-            _ordersService = new OrdersService(_dbClientMock.Object);
+            _ordersRepositoryMock = new Mock<IOrdersRepository>();
+            _ordersService = new OrdersService(_ordersRepositoryMock.Object);
         }
 
         [Test]
-        public void CreateOrder_WithValidOrderRequest_ReturnsOrder()
+        public async Task CreateOrder_WithValidOrderRequest_ReturnsOrder()
         {
             // Arrange
-            var orderRequest = new OrderRequest(new List<string> { "pita", "meatball" }, 1.0f);
+            var orderRequest = new OrderRequest(new List<string> { "pita", "meatball" }, 1.0M);
 
             ErrorOr<Order> order = Order.From(orderRequest);
 
-            _dbClientMock.Setup(x => x.ExecuteQueryAsync(It.IsAny<string>())).ReturnsAsync(new DataTable());
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(1);
+            _ordersRepositoryMock.Setup(x => x.CreateOrderAsync(It.IsAny<Order>())).ReturnsAsync(1);
 
             // Act
-            ErrorOr<Order> result = _ordersService.CreateOrder(order.Value);
+            ErrorOr<Order> result = await _ordersService.CreateOrderAsync(order.Value);
 
             // Assert
             Assert.That(result.IsError, Is.False);
@@ -43,18 +43,17 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
         }
 
         [Test]
-        public void CreateOrder_WithInvalidOrderRequest_ReturnsError()
+        public async Task CreateOrder_WithInvalidOrderRequest_ReturnsError()
         {
             // Arrange
-            var orderRequest = new OrderRequest(new List<string>{"burger"}, 0.1f);
+            var orderRequest = new OrderRequest(new List<string>{"burger"}, 0.1M);
 
             ErrorOr<Order> order = Order.From(orderRequest);
 
-            _dbClientMock.Setup(x => x.ExecuteQueryAsync(It.IsAny<string>())).ReturnsAsync(new DataTable());
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(-1);
+            _ordersRepositoryMock.Setup(x => x.CreateOrderAsync(It.IsAny<Order>())).ReturnsAsync(0);
 
             // Act
-            ErrorOr<Order> result = _ordersService.CreateOrder(order.Value);
+            ErrorOr<Order> result = await _ordersService.CreateOrderAsync(order.Value);
 
             // Assert
             Assert.That(result.IsError, Is.True);

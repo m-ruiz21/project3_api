@@ -28,7 +28,7 @@ public class MenuItemService : IMenuItemService
         return menuItem;
     }
 
-    public async Task<ErrorOr<MenuItem>> GetMenuItem(string name)
+    public async Task<ErrorOr<MenuItem>> GetMenuItemAsync(string name)
     {
         if (name == null)
         {
@@ -60,7 +60,7 @@ public class MenuItemService : IMenuItemService
         return menuByCategory;
     }
 
-    public async Task<ErrorOr<MenuItem>> UpdateMenuItem(string name, MenuItem menuItem)
+    public async Task<ErrorOr<MenuItem>> UpdateMenuItemAsync(string name, MenuItem menuItem)
     {
         if (name == null || menuItem == null)
         {
@@ -80,7 +80,7 @@ public class MenuItemService : IMenuItemService
         return menuItem;
     }
 
-    public async Task<ErrorOr<IActionResult>> DeleteMenuItem(string name)
+    public async Task<ErrorOr<IActionResult>> DeleteMenuItemAsync(string name)
     {
         if (name == null)
         {

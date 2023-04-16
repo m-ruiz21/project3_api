@@ -31,7 +31,7 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
             _repositoryMock.Setup(x => x.DeleteMenuItemAsync(It.IsAny<string>())).ReturnsAsync(true);
 
             // Act
-            ErrorOr<IActionResult> result = await _menuItemService.DeleteMenuItem(name);
+            ErrorOr<IActionResult> result = await _menuItemService.DeleteMenuItemAsync(name);
 
             // Assert
             Assert.That(result.IsError, Is.False);
@@ -46,7 +46,7 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
             _repositoryMock.Setup(x => x.DeleteMenuItemAsync(It.IsAny<string>())).ReturnsAsync(false);
 
             // Act
-            ErrorOr<IActionResult> result = await _menuItemService.DeleteMenuItem(name);
+            ErrorOr<IActionResult> result = await _menuItemService.DeleteMenuItemAsync(name);
 
             // Assert
             Assert.That(result.IsError);

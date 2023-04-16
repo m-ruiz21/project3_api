@@ -18,7 +18,7 @@ namespace Project2Api.Services.MenuItems
         /// </summary>
         /// <param name="name"></param>
         /// <returns>Menu item</returns>
-        Task<ErrorOr<MenuItem>> GetMenuItem(string name);
+        Task<ErrorOr<MenuItem>> GetMenuItemAsync(string name);
 
         /// <summary>
         /// Gets all menu items
@@ -32,13 +32,13 @@ namespace Project2Api.Services.MenuItems
         /// <param name="name"></param>
         /// <param name="menuItem"></param>
         /// <returns>Updated menu item</returns>
-        Task<ErrorOr<MenuItem>> UpdateMenuItem(string name, MenuItem menuItem);
+        Task<ErrorOr<MenuItem>> UpdateMenuItemAsync(string name, MenuItem menuItem);
 
         /// <summary>
         /// Deletes menu item
         /// </summary>
         /// <param name="name"></param>
         /// <returns>Deleted menu item</returns>
-        Task<ErrorOr<IActionResult>> DeleteMenuItem(string name);
+        Task<ErrorOr<IActionResult>> DeleteMenuItemAsync(string name);
     }
 }

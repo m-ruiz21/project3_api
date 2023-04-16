@@ -22,7 +22,7 @@ public interface IOrdersRepository
     /// </summary>
     /// <param name="id">The id of the order.</param>
     /// <returns>An order.</returns>
-    Task<Order?> GetOrderIdAsync(Guid id);
+    Task<Order?> GetOrderByIdAsync(Guid id);
 
     /// <summary>
     /// Updates an order.

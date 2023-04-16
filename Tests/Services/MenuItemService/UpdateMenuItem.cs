@@ -39,7 +39,7 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
             _repositoryMock.Setup(x => x.UpdateMenuItemAsync(It.IsAny<MenuItem>())).ReturnsAsync(1);
             
             // Act
-            ErrorOr<MenuItem> result = await _menuItemService.UpdateMenuItem(name, menuItem);
+            ErrorOr<MenuItem> result = await _menuItemService.UpdateMenuItemAsync(name, menuItem);
 
             // Assert
             Assert.That(result.IsError, Is.False);
@@ -66,7 +66,7 @@ namespace Project2Api.Tests.Services.MenuItemServiceTests
             _repositoryMock.Setup(x => x.UpdateMenuItemAsync(It.IsAny<MenuItem>())).ReturnsAsync(0);
 
             // Act
-            ErrorOr<MenuItem> result = await _menuItemService.UpdateMenuItem(name, menuItem);
+            ErrorOr<MenuItem> result = await _menuItemService.UpdateMenuItemAsync(name, menuItem);
 
             // Assert
             Assert.That(result.IsError, Is.True);

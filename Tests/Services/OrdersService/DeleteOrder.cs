@@ -4,6 +4,7 @@ using Project2Api.Services.Orders;
 using System.Data;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
+using Project2Api.Repositories;
 
 namespace Project2Api.Tests.Services.OrdersServiceTests
 {
@@ -12,26 +13,25 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
     internal class DeleteOrderTests 
     {
 
-        private Mock<IDbClient> _dbClientMock = null!;
+        private Mock<IOrdersRepository> _ordersRepositoryMock = null!;
         private OrdersService _ordersService = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _dbClientMock = new Mock<IDbClient>();
-            _dbClientMock.Setup(x => x.ExecuteQueryAsync(It.IsAny<string>())).ReturnsAsync(new DataTable());
-            _ordersService = new OrdersService(_dbClientMock.Object);
+            _ordersRepositoryMock = new Mock<IOrdersRepository>();
+            _ordersService = new OrdersService(_ordersRepositoryMock.Object);
         } 
 
         [Test]
-        public void DeleteOrder_WithValidOrderId_Returns204Status()
+        public async Task DeleteOrder_WithValidOrderId_Returns204Status()
         {
             // Arrange
             Guid orderId = Guid.NewGuid();
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(1);
+            _ordersRepositoryMock.Setup(x => x.DeleteOrderAsync(orderId)).ReturnsAsync(true);
 
             // Act
-            ErrorOr<IActionResult> result = _ordersService.DeleteOrder(orderId);
+            ErrorOr<IActionResult> result = await _ordersService.DeleteOrderAsync(orderId);
 
             // Assert
             Assert.That(result.IsError, Is.False);
@@ -39,14 +39,14 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
         }
 
         [Test]
-        public void DeleteOrder_WithInvalidOrderId_Returns404Status()
+        public async Task DeleteOrder_WithInvalidOrderId_Returns404Status()
         {
             // Arrange
             Guid orderId = Guid.NewGuid();
-            _dbClientMock.Setup(x => x.ExecuteNonQueryAsync(It.IsAny<string>())).ReturnsAsync(0);
+            _ordersRepositoryMock.Setup(x => x.DeleteOrderAsync(orderId)).ReturnsAsync(false);
 
             // Act
-            ErrorOr<IActionResult> result = _ordersService.DeleteOrder(orderId);
+            ErrorOr<IActionResult> result = await _ordersService.DeleteOrderAsync(orderId);
 
             // Assert
             Assert.That(result.IsError);
