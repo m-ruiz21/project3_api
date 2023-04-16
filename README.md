@@ -17,6 +17,3 @@ dotnet run --project .\Project2Api\
 ```
 dotnet test
 ```
-
-# Table of Contents #
-- [Api Documentation](https://github.com/m-ruiz21/project2_api/blob/master/Docs/Api.md)
