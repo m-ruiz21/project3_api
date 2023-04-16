@@ -16,6 +16,12 @@ public static partial class Errors
             description: "Unexpected error occurred when getting inventory"
         );
 
+        public static Error InvalidType => Error.Custom(
+            type: (int)CustomErrorType.InvalidParams,
+            code: "Inventory.InvalidType", 
+            description: "Given inventory item type is invalid"
+        );
+
         public static Error DbError => Error.Custom(
             type: (int)CustomErrorType.Database, 
             code: "Inventory.DbError", 

@@ -6,9 +6,9 @@ namespace Project2Api.Models;
 
 public class InventoryItem
 {
-    public string Name { get; }
-    public int Quantity { get; }
-    public string Type { get; }
+    public string Name { get; set; }
+    public int Quantity { get; set; }
+    public string Type { get; set; }
 
     /// <summary>
     /// Private constructor for InventoryItem
