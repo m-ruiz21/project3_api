@@ -2,7 +2,9 @@ using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Project2Api.Contracts.Cutlery;
 using Project2Api.Models;
+using Project2Api.Models.Reports;
 using Project2Api.Services.CutleryItems;
+using Project2Api.Services.Reports;
 
 namespace Project2Api.Controllers
 {
@@ -10,9 +12,10 @@ namespace Project2Api.Controllers
     [Route("reports")]
     public class ReportsController : ApiController 
     {
-        public ReportsController()
+        private IReportsService _reportsService;
+        public ReportsController(IReportsService reportsService)
         {
-
+            _reportsService = reportsService;
         }
 
         /// <summary>
@@ -20,9 +23,14 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <returns>Sales History</returns>
         [HttpGet("xreport")]
-        public IActionResult GetXReport()
+        public async Task<IActionResult> GetXReport()
         {
-            return Ok();
+            ErrorOr<XReport> result = await _reportsService.GetXReport();
+
+            return result.Match(
+                value => Ok(value),
+                errors => Problem(errors)
+            );
         }
     }
 }
