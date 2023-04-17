@@ -15,7 +15,7 @@ public interface ICutleryRepository
     /// Gets all cutlery.
     /// </summary>
     /// <returns>A list of cutlery.</returns>
-    Task<IEnumerable<Cutlery>?> GetCutleryAsync();
+    Task<IEnumerable<Cutlery>?> GetAllCutleryAsync();
 
     /// <summary>
     /// Gets a cutlery by name.

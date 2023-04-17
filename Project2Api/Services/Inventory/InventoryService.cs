@@ -42,7 +42,7 @@ public class InventoryService: IInventoryService
 
     public async Task<ErrorOr<List<InventoryItem>>> GetAllInventoryItems()
     {
-        IEnumerable<Cutlery>? allCutlery = await _cutleryRepository.GetCutleryAsync();
+        IEnumerable<Cutlery>? allCutlery = await _cutleryRepository.GetAllCutleryAsync();
         IEnumerable<MenuItem>? allMenuItems = await _menuItemRepository.GetMenuItemsAsync();
         if (allCutlery == null || allMenuItems == null)
         {

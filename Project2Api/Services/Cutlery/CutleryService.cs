@@ -30,7 +30,7 @@ public class CutleryService : ICutleryService
 
     public async Task<ErrorOr<List<Cutlery>>> GetAllCutleryAsync()
     {
-        IEnumerable<Cutlery>? cutlery = await _cutleryRepository.GetCutleryAsync();
+        IEnumerable<Cutlery>? cutlery = await _cutleryRepository.GetAllCutleryAsync();
 
         if (cutlery == null)
         {
