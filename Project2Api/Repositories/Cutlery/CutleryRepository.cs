@@ -51,7 +51,7 @@ public class CutleryRepository : ICutleryRepository
         }
     }
 
-    public Task<IEnumerable<Cutlery>?> GetCutleryAsync()
+    public Task<IEnumerable<Cutlery>?> GetAllCutleryAsync()
     {
         using (UnitOfWork uow = new UnitOfWork(_connection))
         {
