@@ -81,6 +81,7 @@ public class ReportsService : IReportsService
         }
 
         decimal stockThreshold = 0.1m; // 10% stock threshold
+
         var query = 
             from menuItem in menuItems
             join orderedMenuItem in (
@@ -105,4 +106,33 @@ public class ReportsService : IReportsService
         return query.ToList();
     }
 
+    public async Task<ErrorOr<List<SalesReport>>> GetSalesReport(DateTime startDate, DateTime endDate, string ItemName)
+    {   
+        IEnumerable<OrderedMenuItem>? orderedMenuItems = await _orderedMenuItemsRepository.GetOrderedMenuItemsAsync();
+        IEnumerable<Order>? orders = await _ordersRepository.GetOrdersAsync();
+
+        if (orders == null || orderedMenuItems == null)
+        {
+            return Errors.Reports.InvalidRequest;
+        }
+
+        var historicalSales = orders
+            .Where(o => o.OrderTime.Date >= startDate && o.OrderTime.Date <= endDate)
+            .Join(
+                orderedMenuItems.Where(omi => omi.MenuItemName == ItemName),
+                o => o.Id,
+                omi => omi.OrderId,
+                (o, omi) => new { Order = o, OrderedMenuItem = omi })
+            .GroupBy(o => o.Order.OrderTime.Date)
+            .Select(g => new SalesReport(
+                g.Sum(om => om.OrderedMenuItem.Quantity * om.Order.Price),
+                g.Key
+            ))
+            .OrderBy(g => g.Date)
+            .ToList();
+
+        return historicalSales;
+
+    }   
+    
 }

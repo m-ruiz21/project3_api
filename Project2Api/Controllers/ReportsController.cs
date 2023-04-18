@@ -62,5 +62,16 @@ namespace Project2Api.Controllers
                 errors => Problem(errors)
             );
         }
+
+        [HttpGet("sales-report")]
+        public async Task<IActionResult> GetSalesReport(SalesReportRequest salesReportRequest)
+        {
+            ErrorOr<List<SalesReport>> result = await _reportsService.GetSalesReport(salesReportRequest.StartDate, salesReportRequest.EndDate, salesReportRequest.menuItem);
+
+            return result.Match(
+                value => Ok(value),
+                errors => Problem(errors)
+            );
+        }
     }
 }
