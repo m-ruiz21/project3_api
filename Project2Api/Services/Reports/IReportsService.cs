@@ -1,4 +1,5 @@
 using ErrorOr;
+using Project2Api.Models;
 using Project2Api.Models.Reports;
 
 namespace Project2Api.Services.Reports
