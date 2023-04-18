@@ -47,5 +47,20 @@ namespace Project2Api.Controllers
                 errors => Problem(errors)
             );
         }
+
+        /// <summary>
+        // get Excess Menu Items
+        /// </summary>
+        /// <returns>Excess Menu Items</returns>
+        [HttpGet("excess-report")]
+        public async Task<IActionResult> GetExcessReport(ExcessReportRequest excessReportRequest)
+        {
+            ErrorOr<List<ExcessMenuItem>> result = await _reportsService.GetExcessReport(excessReportRequest.FromDate);
+
+            return result.Match(
+                value => Ok(value),
+                errors => Problem(errors)
+            );
+        }
     }
 }
