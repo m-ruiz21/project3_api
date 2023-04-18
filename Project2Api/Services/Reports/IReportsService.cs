@@ -24,5 +24,11 @@ namespace Project2Api.Services.Reports
         /// </summary>
         /// <returns>Excess Report</returns>
         Task<ErrorOr<List<ExcessMenuItem>>> GetExcessReport(DateTime fromDate);
+
+        /// <summary>
+        /// Gets Sales Report
+        /// </summary>
+        /// <returns>Sales Report</returns>
+        Task<ErrorOr<List<SalesReport>>> GetSalesReport(DateTime startDate, DateTime endDate, string ItemName);
     }
 }
