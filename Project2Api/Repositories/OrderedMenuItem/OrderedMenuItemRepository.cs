@@ -36,23 +36,92 @@ public class OrderedMenuItemRepository : IOrderedMenuItemRepository
         }
     }
 
-    public Task<IEnumerable<OrderedMenuItem>> GetAllOrderedMenuItems()
+    public Task<IEnumerable<OrderedMenuItem>?> GetAllOrderedMenuItems()
     {
-        throw new NotImplementedException();
+        using (UnitOfWork uow = new UnitOfWork(_connection))
+        {
+            try
+            {
+                string sql = "SELECT * FROM ordered_menu_item";
+
+                IEnumerable<OrderedMenuItem> orderedMenuItems = uow.Connection.Query<OrderedMenuItem>(sql, uow.Transaction);
+
+                return Task.FromResult<IEnumerable<OrderedMenuItem>?>(orderedMenuItems);
+            }
+            catch (Exception e)
+            {
+                uow.Rollback();
+                Console.WriteLine(e.Message);
+                return Task.FromResult<IEnumerable<OrderedMenuItem>?>(null);
+            }
+        }
     }
 
-    public Task<OrderedMenuItem> GetOrderedMenuItemByOrderIdAndMenuItemName(Guid orderId, string menuItemName)
+    public Task<OrderedMenuItem?> GetOrderedMenuItemByOrderIdAndMenuItemName(Guid orderId, string menuItemName)
     {
-        throw new NotImplementedException();
+        using (UnitOfWork uow = new UnitOfWork(_connection))
+        {
+            try
+            {
+                string sql = "SELECT * FROM ordered_menu_item WHERE order_id = @OrderId AND menu_item_name = @MenuItemName";
+                var parameters = new { OrderId = orderId, MenuItemName = menuItemName };
+
+                OrderedMenuItem orderedMenuItem = uow.Connection.QueryFirstOrDefault<OrderedMenuItem>(sql, parameters, uow.Transaction);
+
+                return Task.FromResult<OrderedMenuItem?>(orderedMenuItem);
+            }
+            catch (Exception e)
+            {
+                uow.Rollback();
+                Console.WriteLine(e.Message);
+                return Task.FromResult<OrderedMenuItem?>(null);
+            }
+        }
     }
 
-    public Task<OrderedMenuItem> UpdateOrderedMenuItem(OrderedMenuItem orderedMenuItem)
+    public Task<OrderedMenuItem?> UpdateOrderedMenuItem(OrderedMenuItem orderedMenuItem)
     {
-        throw new NotImplementedException();
+        using (UnitOfWork uow = new UnitOfWork(_connection))
+        {
+            try
+            {
+                string sql = "UPDATE ordered_menu_item SET quantity = @Quantity WHERE order_id = @OrderId AND menu_item_name = @MenuItemName";
+                var parameters = new { Quantity = orderedMenuItem.Quantity, OrderId = orderedMenuItem.OrderId, MenuItemName = orderedMenuItem.MenuItemName };
+
+                int rowsAffected = uow.Connection.Execute(sql, parameters, uow.Transaction);
+
+                uow.Commit();
+                return Task.FromResult<OrderedMenuItem?>(orderedMenuItem);
+            }
+            catch (Exception e)
+            {
+                uow.Rollback();
+                Console.WriteLine(e.Message);
+                return Task.FromResult<OrderedMenuItem?>(null);
+            }
+        }
     }
     
-    public Task<OrderedMenuItem> DeleteOrderedMenuItem(OrderedMenuItem orderedMenuItem)
+    public Task<OrderedMenuItem?> DeleteOrderedMenuItem(OrderedMenuItem orderedMenuItem)
     {
-        throw new NotImplementedException();
+        using (UnitOfWork uow = new UnitOfWork(_connection))
+        {
+            try
+            {
+                string sql = "DELETE FROM ordered_menu_item WHERE order_id = @OrderId AND menu_item_name = @MenuItemName";
+                var parameters = new { OrderId = orderedMenuItem.OrderId, MenuItemName = orderedMenuItem.MenuItemName };
+
+                int rowsAffected = uow.Connection.Execute(sql, parameters, uow.Transaction);
+
+                uow.Commit();
+                return Task.FromResult<OrderedMenuItem?>(orderedMenuItem);
+            }
+            catch (Exception e)
+            {
+                uow.Rollback();
+                Console.WriteLine(e.Message);
+                return Task.FromResult<OrderedMenuItem?>(null);
+            }
+        }
     }
 }
