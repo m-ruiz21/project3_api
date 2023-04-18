@@ -118,18 +118,14 @@ public class ReportsService : IReportsService
 
         var historicalSales = orders
             .Where(o => o.OrderTime.Date >= startDate && o.OrderTime.Date <= endDate)
-            .GroupJoin(
-                orderedMenuItems,
+            .Join(
+                orderedMenuItems.Where(omi => omi.MenuItemName == ItemName),
                 o => o.Id,
                 omi => omi.OrderId,
-                (o, omis) => new { Order = o, OrderedMenuItems = omis.DefaultIfEmpty() })
-            .SelectMany(
-                o => o.OrderedMenuItems,
-                (o, omi) => new { Order = o.Order, OrderedMenuItem = omi })
-            .Where(om => om.OrderedMenuItem.MenuItemName == ItemName || om.OrderedMenuItem == null)
+                (o, omi) => new { Order = o, OrderedMenuItem = omi })
             .GroupBy(o => o.Order.OrderTime.Date)
             .Select(g => new SalesReport(
-                g.Sum(om => om.OrderedMenuItem == null ? 0 : om.OrderedMenuItem.Quantity * om.Order.Price),
+                g.Sum(om => om.OrderedMenuItem.Quantity * om.Order.Price),
                 g.Key
             ))
             .OrderBy(g => g.Date)
