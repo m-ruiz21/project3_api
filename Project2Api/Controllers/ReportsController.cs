@@ -38,9 +38,9 @@ namespace Project2Api.Controllers
         /// </summary>
         /// <returns>Sales History</returns>
         [HttpGet("zreport")]
-        public async Task<IActionResult> GetZReport(ZReportRequest request)
+        public async Task<IActionResult> GetZReport(int pageNumber = 1, int pageSize = 50)
         {
-            ErrorOr<List<ZReportDataPoint>> result = await _reportsService.GetZReport(request.StartDate, request.EndDate);
+            ErrorOr<List<ZReportDataPoint>> result = await _reportsService.GetZReport(pageNumber, pageSize);
 
             return result.Match(
                 value => Ok(value),

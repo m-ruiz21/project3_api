@@ -17,7 +17,7 @@ namespace Project2Api.Services.Reports
         /// Gets Y Report
         /// </summary>
         /// <returns>Y Report</returns>
-        Task<ErrorOr<List<ZReportDataPoint>>> GetZReport(DateTime satartDate, DateTime endDate);
+        Task<ErrorOr<List<ZReportDataPoint>>> GetZReport(int pageNumber, int pageSize);
 
         /// <summary>
         /// Gets Excess Report

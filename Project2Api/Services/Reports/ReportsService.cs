@@ -43,7 +43,7 @@ public class ReportsService : IReportsService
         return xReport;
     }
 
-    public async Task<ErrorOr<List<ZReportDataPoint>>> GetZReport(DateTime startDate, DateTime endDate)
+    public async Task<ErrorOr<List<ZReportDataPoint>>> GetZReport(int pageNumber, int pageSize)
     {
         IEnumerable<Order>? orders = await _ordersRepository.GetOrdersAsync(); 
 
@@ -51,6 +51,13 @@ public class ReportsService : IReportsService
         {
             return Errors.Reports.DbError;
         }
+
+        DateTime endDate = DateTime.Now.AddDays(-((pageNumber - 1) * pageSize));
+
+        DateTime startDate = endDate.AddDays(-pageSize); 
+
+
+
 
         var historicalSales = orders
             .Where(o => o.OrderTime.Date >= startDate && o.OrderTime.Date <= endDate)
