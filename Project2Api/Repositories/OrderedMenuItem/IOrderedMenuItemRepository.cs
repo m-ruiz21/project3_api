@@ -7,7 +7,7 @@ namespace Project2Api.Repositories;
 
 public interface IOrderedMenuItemRepository
 {
-    Task<IEnumerable<OrderedMenuItem>?> GetAllOrderedMenuItems();
+    Task<IEnumerable<OrderedMenuItem>?> GetOrderedMenuItemsAsync();
     Task<OrderedMenuItem?> GetOrderedMenuItemByOrderIdAndMenuItemName(Guid orderId, string menuItemName);
     Task<OrderedMenuItem?> CreateOrderedMenuItem(OrderedMenuItem orderedMenuItem);
     Task<OrderedMenuItem?> UpdateOrderedMenuItem(OrderedMenuItem orderedMenuItem);

@@ -21,6 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddSingleton<IMenuItemRepository, MenuItemRepository>(); 
     builder.Services.AddSingleton<IOrdersRepository, OrdersRepository>();
     builder.Services.AddSingleton<ICutleryRepository, CutleryRepository>();
+    builder.Services.AddSingleton<IOrderedMenuItemRepository, OrderedMenuItemRepository>();
 
     // services
     builder.Services.AddSingleton<IOrdersService, OrdersService>();

@@ -10,12 +10,12 @@ public class OrderedMenuItem
     public int Quantity { get; set; }
 
     public OrderedMenuItem(
-        Guid orderId, 
-        string menuItemName, 
+        Guid order_id, 
+        String menu_item_name, 
         int quantity)
     {
-        OrderId = orderId;
-        MenuItemName = menuItemName;
+        OrderId = order_id;
+        MenuItemName = menu_item_name;
         Quantity = quantity;
     }
 

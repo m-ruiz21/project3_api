@@ -5,7 +5,7 @@ namespace Project2Api.ServiceErrors;
 public static partial class Errors
 {
     /// <summary>
-    /// Cutlery errors
+    /// Report errors
     /// </summary>
     public static class Reports 
     {
@@ -20,7 +20,7 @@ public static partial class Errors
             description: "Error occurred when getting report"
         );
 
-        public static Error InvalidCutlery => Error.Custom(
+        public static Error InvalidRequest => Error.Custom(
             type: (int)CustomErrorType.InvalidParams,
             code: "Reports.InvalidReportRequest", 
             description: "Given report request is invalid"

@@ -36,7 +36,7 @@ public class OrderedMenuItemRepository : IOrderedMenuItemRepository
         }
     }
 
-    public Task<IEnumerable<OrderedMenuItem>?> GetAllOrderedMenuItems()
+    public Task<IEnumerable<OrderedMenuItem>?> GetOrderedMenuItemsAsync()
     {
         using (UnitOfWork uow = new UnitOfWork(_connection))
         {
