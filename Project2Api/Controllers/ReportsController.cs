@@ -1,9 +1,9 @@
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Project2Api.Contracts.Cutlery;
+using Project2Api.Contracts.Reports;
 using Project2Api.Models;
 using Project2Api.Models.Reports;
-using Project2Api.Services.CutleryItems;
 using Project2Api.Services.Reports;
 
 namespace Project2Api.Controllers
@@ -26,6 +26,21 @@ namespace Project2Api.Controllers
         public async Task<IActionResult> GetXReport()
         {
             ErrorOr<XReport> result = await _reportsService.GetXReport();
+
+            return result.Match(
+                value => Ok(value),
+                errors => Problem(errors)
+            );
+        }
+
+        /// <summary>
+        // get Z Report
+        /// </summary>
+        /// <returns>Sales History</returns>
+        [HttpGet("zreport")]
+        public async Task<IActionResult> GetZReport(ZReportRequest request)
+        {
+            ErrorOr<List<ZReportDataPoint>> result = await _reportsService.GetZReport(request.StartDate, request.EndDate);
 
             return result.Match(
                 value => Ok(value),

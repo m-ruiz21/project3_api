@@ -10,5 +10,11 @@ namespace Project2Api.Services.Reports
         /// </summary>
         /// <returns>X Report</returns>
         Task<ErrorOr<XReport>> GetXReport();
+
+        /// <summary>
+        /// Gets Y Report
+        /// </summary>
+        /// <returns>Y Report</returns>
+        Task<ErrorOr<List<ZReportDataPoint>>> GetZReport(DateTime satartDate, DateTime endDate);
     }
 }
