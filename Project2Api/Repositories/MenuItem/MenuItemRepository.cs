@@ -140,6 +140,9 @@ public class MenuItemRepository : IMenuItemRepository
 
                 uow.Connection.Execute(sql, parameters, uow.Transaction);
 
+                sql = "DELETE FROM ordered_menu_item WHERE menu_item_name = @Name";
+                uow.Connection.Execute(sql, parameters, uow.Transaction);
+
                 sql = "DELETE FROM menu_item WHERE name = @Name";
                 uow.Connection.Execute(sql, parameters, uow.Transaction);
                 
