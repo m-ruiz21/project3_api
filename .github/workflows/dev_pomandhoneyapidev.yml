@@ -6,12 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - PomAndHoneyApiDev
 on:
   push:
     branches:
-      - dev  
-  
-  pull_request:
-    types: [closed]
-    branches:
-      - dev
+      - dev 
       
   workflow_dispatch:
 
