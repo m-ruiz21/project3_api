@@ -57,6 +57,28 @@ public class OrderedMenuItemRepository : IOrderedMenuItemRepository
         }
     }
 
+    public Task<IEnumerable<OrderedMenuItem>?> GetOrderedMenuItemsInDateRangeAsync(DateTime startDate, DateTime endDate)
+    {
+        using (UnitOfWork uow = new UnitOfWork(_connection))
+        {
+            try
+            {
+                string sql = "SELECT * FROM ordered_menu_item WHERE order_id IN (SELECT id FROM orders WHERE date_time BETWEEN @StartDate AND @EndDate)";
+                var parameters = new { StartDate = startDate, EndDate = endDate };
+
+                IEnumerable<OrderedMenuItem> orderedMenuItems = uow.Connection.Query<OrderedMenuItem>(sql, parameters, uow.Transaction);
+
+                return Task.FromResult<IEnumerable<OrderedMenuItem>?>(orderedMenuItems);
+            }
+            catch (Exception e)
+            {
+                uow.Rollback();
+                Console.WriteLine(e.Message);
+                return Task.FromResult<IEnumerable<OrderedMenuItem>?>(null);
+            }
+        }
+    }
+    
     public Task<OrderedMenuItem?> GetOrderedMenuItemByOrderIdAndMenuItemName(Guid orderId, string menuItemName)
     {
         using (UnitOfWork uow = new UnitOfWork(_connection))

@@ -29,6 +29,6 @@ namespace Project2Api.Services.Reports
         /// Gets Sales Report
         /// </summary>
         /// <returns>Sales Report</returns>
-        Task<ErrorOr<List<SalesReport>>> GetSalesReport(DateTime startDate, DateTime endDate, string ItemName);
+        Task<ErrorOr<List<SalesReportDataPoint>>> GetSalesReport(DateTime startDate, DateTime endDate, string ItemName);
     }
 }

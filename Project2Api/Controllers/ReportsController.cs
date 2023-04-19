@@ -66,7 +66,7 @@ namespace Project2Api.Controllers
         [HttpGet("sales-report")]
         public async Task<IActionResult> GetSalesReport(SalesReportRequest salesReportRequest)
         {
-            ErrorOr<List<SalesReport>> result = await _reportsService.GetSalesReport(salesReportRequest.StartDate, salesReportRequest.EndDate, salesReportRequest.menuItem);
+            ErrorOr<List<SalesReportDataPoint>> result = await _reportsService.GetSalesReport(salesReportRequest.StartDate, salesReportRequest.EndDate, salesReportRequest.menuItem);
 
             return result.Match(
                 value => Ok(value),
