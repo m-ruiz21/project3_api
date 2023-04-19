@@ -77,8 +77,8 @@ namespace Project2Api.Controllers
         /// <param name="name"></param>
         /// <param name="menuItemRequest"></param>
         /// <returns>Updated object</returns>
-        [HttpPut("{name}")]
-        public async Task<IActionResult> UpdateMenuItem(string name, MenuItemRequest menuItemRequest)
+        [HttpPut()]
+        public async Task<IActionResult> UpdateMenuItem(MenuItemRequest menuItemRequest)
         {
             ErrorOr<MenuItem> menuItem = MenuItem.From(menuItemRequest);
 
@@ -87,7 +87,7 @@ namespace Project2Api.Controllers
                 return Problem(menuItem.Errors);
             }
 
-            ErrorOr<MenuItem> menuItemErrorOr = await _menuItemService.UpdateMenuItemAsync(name, menuItem.Value);
+            ErrorOr<MenuItem> menuItemErrorOr = await _menuItemService.UpdateMenuItemAsync(menuItem.Value.Name, menuItem.Value);
 
             return menuItemErrorOr.Match(
                 value => Ok(MapMenuItemToMenuItemResponse(value)),
