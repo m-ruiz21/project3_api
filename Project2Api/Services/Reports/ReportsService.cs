@@ -45,21 +45,17 @@ public class ReportsService : IReportsService
 
     public async Task<ErrorOr<List<ZReportDataPoint>>> GetZReport(int pageNumber, int pageSize)
     {
-        IEnumerable<Order>? orders = await _ordersRepository.GetOrdersAsync(); 
+        DateTime endDate = DateTime.Now.AddDays(-((pageNumber - 1) * pageSize));
+        DateTime startDate = endDate.AddDays(-pageSize); 
+
+        IEnumerable<Order>? orders = await _ordersRepository.GetOrdersInDateRangeAsync(startDate, endDate);
 
         if (orders == null) 
         {
             return Errors.Reports.DbError;
         }
 
-        DateTime endDate = DateTime.Now.AddDays(-((pageNumber - 1) * pageSize));
-
-        DateTime startDate = endDate.AddDays(-pageSize); 
-
-
-
-
-        var historicalSales = orders
+        List<ZReportDataPoint> zReport = orders
             .Where(o => o.OrderTime.Date >= startDate && o.OrderTime.Date <= endDate)
             .GroupBy(o => o.OrderTime.Date)
             .Select(g => new ZReportDataPoint(
@@ -68,7 +64,7 @@ public class ReportsService : IReportsService
             .OrderBy(g => g.Date)
             .ToList();
 
-        return historicalSales;
+        return zReport;
     }
 
     public async Task<ErrorOr<List<ExcessMenuItem>>> GetExcessReport(DateTime fromDate)
@@ -79,8 +75,8 @@ public class ReportsService : IReportsService
         }
 
         IEnumerable<MenuItem>? menuItems = await _menuItemsRepository.GetMenuItemsAsync();
-        IEnumerable<OrderedMenuItem>? orderedMenuItems = await _orderedMenuItemsRepository.GetOrderedMenuItemsAsync();
-        IEnumerable<Order>? orders = await _ordersRepository.GetOrdersAsync();
+        IEnumerable<OrderedMenuItem>? orderedMenuItems = await _orderedMenuItemsRepository.GetOrderedMenuItemsInDateRangeAsync(fromDate, DateTime.Now);
+        IEnumerable<Order>? orders = await _ordersRepository.GetOrdersInDateRangeAsync(fromDate, DateTime.Now);
 
         if (menuItems == null || orderedMenuItems == null || orders == null) 
         {
@@ -113,33 +109,42 @@ public class ReportsService : IReportsService
         return query.ToList();
     }
 
-    public async Task<ErrorOr<List<SalesReport>>> GetSalesReport(DateTime startDate, DateTime endDate, string ItemName)
-    {   
-        IEnumerable<OrderedMenuItem>? orderedMenuItems = await _orderedMenuItemsRepository.GetOrderedMenuItemsAsync();
-        IEnumerable<Order>? orders = await _ordersRepository.GetOrdersAsync();
-
-        if (orders == null || orderedMenuItems == null)
+    public async Task<ErrorOr<List<SalesReportDataPoint>>> GetSalesReport(DateTime startDate, DateTime endDate, string ItemName)
+    {  
+        if (startDate == DateTime.MinValue || endDate == DateTime.MinValue || startDate > endDate || startDate > DateTime.Now || endDate > DateTime.Now)
         {
             return Errors.Reports.InvalidRequest;
         }
 
-        var historicalSales = orders
-            .Where(o => o.OrderTime.Date >= startDate && o.OrderTime.Date <= endDate)
-            .Join(
-                orderedMenuItems.Where(omi => omi.MenuItemName == ItemName),
-                o => o.Id,
-                omi => omi.OrderId,
-                (o, omi) => new { Order = o, OrderedMenuItem = omi })
-            .GroupBy(o => o.Order.OrderTime.Date)
-            .Select(g => new SalesReport(
-                g.Sum(om => om.OrderedMenuItem.Quantity * om.Order.Price),
-                g.Key
-            ))
+        IEnumerable<OrderedMenuItem>? orderedMenuItems = await _orderedMenuItemsRepository.GetOrderedMenuItemsInDateRangeAsync(startDate, endDate);
+        IEnumerable<Order>? orders = await _ordersRepository.GetOrdersInDateRangeAsync(startDate, endDate);
+
+        if (orders == null || orderedMenuItems == null)
+        {
+            return Errors.Reports.DbError;
+        }
+
+        IEnumerable<DateTime> dateRange = Enumerable.Range(0, (endDate - startDate).Days + 1)
+                            .Select(i => startDate.AddDays(i));
+            
+        List<SalesReportDataPoint> salesReport = dateRange
+            .GroupJoin(
+                orders.Join(
+                    orderedMenuItems.Where(omi => omi.MenuItemName == ItemName),
+                    o => o.Id,
+                    omi => omi.OrderId,
+                    (o, omi) => new { Order = o, OrderedMenuItem = omi })
+                .GroupBy(o => o.Order.OrderTime.Date)
+                .Select(g => new { Date = g.Key, Quantity = g.Sum(om => om.OrderedMenuItem.Quantity) }),
+                d => d,
+                s => s.Date,
+                (d, s) => new SalesReportDataPoint(
+                    s.Select(x => x.Quantity).DefaultIfEmpty(0).Sum(),
+                    d
+                ))
             .OrderBy(g => g.Date)
             .ToList();
 
-        return historicalSales;
-
-    }   
-    
-}
+        return salesReport;
+    }    
+}             
