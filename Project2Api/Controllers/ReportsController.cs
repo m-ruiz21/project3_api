@@ -52,7 +52,7 @@ namespace Project2Api.Controllers
         // get Excess Menu Items
         /// </summary>
         /// <returns>Excess Menu Items</returns>
-        [HttpGet("excess-report")]
+        [HttpPost("excess-report")]
         public async Task<IActionResult> GetExcessReport(ExcessReportRequest excessReportRequest)
         {
             ErrorOr<List<ExcessMenuItem>> result = await _reportsService.GetExcessReport(excessReportRequest.FromDate);
@@ -63,7 +63,7 @@ namespace Project2Api.Controllers
             );
         }
 
-        [HttpGet("sales-report")]
+        [HttpPost("sales-report")]
         public async Task<IActionResult> GetSalesReport(SalesReportRequest salesReportRequest)
         {
             ErrorOr<List<SalesReportDataPoint>> result = await _reportsService.GetSalesReport(salesReportRequest.StartDate, salesReportRequest.EndDate, salesReportRequest.menuItem);
