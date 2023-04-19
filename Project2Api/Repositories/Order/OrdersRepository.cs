@@ -85,6 +85,28 @@ public class OrdersRepository : IOrdersRepository
         }
     }
 
+    public Task<IEnumerable<Order>?> GetOrdersInDateRangeAsync(DateTime startDate, DateTime endDate)
+    {
+        using (UnitOfWork uow = new UnitOfWork(_connection))
+        {
+            try
+            {
+                string sql = "SELECT * FROM orders WHERE date_time BETWEEN @start_date AND @end_date ORDER BY date_time DESC";
+                var parameters = new { start_date = startDate, end_date = endDate };
+
+                IEnumerable<Order> orders = uow.Connection.Query<Order>(sql, parameters, uow.Transaction);
+
+                uow.Commit();
+                return Task.FromResult<IEnumerable<Order>?>(orders);
+            } catch (Exception e)
+            {
+                uow.Rollback();
+                Console.WriteLine(e.Message); 
+                return Task.FromResult<IEnumerable<Order>?>(null);
+            }
+        }
+    }
+    
     public Task<IEnumerable<Order>?> GetOrdersAsync()
     {
         using (UnitOfWork uow = new UnitOfWork(_connection))
