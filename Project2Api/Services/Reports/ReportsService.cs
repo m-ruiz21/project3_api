@@ -55,13 +55,20 @@ public class ReportsService : IReportsService
             return Errors.Reports.DbError;
         }
 
-        List<ZReportDataPoint> zReport = orders
-            .Where(o => o.OrderTime.Date >= startDate && o.OrderTime.Date <= endDate)
-            .GroupBy(o => o.OrderTime.Date)
-            .Select(g => new ZReportDataPoint(
-                g.Sum(o => o.Price), g.Key
-                ))
-            .OrderBy(g => g.Date)
+        IEnumerable<DateTime> dateRange = Enumerable.Range(0, (endDate - startDate).Days + 1)
+                            .Select(i => startDate.AddDays(i));
+        
+        List<ZReportDataPoint> zReport = dateRange
+            .GroupJoin(
+                orders,
+                date => date.Date,
+                order => order.OrderTime.Date,
+                (date, orders) => new ZReportDataPoint(
+                    orders.Sum(o => o.Price),
+                    date
+                )
+            )
+            .OrderBy(dp => dp.Date)
             .ToList();
 
         return zReport;
