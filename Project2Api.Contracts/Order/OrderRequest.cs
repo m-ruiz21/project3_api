@@ -1,7 +1,6 @@
 ﻿namespace Project2Api.Contracts.Order
 {
     public record OrderRequest(
-        List<string> Items, 
-        decimal Price
+        List<string> Items 
     );
 }

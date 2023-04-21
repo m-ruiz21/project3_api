@@ -12,7 +12,10 @@ public class Order
     public List<string> Items { get; set; }
     public decimal Price { get; set; }    
 
-    public Order(Guid id, DateTime date_time, decimal total_price)
+    public Order(
+        Guid id, 
+        DateTime date_time, 
+        decimal total_price)
     {
         Id = id;
         OrderTime = date_time;
@@ -21,7 +24,7 @@ public class Order
     }
 
 
-    public Order(
+    private Order(
         Guid id, 
         DateTime orderTime, 
         List<string> items, 
@@ -48,7 +51,7 @@ public class Order
         Guid? id = null
     )
     {
-        if (price == 0.0M || orderTime == DateTime.MinValue)
+        if (price < 0.0M || orderTime == DateTime.MinValue || items.Count == 0)
         {
             return Errors.Orders.InvalidOrder;
         }
@@ -71,7 +74,7 @@ public class Order
         return Create(
             DateTime.Now,
             order.Items,
-            order.Price
+            0.0M 
         );
     }
 
@@ -86,7 +89,7 @@ public class Order
         return Create(
             order.dateTime, 
             order.Items, 
-            order.Price,
+            0.0M,
             id
         );
     }

@@ -138,7 +138,7 @@ public class OrdersRepository : IOrdersRepository
                 var parameters = new { date_time = order.OrderTime, total_price = order.Price, id = order.Id };
                 int rowsAffected = uow.Connection.Execute(sql, parameters, uow.Transaction);
 
-                sql = "DELETE FROM ordered_menu_items WHERE order_id = @order_id";
+                sql = "DELETE FROM ordered_menu_item WHERE order_id = @order_id";
                 var deleteOrderItemsParameters = new { order_id = order.Id };
                 uow.Connection.Execute(sql, deleteOrderItemsParameters, uow.Transaction);
 

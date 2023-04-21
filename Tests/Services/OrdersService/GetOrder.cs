@@ -12,13 +12,16 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
     {
 
         private Mock<IOrdersRepository> _orderRepositoryMock = null!;
+        private Mock<IMenuItemRepository> _menuItemRepositoryMock = null!;
+
         private OrdersService _ordersService = null!;
 
         [SetUp]
         public void SetUp()
         {
             _orderRepositoryMock = new Mock<IOrdersRepository>();
-            _ordersService = new OrdersService(_orderRepositoryMock.Object);
+            _menuItemRepositoryMock = new Mock<IMenuItemRepository>();
+            _ordersService = new OrdersService(_orderRepositoryMock.Object, _menuItemRepositoryMock.Object);
         }
     
         [Test]

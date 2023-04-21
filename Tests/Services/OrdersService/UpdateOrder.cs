@@ -11,13 +11,15 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
     internal class UpdateOrderTests 
     {
         private Mock<IOrdersRepository> _ordersRepositoryMock= null!;
+        private Mock<IMenuItemRepository> _menuItemRepositoryMock = null!;
         private OrdersService _ordersService = null!;
 
         [SetUp]
         public void SetUp()
         {
             _ordersRepositoryMock = new Mock<IOrdersRepository>(); 
-            _ordersService = new OrdersService(_ordersRepositoryMock.Object);    
+            _menuItemRepositoryMock = new Mock<IMenuItemRepository>(); 
+            _ordersService = new OrdersService(_ordersRepositoryMock.Object, _menuItemRepositoryMock.Object);    
         }
 
         [Test]
@@ -25,10 +27,11 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
         {
             // Arrange
             DateTime dateTime = DateTime.Now;
-            UpdateOrderRequest updateOrderRequest = new UpdateOrderRequest(dateTime, new List<string> { "pita", "meatball" }, 1.0M);
+            UpdateOrderRequest updateOrderRequest = new UpdateOrderRequest(dateTime, new List<string> { "pita", "falafel" });
             Guid guid = Guid.NewGuid();
             
             _ordersRepositoryMock.Setup(x => x.UpdateOrderAsync(It.IsAny<Order>())).ReturnsAsync(1);
+            _menuItemRepositoryMock.Setup(x => x.GetMenuItemByNameAsync(It.IsAny<string>())).ReturnsAsync(new MenuItem("pita", 1, 5M, "base"));
 
             ErrorOr<Order> order = Order.From(updateOrderRequest, guid);
 
@@ -39,7 +42,7 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
             Assert.That(result.IsError, Is.False);
             Assert.That(result.Value.Id, Is.EqualTo(order.Value.Id));
             Assert.That(result.Value.OrderTime, Is.EqualTo(order.Value.OrderTime).Within(1).Seconds);
-            Assert.That(result.Value.Price, Is.EqualTo(order.Value.Price));
+            Assert.That(result.Value.Price, Is.EqualTo(10M));
         }
 
         [Test]
@@ -47,7 +50,7 @@ namespace Project2Api.Tests.Services.OrdersServiceTests
         {
             // Arrange
             DateTime dateTime = DateTime.Now;
-            UpdateOrderRequest updateOrderRequest = new UpdateOrderRequest(dateTime, new List<string> { "burger" }, 0.1M);
+            UpdateOrderRequest updateOrderRequest = new UpdateOrderRequest(dateTime, new List<string> { "burger" });
             Guid guid = Guid.NewGuid();
 
             ErrorOr<Order> order = Order.From(updateOrderRequest, guid);
