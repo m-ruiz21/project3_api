@@ -9,10 +9,12 @@ namespace Project2Api.Services.Orders;
 public class OrdersService : IOrdersService
 {
     private readonly IOrdersRepository _ordersResponsitory;
+    private readonly IMenuItemRepository _menuItemRepository;
     
-    public OrdersService(IOrdersRepository ordersResponsitory)
+    public OrdersService(IOrdersRepository ordersResponsitory, IMenuItemRepository menuItemRepository)
     {
         _ordersResponsitory = ordersResponsitory;
+        _menuItemRepository = menuItemRepository;
     }
     
     public async Task<ErrorOr<Order>> CreateOrderAsync(Order order)
@@ -21,7 +23,19 @@ public class OrdersService : IOrdersService
         {
             return Errors.Orders.InvalidOrder;
         }
-        
+
+        foreach (string orderItem in order.Items)
+        {
+            MenuItem? menuItem = await _menuItemRepository.GetMenuItemByNameAsync(orderItem);
+
+            if (menuItem == null)
+            {
+                return Errors.MenuItem.InvalidMenuItem;
+            }
+
+            order.Price += menuItem.Price;
+        }
+
         int? rowsAffected = await _ordersResponsitory.CreateOrderAsync(order);
         if (rowsAffected == null || rowsAffected == 0)
         {
@@ -75,6 +89,18 @@ public class OrdersService : IOrdersService
         if (id == Guid.Empty) 
         {
             return Errors.Orders.InvalidOrder;
+        }
+
+        foreach (string orderItem in order.Items)
+        {
+            MenuItem? menuItem = await _menuItemRepository.GetMenuItemByNameAsync(orderItem);
+
+            if (menuItem == null)
+            {
+                return Errors.MenuItem.InvalidMenuItem;
+            }
+
+            order.Price += menuItem.Price;
         }
 
         int? rowsAffected = await _ordersResponsitory.UpdateOrderAsync(order);

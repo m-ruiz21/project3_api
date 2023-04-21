@@ -71,7 +71,7 @@ namespace Tests.Models.OrdersTests
             ErrorOr<Order> errorOrOrder = Order.Create(
                 orderTime,
                 orderItems,
-                0.0M,
+                -10.0M,
                 guid
             );
 

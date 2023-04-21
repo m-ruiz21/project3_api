@@ -16,7 +16,7 @@ namespace Tests.Models.OrdersTests
             // Arrange
             List<string> orderItems = new List<string>();
             orderItems.Add("pita");
-            OrderRequest orderRequest = new OrderRequest(orderItems, 0.1M);
+            OrderRequest orderRequest = new OrderRequest(orderItems);
 
             // Act
             ErrorOr<Order> errorOrOrder = Order.From(orderRequest);
@@ -24,7 +24,6 @@ namespace Tests.Models.OrdersTests
             // Assert
             Assert.That(! errorOrOrder.IsError);
             Assert.That(orderItems, Is.EqualTo(errorOrOrder.Value.Items));
-            Assert.That(0.1f, Is.EqualTo(errorOrOrder.Value.Price).Within(0.01f));
             Assert.That(errorOrOrder.Value.OrderTime, ! Is.EqualTo(DateTime.Now)); 
             Assert.That(Guid.Empty, ! Is.EqualTo(errorOrOrder.Value.Id));
         }
@@ -35,8 +34,7 @@ namespace Tests.Models.OrdersTests
         {
             // Arrange
             List<string> orderItems = new List<string>();
-            orderItems.Add("pita");
-            OrderRequest orderRequest = new OrderRequest(orderItems, 0.0M);
+            OrderRequest orderRequest = new OrderRequest(orderItems);
 
             // Act
             ErrorOr<Order> errorOrOrder = Order.From(orderRequest);
