@@ -71,8 +71,11 @@ public class Order
     /// <returns>Created order</returns>
     public static ErrorOr<Order> From(OrderRequest order)
     {
+        TimeZoneInfo targetZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+        DateTime orderDateTimeCST = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, targetZone);
+        
         return Create(
-            DateTime.Now,
+            orderDateTimeCST,
             order.Items,
             0.0M 
         );

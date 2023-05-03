@@ -68,7 +68,7 @@ public class ReportsService : IReportsService
                     date
                 )
             )
-            .OrderBy(dp => dp.Date)
+            .OrderByDescending(dp => dp.Date) // use OrderByDescending to sort in descending order
             .ToList();
 
         return zReport;
