@@ -149,7 +149,7 @@ public class ReportsService : IReportsService
                     s.Select(x => x.Quantity).DefaultIfEmpty(0).Sum(),
                     d
                 ))
-            .OrderBy(g => g.Date)
+            .OrderByDescending(g => g.Date)
             .ToList();
 
         return salesReport;
