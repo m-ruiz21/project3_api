@@ -6,6 +6,7 @@ using Project2Api.Repositories;
 using Project2Api.Services.Inventory;
 using Project2Api.Services.CutleryItems;
 using Project2Api.Services.Reports;
+using Microsoft.AspNetCore.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -18,24 +19,38 @@ var builder = WebApplication.CreateBuilder(args);
         );
     
     // repositories
-    builder.Services.AddSingleton<IMenuItemRepository, MenuItemRepository>(); 
-    builder.Services.AddSingleton<IOrdersRepository, OrdersRepository>();
-    builder.Services.AddSingleton<ICutleryRepository, CutleryRepository>();
-    builder.Services.AddSingleton<IOrderedMenuItemRepository, OrderedMenuItemRepository>();
+    builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>(); 
+    builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+    builder.Services.AddScoped<ICutleryRepository, CutleryRepository>();
+    builder.Services.AddScoped<IOrderedMenuItemRepository, OrderedMenuItemRepository>();
 
     // services
-    builder.Services.AddSingleton<IOrdersService, OrdersService>();
-    builder.Services.AddSingleton<IMenuItemService, MenuItemService>();   
-    builder.Services.AddSingleton<IInventoryService, InventoryService>();  
-    builder.Services.AddSingleton<ICutleryService, CutleryService>();
-    builder.Services.AddSingleton<IReportsService, ReportsService>();
+    builder.Services.AddScoped<IOrdersService, OrdersService>();
+    builder.Services.AddScoped<IMenuItemService, MenuItemService>();   
+    builder.Services.AddScoped<IInventoryService, InventoryService>();  
+    builder.Services.AddScoped<ICutleryService, CutleryService>();
+    builder.Services.AddScoped<IReportsService, ReportsService>();
 
     // controllers 
     builder.Services.AddControllers();
+
+    // cors (for local testing use only)
+    // builder.Services.AddCors(options =>
+    // {
+    //     options.AddPolicy("MyCorsPolicy", builder =>
+    //     {
+    //         builder.AllowAnyOrigin()
+    //             .AllowAnyMethod()
+    //             .AllowAnyHeader();
+    //     });
+    // });
 }
 
 var app = builder.Build();
 {
+    // for testing use only:
+    // app.UseCors("MyCorsPolicy");
+
     app.UseHttpsRedirection();
     // app.UseAuthorization();
     app.MapControllers();
